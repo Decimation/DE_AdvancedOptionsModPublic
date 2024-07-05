@@ -24,7 +24,7 @@ using OrigFunctionAlphaBlend = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, 
 //ORIG_FUNCTION_AlphaBlend orig_AlphaBlend ;
 OrigFunctionAlphaBlend orig_AlphaBlend = nullptr;
 
-  BOOL WINAPI AlphaBlend(HDC hdcDest, const int xoriginDest, const int yoriginDest, const int wDest, const int hDest,
+BOOL WINAPI AlphaBlend(HDC hdcDest, const int xoriginDest, const int yoriginDest, const int wDest, const int hDest,
 					   HDC hdcSrc, const int xoriginSrc,
 					   const int yoriginSrc, const int wSrc, const int hSrc, const BLENDFUNCTION ftn)
 {
@@ -76,6 +76,7 @@ void DllInit()
 		logErr("DllInit: hOriginalDll is nullptr, mod should not be working...");
 		g_isDllInitOk = false;
 	}
+	logInfo("dll init DEAO");
 }
 
 void DisableWndProcHook(HWND hwnd)
@@ -275,16 +276,19 @@ void modInit()
 //! new version
 auto InitializeHooks() -> bool
 {
-	if (MinHookManager::getInitializeStatus() != MH_OK) {
+	MinHookManager::setInitializeStatus(MH_Initialize());
+
+	/*if (MinHookManager::getInitializeStatus() != MH_OK) {
 		const std::string mhStatusStr = MH_StatusToString(MinHookManager::getInitializeStatus());
 		logInfo("InitializeHooks: MH_StatusStr is %s calling MH_Initialize()", mhStatusStr.c_str());
-		MinHookManager::setInitializeStatus(MH_Initialize());
-	}
+	}*/
+
 	if (MinHookManager::getInitializeStatus() != MH_OK) {
 		const std::string MH_StatusStr = MH_StatusToString(MinHookManager::getInitializeStatus());
 		logErr("Failed to initialize MinHook. minhook status is: %s \n", MH_StatusStr.c_str());
 		return false;
 	}
+
 	logInfo("InitializeHooks: minhook status is: MH_OK ");
 
 	pgetFovTargetValMBTarget = reinterpret_cast<getFovTargetValMB>(MinHookManager::GetGetFovTargetValAddr());
@@ -469,6 +473,8 @@ DWORD __stdcall EjectThread(LPVOID /*lpParameter*/)
 //? Reminder: the way to load this dll with xenos is simply to change the output name to smth like somedll.dll.
 DWORD WINAPI ModMain()
 {
+	logInfo("New DEAO mod");
+
 	//? attempting to close the mod if/when idlauncher triggers msimg32.dll 
 	if (!mem.isGameFileNameValid()) {
 		CreateThread(nullptr, 0, EjectThread, nullptr, 0, nullptr);
@@ -528,24 +534,15 @@ DWORD WINAPI ModMain()
 		if (!findGameWindow(Config::GAME_WINDOW_CLASS_NAME)) {
 			Config::setModError("Could not find game window, mod will not work");
 		}
-	}
-
-	if (!Config::isModError()) {
 		const uintptr_t mainModuleAddr = MemHelper::getModuleBaseAddr();
 		if (mainModuleAddr == NULL) {
 			Config::setModError("Module base address is: NULL: mod can not work.");
 		} else {
 			logInfo("Module base address is: %p", (void*)mainModuleAddr);
 		}
-	}
-
-	if (!Config::isModError()) {
 		if (!Scanner::scanForAddrs()) {
 			Config::setModError("Functions/structs scanning process failed mod can not work.");
 		}
-	}
-
-	if (!Config::isModError()) {
 		if (!InitializeHooks()) {
 			Config::setModError("Failed to initalize minhook, mod can not work.");
 		}
@@ -589,49 +586,50 @@ DWORD WINAPI ModMain()
 		TTS::addToQueue(L"Mod Error, check the mod log file in the game folder");
 	}
 
-	bool             isFirstTimeStatusLog = true;
-	static int const loopSleepMs          = 10;
+	bool isFirstTimeStatusLog = true;
 
-	bool const     lastIsPlayerInGame             = false;
-	uint64_t const lastOwnedItemsGetMs            = 0;
-	uint64_t const lastStringOverwriteAttempMs    = 0;
-	uint64_t const lastGetAsyncKeyPressMs         = 0;
-	uint64_t const lastIniFileReloadMs            = 0;
-	uint64_t const lastDeclWeaponOverwriteMs      = 0;
-	uint64_t const lastGameTimeDebugMs            = 0;
-	uint64_t const lastcustomUICoordsCheckMs      = 0;
-	uint64_t const lastcolorReloadMs              = 0;
-	uint64_t       lastWeaponSwitchCheckMs        = 0;
-	uint64_t       lastIdInventoryGetMs           = 0;
-	uint64_t const lastWeaponSettingCheckMs       = 0;
-	uint64_t       lastHudColorsUpdateCheckMs     = 0;
-	uint64_t const lastImmersiveCrosshairCheckMs  = 0;
-	uint64_t const lastCrosshairScaleCheckMs      = 0;
-	uint64_t const lastCrosshairInScropCheckMs    = 0;
-	uint64_t       lastinGameReticleModeCheckMs   = 0;
-	uint64_t const lastPulseColorUpdateMs         = 0;
-	uint64_t const lastFXCheckMs                  = 0;
-	uint64_t const lastIniFileWatcherCheckMs      = 0;
-	uint64_t const lastDebugWarningMs             = 0;
-	uint64_t const lastFragIconBlinkTestMs        = 0;
-	uint64_t       lastCustomIceNadeIconCheckMs   = 0;
-	uint64_t       lastIceIconCoordsUpdateCheckMs = 0;
-	uint64_t       lastForceDebugStringCheckMs    = 0;
-	uint64_t const lastIsDemonPlayerCheckMs       = 0;
-	uint64_t const lastGameModeCheckMs            = 0;
-	uint64_t const lastIsReticleHideCheckkMs      = 0;
-	uint64_t const lastIsInCinematicCheckkMs      = 0;
-	uint64_t const lastIdPlayerCheckMs            = 0;
-	uint64_t const lastHudDebugMs                 = 0;
-	uint64_t const lastScreenResCheckMs           = 0;
-	uint64_t       lastCustomHudcheckMs           = 0;
-	uint64_t       lastFragSelectedCheckMs        = 0;
-	uint64_t       lastAACheckMs                  = 0;
+	static constexpr int loopSleepMs = 10;
+
+	constexpr bool     lastIsPlayerInGame             = false;
+	constexpr uint64_t lastOwnedItemsGetMs            = 0;
+	constexpr uint64_t lastStringOverwriteAttempMs    = 0;
+	constexpr uint64_t lastGetAsyncKeyPressMs         = 0;
+	constexpr uint64_t lastIniFileReloadMs            = 0;
+	constexpr uint64_t lastDeclWeaponOverwriteMs      = 0;
+	constexpr uint64_t lastGameTimeDebugMs            = 0;
+	constexpr uint64_t lastcustomUICoordsCheckMs      = 0;
+	constexpr uint64_t lastcolorReloadMs              = 0;
+	uint64_t           lastWeaponSwitchCheckMs        = 0;
+	uint64_t           lastIdInventoryGetMs           = 0;
+	constexpr uint64_t lastWeaponSettingCheckMs       = 0;
+	uint64_t           lastHudColorsUpdateCheckMs     = 0;
+	constexpr uint64_t lastImmersiveCrosshairCheckMs  = 0;
+	constexpr uint64_t lastCrosshairScaleCheckMs      = 0;
+	constexpr uint64_t lastCrosshairInScropCheckMs    = 0;
+	uint64_t           lastinGameReticleModeCheckMs   = 0;
+	constexpr uint64_t lastPulseColorUpdateMs         = 0;
+	constexpr uint64_t lastFXCheckMs                  = 0;
+	constexpr uint64_t lastIniFileWatcherCheckMs      = 0;
+	constexpr uint64_t lastDebugWarningMs             = 0;
+	constexpr uint64_t lastFragIconBlinkTestMs        = 0;
+	uint64_t           lastCustomIceNadeIconCheckMs   = 0;
+	uint64_t           lastIceIconCoordsUpdateCheckMs = 0;
+	uint64_t           lastForceDebugStringCheckMs    = 0;
+	constexpr uint64_t lastIsDemonPlayerCheckMs       = 0;
+	constexpr uint64_t lastGameModeCheckMs            = 0;
+	constexpr uint64_t lastIsReticleHideCheckkMs      = 0;
+	constexpr uint64_t lastIsInCinematicCheckkMs      = 0;
+	constexpr uint64_t lastIdPlayerCheckMs            = 0;
+	constexpr uint64_t lastHudDebugMs                 = 0;
+	constexpr uint64_t lastScreenResCheckMs           = 0;
+	uint64_t           lastCustomHudcheckMs           = 0;
+	uint64_t           lastFragSelectedCheckMs        = 0;
+	uint64_t           lastAACheckMs                  = 0;
 
 	//uint64_t lastCurrentActiveReticleCheckMs = 0;
-	bool const wasPlayerInMenu = false;
+	constexpr bool wasPlayerInMenu = false;
 
-	bool const debugIsFragNadeIconToggle = false;
+	constexpr bool debugIsFragNadeIconToggle = false;
 
 	uint64_t lastPlayerFlagUpdateMs = 0;
 	//! in game, not a demon, not in cutscene, not dead.
@@ -650,7 +648,7 @@ DWORD WINAPI ModMain()
 	bool isFragNadeOwned = false;
 	bool isIceNadeOwned  = false;
 
-	bool const last_bShowMenu = false; //! mod menu
+	constexpr bool last_bShowMenu = false; //! mod menu
 
 	while (true) {
 		if (isFirstTimeStatusLog) {
