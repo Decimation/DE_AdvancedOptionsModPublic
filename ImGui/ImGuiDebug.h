@@ -1,25 +1,20 @@
 #pragma once
 
-
-//#include "../Config/Config.h"
+#include "../Config/Config.h"
 #include "../ImGui/dependencies/imgui/imgui.h" //! i struggled to find this freaking include....
 
-
-
-
-class ImGuiDebug {
+class ImGuiDebug
+{
 private:
 	//static bool m_isRenderEnabled;
 
-	static bool m_lastIsMouseWithinImGuiWindow;
+	inline static bool m_lastIsMouseWithinImGuiWindow = false;
 	//static bool m_isFirtTimeWantCaptureMouse;
 
 	/*static bool m_lastisWindowHovered;
 	static bool m_isFirtTimeisWindowHovered;*/
 
 public:
-
-
 	/*static bool isRenderEnabled() {
 		return m_isRenderEnabled;
 		
@@ -39,25 +34,24 @@ public:
 			return false;
 		}*/
 
-		ImVec2 windowPos = ImGui::GetWindowPos();
+		ImVec2 windowPos  = ImGui::GetWindowPos();
 		ImVec2 windowSize = ImGui::GetWindowSize();
-		ImVec2 mousePos = ImGui::GetMousePos();
+		ImVec2 mousePos   = ImGui::GetMousePos();
 
-		logInfo("windowPos: x: %.2f y: %.2f  windowSize: x: %.2f y: %.2f mousePos:  x: %.2f y: %.2f", windowPos.x, windowPos.y, windowSize.x, windowSize.y, mousePos.x, mousePos.y);
+		logInfo("windowPos: x: %.2f y: %.2f  windowSize: x: %.2f y: %.2f mousePos:  x: %.2f y: %.2f", windowPos.x,
+		        windowPos.y, windowSize.x, windowSize.y, mousePos.x, mousePos.y);
 		// Debug logging
 		// Log windowPos, windowSize, and mousePos to identify any issues
 
 		if (mousePos.x >= windowPos.x && mousePos.x <= windowPos.x + windowSize.x &&
-			mousePos.y >= windowPos.y && mousePos.y <= windowPos.y + windowSize.y)
-		{
+			mousePos.y >= windowPos.y && mousePos.y <= windowPos.y + windowSize.y) {
 			logInfo("IsMouseWithinImGuiWindow: true");
 			return true; // Mouse is within the ImGui window
 		}
 		logInfo("IsMouseWithinImGuiWindow: false");
 		return false; // Mouse is outside the ImGui window
 	}
-	
-	
+
 	//! those don't work
 	/*static void logWantCaptureMouseChange(bool isWantCaptureMouse) {
 		if (m_isFirtTimeWantCaptureMouse) {
@@ -83,12 +77,11 @@ public:
 		}
 		m_isFirtTimeisWindowHovered = false;
 	}*/
-
-
 };
- bool ImGuiDebug::m_lastIsMouseWithinImGuiWindow = false;
- //bool ImGuiDebug::m_isRenderEnabled = false;
- //bool ImGuiDebug::m_isFirtTimeWantCaptureMouse = true;
 
- //bool ImGuiDebug::m_lastisWindowHovered = true;
- //bool ImGuiDebug::m_isFirtTimeisWindowHovered = true;
+// bool ImGuiDebug::m_lastIsMouseWithinImGuiWindow = false;
+//bool ImGuiDebug::m_isRenderEnabled = false;
+//bool ImGuiDebug::m_isFirtTimeWantCaptureMouse = true;
+
+//bool ImGuiDebug::m_lastisWindowHovered = true;
+//bool ImGuiDebug::m_isFirtTimeisWindowHovered = true;

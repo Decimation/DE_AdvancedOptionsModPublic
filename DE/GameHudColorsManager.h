@@ -5,7 +5,6 @@
 #include "idColor.h"
 #include "idLib.h"
 #include "MemHelper.h"
-#include "idDeclUIColorManager.h"
 
 //#include <vector>
 //#include <string>
@@ -25,12 +24,9 @@
 //#include "idSWFSpriteInstanceManager.h"
 //#include "../ImGui/menu/menu.hpp"
 
-
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-
-
 
 //#include "../IniFile/IniConfig.h"
 
@@ -135,18 +131,7 @@ private:
 	inline  static int m_debugNamedColorIndex = -1;
 	inline  static float const m_epsilon = 0.001f;
 
-
 public:
-
-
-	
-
-	
-
-
-
-	
-
 
 	static void acquireIdDeclUIColorAddr(__int64 IdDeclUIColorAddr);
 

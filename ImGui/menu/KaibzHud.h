@@ -1,15 +1,14 @@
 #pragma once
 
-
 #include <Windows.h>
 #include "../dependencies/imgui/imgui.h"
 #include "menu.hpp"
-#include "../../Debug/ImGuiDebugWin.h"
+#include <../ImGui/ImGuiDebug.h>
+#include "../../ImGui/ImGuiDebug.h"
 #include "../../K_Utils/K_Utils.h"
 #include "../../DE/idInventoryManager.h"
 #include "../../Hud/CustomCrosshairManager.h"
 #include "../../Hud/KaibzHudManager.h"
-
 
 class KaibzHud
 {
@@ -29,7 +28,6 @@ public:
 	static ImVec4 getElementColor(KaibzHudColor_t hudColor, int outlineRef);
 
 	static void writePaddedNumberALT(std::string paddedStr, float zeroCharWidth, KaibzHudColor_t hudColor, int outlineRef);
-
 
 	//static void writePaddedNumber(std::string paddedStr, float zeroCharWidth, ImVec4 color, int outlineRef);
 

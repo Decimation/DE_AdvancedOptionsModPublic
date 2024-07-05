@@ -79,9 +79,9 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Bin\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>build\$(PlatformName)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)include;$(VULKAN_SDK)\Include;$(SolutionDir)Json;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;C:\VulkanSDK\1.3.283.0\Include;$(SolutionDir)Json;$(IncludePath)</IncludePath>
     <TargetName>msimg32</TargetName>
-    <LibraryPath>$(VC_LibraryPath_x64);$(VULKAN_SDK)\Lib;$(WindowsSDK_LibraryPath_x64);$(SolutionDir)MinHookLibX64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x64);C:\VulkanSDK\1.3.283.0\Lib;$(WindowsSDK_LibraryPath_x64);$(SolutionDir)MinHookLibX64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -113,11 +113,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;XINPUT1_3_WRAPPER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.283.0\Include;$(SolutionDir)Debug;$(SolutionDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

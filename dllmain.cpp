@@ -1,12 +1,8 @@
-//#include <windows.h>
-
-//? atm the order and includs in this file is important to be able to build, we need to sanatis
-
+// Author: Deci | Project: DE_AdvancedOptionsModPublic | Name: dllmain.cpp
+// Date: 2024/07/05 @ 14:07:55
 
 #include "stdafx.h"
 #include "Common.h"
-#include "SWIP.h"
-#include "Utils.h"
 #include "dllmain.h"
 
 //#include "spdlog/spdlog.h"
@@ -15,156 +11,136 @@
 //#include <iostream>
 #include "DE/idCmd.h"
 //#include "DE/HudAmmoData.h"
-#include"DE/Sigs.h"
 //#include "Debug/idPlayerDebug.h"
 //#include "Debug/idInventoryManagerDebug.h"
-#include "DE/idFxManager.h"
 #include "Rtti/Rtti_Helper.h"
-#include "DE/ReticleColorManager.h"
 //#include "Debug/ReticleSettingsDebug.h"
 #include "DE/GameVersionInfoManager.h"
-#include "DE/idHudManager.h"
-#include "DE/idPlayerMetricsManager.h"
-#include "DE/GeneratedClasses.h"
-#include "TypeGenerator/ClassDefFileGenerator.h"
-#include "TypeGenerator/EnumsDefFileGenerator.h"
 #include "DE/idDebugManager.h"
 #include "ImGui/ImGuiUserConfig.h"
 #include "ImGui/dependencies/imgui/imconfig.h"
 
-
-
-
-
-
-
-typedef BOOL(WINAPI* ORIG_FUNCTION_AlphaBlend)(HDC, int, int, int, int, HDC, int, int, int, int, BLENDFUNCTION);
+using OrigFunctionAlphaBlend = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, BLENDFUNCTION);
 //ORIG_FUNCTION_AlphaBlend orig_AlphaBlend ;
-ORIG_FUNCTION_AlphaBlend orig_AlphaBlend = nullptr;
+OrigFunctionAlphaBlend orig_AlphaBlend = nullptr;
 
-BOOL WINAPI AlphaBlend(HDC hdcDest, int xoriginDest, int yoriginDest, int wDest, int hDest, HDC hdcSrc, int xoriginSrc, int yoriginSrc, int wSrc, int hSrc, BLENDFUNCTION ftn)
+extern "C"  BOOL WINAPI AlphaBlend(HDC hdcDest, const int xoriginDest, const int yoriginDest, const int wDest, const int hDest,
+					   HDC hdcSrc, const int xoriginSrc,
+					   const int yoriginSrc, const int wSrc, const int hSrc, const BLENDFUNCTION ftn)
 {
 	//? attempting this to get rid of warning
 
-	if (orig_AlphaBlend)
-	{
-		return orig_AlphaBlend(hdcDest, xoriginDest, yoriginDest, wDest, hDest, hdcSrc, xoriginSrc, yoriginSrc, wSrc, hSrc, ftn);
+	if (orig_AlphaBlend != nullptr) {
+		return orig_AlphaBlend(hdcDest, xoriginDest, yoriginDest, wDest, hDest, hdcSrc, xoriginSrc, yoriginSrc, wSrc,
+							   hSrc, ftn);
 	}
-	else
-	{
-		// Handle error: Original function pointer not initialized
-		// For example:
-		return FALSE;
-	}
+	// Handle error: Original function pointer not initialized
+	// For example:
+	return FALSE;
 
 	//! this works though !!!!!
 	// Call the original AlphaBlend function
 	//return orig_AlphaBlend(hdcDest, xoriginDest, yoriginDest, wDest, hDest, hdcSrc, xoriginSrc, yoriginSrc, wSrc, hSrc, ftn);
 }
 
-
-
-typedef BOOL(WINAPI* ORIG_FUNCTION_GradientFill)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
+using ORIG_FUNCTION_GradientFill = BOOL(WINAPI*)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
 ORIG_FUNCTION_GradientFill orig_GradientFill;
-BOOL WINAPI GradientFill(HDC hdc, PTRIVERTEX pVertex, ULONG dwNumVertex, PVOID pMesh, ULONG dwNumMesh, ULONG dwMode)
+
+extern "C" BOOL WINAPI GradientFill(HDC hdc, PTRIVERTEX pVertex, const ULONG dwNumVertex, PVOID pMesh, const ULONG dwNumMesh,
+						 const ULONG dwMode)
 {
 	return (orig_GradientFill)(hdc, pVertex, dwNumVertex, pMesh, dwNumMesh, dwMode);
 }
 
-typedef BOOL(WINAPI* ORIG_FUNCTION_TransparentBlt)(HDC, int, int, int, int, HDC, int, int, int, int, UINT);
-ORIG_FUNCTION_TransparentBlt orig_TransparentBlt;
-BOOL WINAPI TransparentBlt(HDC hdcDest, int xoriginDest, int yoriginDest, int wDest, int hDest, HDC hdcSrc, int xoriginSrc, int yoriginSrc, int wSrc, int hSrc, UINT crTransparent)
+using OrigFunctionTransparentBlt = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, UINT);
+OrigFunctionTransparentBlt orig_TransparentBlt;
+
+extern "C" BOOL WINAPI TransparentBlt(HDC hdcDest, const int xoriginDest, const int yoriginDest, const int wDest, const int hDest,
+						   HDC hdcSrc,
+						   const int xoriginSrc, const int yoriginSrc, const int wSrc, const int hSrc,
+						   const UINT crTransparent)
 {
-	return (orig_TransparentBlt)(hdcDest, xoriginDest, yoriginDest, wDest, hDest, hdcSrc, xoriginSrc, yoriginSrc, wSrc, hSrc, crTransparent);
+	return (orig_TransparentBlt)(hdcDest, xoriginDest, yoriginDest, wDest, hDest, hdcSrc, xoriginSrc, yoriginSrc, wSrc,
+								 hSrc, crTransparent);
 }
-
-
 
 void DllInit()
 {
-
-	HMODULE hOriginalDll = LoadLibraryW(L"msimg32.dll");	
-	if (hOriginalDll) {
-		orig_AlphaBlend = (ORIG_FUNCTION_AlphaBlend)GetProcAddress(hOriginalDll, "AlphaBlend");
-		orig_GradientFill = (ORIG_FUNCTION_GradientFill)GetProcAddress(hOriginalDll, "GradientFill");
-		orig_TransparentBlt = (ORIG_FUNCTION_TransparentBlt)GetProcAddress(hOriginalDll, "TransparentBlt");
-	}
-	else {
+	const HMODULE hOriginalDll = LoadLibraryW(L"msimg32.dll");
+	if (hOriginalDll != nullptr) {
+		orig_AlphaBlend = reinterpret_cast<OrigFunctionAlphaBlend>(GetProcAddress(hOriginalDll, "AlphaBlend"));
+		orig_GradientFill = reinterpret_cast<ORIG_FUNCTION_GradientFill>(GetProcAddress(hOriginalDll, "GradientFill"));
+		orig_TransparentBlt = reinterpret_cast<OrigFunctionTransparentBlt>(GetProcAddress(hOriginalDll,
+				 "TransparentBlt"));
+	} else {
 		logErr("DllInit: hOriginalDll is nullptr, mod should not be working...");
 		g_isDllInitOk = false;
 	}
-	
 }
 
-
-void DisableWndProcHook(HWND hwnd) {
+void DisableWndProcHook(HWND hwnd)
+{
 	SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)pOriginalWndProc);
 }
 
-
-bool IsExpectedExecutable(const std::wstring& expectedFilename) {
+auto IsExpectedExecutable(const std::wstring& expectedFilename) -> bool
+{
 	// Get the filename of the current process
 	wchar_t filename[MAX_PATH];
 	GetModuleFileNameW(nullptr, filename, MAX_PATH);
 
 	// Compare the filename against the expected filename
-	std::wstring currentFilename = filename;
+	const std::wstring currentFilename = filename;
 	if (currentFilename.find(expectedFilename) != std::wstring::npos) {
-		return true;  // Current executable matches the expected one
+		return true; // Current executable matches the expected one
 	}
-	else {
-		return false; // Current executable does not match the expected one
-	}
+	return false; // Current executable does not match the expected one
 }
 
+auto isDoomEternalCaller() -> bool
+{
+	const std::wstring expectedFilename = L"DOOMEternalx64vk.exe";
 
-
-bool isDoomEternalCaller() {
-	std::wstring expectedFilename = L"DOOMEternalx64vk.exe";
-
-	if (!IsExpectedExecutable(expectedFilename)) {
-		return false;
-	}
-	return true;
+	return IsExpectedExecutable(expectedFilename);
 	/*else {
 		MessageBox(nullptr, L"OK found DOOMEternalx64vk.exe.", L"Error", MB_OK | MB_ICONERROR);
 	}*/
 }
 
-
-bool findGameWindow(std::string windowClassName) {
+auto findGameWindow(const std::string& windowClassName) -> bool
+{
 	//HWND hWindow = NULL;
-	uint64_t waitStartMs = K_Utils::EpochMillis();
-	uint64_t timeoutMs = 60000;
+	const uint64_t waitStartMs = K_Utils::EpochMillis();
+	const uint64_t timeoutMs   = 60000;
 
+	logInfo("findGameWindow: searching for window Class Name: %s ... (timeout set to %I64u milliseconds)",
+			windowClassName.c_str(), timeoutMs);
 
-	logInfo("findGameWindow: searching for window Class Name: %s ... (timeout set to %I64u milliseconds)", windowClassName.c_str(), timeoutMs);
-
-	while (g_game_hWindow == NULL)
-	{
-		g_game_hWindow = FindWindowA(windowClassName.c_str(), NULL);
+	while (g_game_hWindow == nullptr) {
+		g_game_hWindow = FindWindowA(windowClassName.c_str(), nullptr);
 		Sleep(20);
 
-		if ((K_Utils::EpochMillis() - waitStartMs) > timeoutMs) {
+		if (K_Utils::EpochMillis() - waitStartMs > timeoutMs) {
 			logErr("findGameWindow: ERROR: timeout reached !");
 			break;
 		}
 	}
 
-	if (g_game_hWindow == NULL) {
-		logErr("findGameWindow: failed to find window Class Name: %s (g_game_hWindow is now set to NULL)", windowClassName.c_str());
+	if (g_game_hWindow == nullptr) {
+		logErr("findGameWindow: failed to find window Class Name: %s (g_game_hWindow is now set to NULL)",
+			   windowClassName.c_str());
 		return false;
 	}
 
 	char windowTitle[256]; // Buffer to store the window title
 	GetWindowTextA(g_game_hWindow, windowTitle, sizeof(windowTitle)); // Retrieve the window title
-	logInfo("findGameWindow: Successfully found Window with Class name: %s, Window Title: %s g_game_hWindow: %p", windowClassName.c_str(), windowTitle, g_game_hWindow);
+	logInfo("findGameWindow: Successfully found Window with Class name: %s, Window Title: %s g_game_hWindow: %p",
+			windowClassName.c_str(), windowTitle, g_game_hWindow);
 
 	//gameStateManager::acquireGameWindowHandle(g_game_hWindow);
 
 	return true;
 }
-
 
 //std::string getGameDirectoryPath(const char* moduleName) {
 //	HMODULE hModules[1024];
@@ -201,12 +177,9 @@ bool findGameWindow(std::string windowClassName) {
 //
 //}
 
-
-
-
-void initImguiV2() {
+void initImguiV2()
+{
 	static bool isFirsTimeUseImguiCheck = true;
-
 
 	if (!modSettings::getIsUseImgui()) {
 		if (isFirsTimeUseImguiCheck) {
@@ -215,50 +188,49 @@ void initImguiV2() {
 			logWarn("!!! user has disabled imgui in the json file, the mod menu, custom hud/crosshair will be disabled !!!!");
 			logWarn("!!! user has disabled imgui in the json file, the mod menu, custom hud/crosshair will be disabled !!!!");
 			logWarn("");
-		}		
+		}
 		isFirsTimeUseImguiCheck = false;
 		return;
 	}
-	
 
-	if (!ImGuiManager::isInitFlag()) return;
+	if (!ImGuiManager::isInitFlag()) {
+		return;
+	}
 
-	if (ImGuiManager::isPreviousInitAttempt()) return;
+	if (ImGuiManager::isPreviousInitAttempt()) {
+		return;
+	}
 
 	logInfo("initImguiV2: init process started..");
 	U::SetRenderingBackend(VULKAN); //? i just moved this here, it should still work but if issue, check it.
 	logInfo("ImGui Rendering backend: %s\n", U::RenderingBackendToStr());
 	MinHookManager::setInitializeStatus(MH_Initialize());
 
-	if (!(MinHookManager::getInitializeStatus() == MH_OK || MinHookManager::getInitializeStatus() == MH_ERROR_ALREADY_INITIALIZED)) {
-		auto statusStr = MH_StatusToString(MinHookManager::getInitializeStatus());
-		logErr("initImguiV2: Failed to initialize MinHook. minhook status is: %s the mod will not work as it should please report to mod author with a log file.\n", statusStr);
-	}
-	else {
+	if (MinHookManager::getInitializeStatus() != MH_OK && MinHookManager::getInitializeStatus() !=
+		MH_ERROR_ALREADY_INITIALIZED) {
+		const auto* const statusStr = MH_StatusToString(MinHookManager::getInitializeStatus());
+		logErr("initImguiV2: Failed to initialize MinHook. minhook status is: %s the mod will not work as it should please report to mod author with a log file.\n",
+			   statusStr);
+	} else {
 		logInfo("initImguiV2: calling H::Init()");
 		H::Init();
 	}
 	ImGuiManager::setInitAttempt();
-
 }
 
-
-
-
-
-
-void modInit() {
-
+void modInit()
+{
 	static bool isFirstTimeInit = true;
 
 	//! init only once.
-	if (!isFirstTimeInit) return;
+	if (!isFirstTimeInit) {
+		return;
+	}
 
 	logInfo("modInit called");
 
-
 	//MaterialLib::init();
-	
+
 	//! not setting font here not only because for some reason in the log:  ERR| set: m_monoSpaceFontAddr is bad ptr can not set font but also because we don't need it as we just use the default font anyway, until may be someday we decide to implement stats. Update found a better way to get monoSpaceFontAddr check the func.
 	//! Update: not sure we need this anymore, at least atm.
 	idFontManager::init();
@@ -272,199 +244,194 @@ void modInit() {
 	//! create default weapons for vec
 	WeaponSettings::initWeapons();
 
-	modSettings::apply();	
+	modSettings::apply();
 
-	
 	//! get all the idDeclUIColor from all color profiles so we can restore original colors of the hud
 	//idDeclUIColorManager::acquireDefaultColors();
 
 	//! attempting to overwrite controller static bind strings only once and only when not in game and once menu is levelLoaded.
 	if (modSettings::getIsUseDedicatedNadeKeys()) {
-		if (!bindLabelChanger.isControllerStaticStringsOverwriteAttempt()) {
+		if (!BindLabelChanger::isControllerStaticStringsOverwriteAttempt()) {
 			//if (EpochMillis() - lastStringOverwriteAttempMs > 1000 && GameStateChecker::isMainMenuLoaded()) {
-				//mem.overwriteBindStrings(); //! will only try to overwrite if not already overwritten
-				//stringChanger.overwriteBindStrings();
-			bindLabelChanger.overwriteControllerLabels(lang.getLocalizedBindStringData());
+			//mem.overwriteBindStrings(); //! will only try to overwrite if not already overwritten
+			//stringChanger.overwriteBindStrings();
+			BindLabelChanger::overwriteControllerLabels(LangManager::getLocalizedBindStringData());
 			//lastStringOverwriteAttempMs = EpochMillis();
 		}
-	}	
-
-
+	}
 
 	if (GameVersionInfoManager::isNewGameUpdateReleased()) {
-		logWarn("This version of the game: %s is different than the version the mod was made for: %s, mod 'may' not work as attended or not work at all.", GameVersionInfoManager::getBuildVersionStr().c_str(), GameVersionInfoManager::getExpectedBuildVersionStr().c_str());
-
+		logWarn("This version of the game: %s is different than the version the mod was made for: %s, mod 'may' not work as attended or not work at all.",
+				GameVersionInfoManager::getBuildVersionStr().c_str(),
+				GameVersionInfoManager::getExpectedBuildVersionStr().c_str());
+	} else {
+		logInfo("Game build Version is the one this mod was designed for: %s",
+				GameVersionInfoManager::getBuildVersionStr().c_str());
 	}
-	else {
-		logInfo("Game build Version is the one this mod was designed for: %s", GameVersionInfoManager::getBuildVersionStr().c_str());
-	}
-
 
 	isFirstTimeInit = false;
-	
 }
 
 //! new version
-bool InitializeHooks() {
-
+auto InitializeHooks() -> bool
+{
 	if (MinHookManager::getInitializeStatus() != MH_OK) {
-		std::string MH_StatusStr = MH_StatusToString(MinHookManager::getInitializeStatus());
-		logInfo("InitializeHooks: MH_StatusStr is %s calling MH_Initialize()", MH_StatusStr.c_str());
+		const std::string mhStatusStr = MH_StatusToString(MinHookManager::getInitializeStatus());
+		logInfo("InitializeHooks: MH_StatusStr is %s calling MH_Initialize()", mhStatusStr.c_str());
 		MinHookManager::setInitializeStatus(MH_Initialize());
-		
 	}
-	if (MinHookManager::getInitializeStatus() != MH_OK)
-	{
-		std::string MH_StatusStr = MH_StatusToString(MinHookManager::getInitializeStatus());
+	if (MinHookManager::getInitializeStatus() != MH_OK) {
+		const std::string MH_StatusStr = MH_StatusToString(MinHookManager::getInitializeStatus());
 		logErr("Failed to initialize MinHook. minhook status is: %s \n", MH_StatusStr.c_str());
 		return false;
 	}
-	else {
-		logInfo("InitializeHooks: minhook status is: MH_OK ");
-	}
-
+	logInfo("InitializeHooks: minhook status is: MH_OK ");
 
 	pgetFovTargetValMBTarget = reinterpret_cast<getFovTargetValMB>(MinHookManager::GetGetFovTargetValAddr());
-	if (MH_CreateHook(reinterpret_cast<void**>(pgetFovTargetValMBTarget), &getFovTargetValMB_Hook, reinterpret_cast<void**>(&pgetFovTargetValMB)) != MH_OK) {
+	if (MH_CreateHook(pgetFovTargetValMBTarget, &getFovTargetValMB_Hook,
+					  reinterpret_cast<void**>(&pgetFovTargetValMB)) != MH_OK) {
 		logErr("failed to create pgetFovTargetValMBTarget");
 		return false;
 	}
 
-
-	pSelectWeaponForSelectionGroupTarget = reinterpret_cast<SelectWeaponForSelectionGroup>(MinHookManager::GetIdPlayerSelectWeaponForSelectionGroupAddr());	
-	if (MH_CreateHook(reinterpret_cast<void**>(pSelectWeaponForSelectionGroupTarget), &SelectWeaponForSelectionGroupHook, reinterpret_cast<void**>(&pSelectWeaponForSelectionGroup)) != MH_OK) {
+	pSelectWeaponForSelectionGroupTarget = reinterpret_cast<SelectWeaponForSelectionGroup>(
+		MinHookManager::GetIdPlayerSelectWeaponForSelectionGroupAddr());
+	if (MH_CreateHook(pSelectWeaponForSelectionGroupTarget,
+					  &SelectWeaponForSelectionGroupHook,
+					  reinterpret_cast<void**>(&pSelectWeaponForSelectionGroup)) != MH_OK) {
 		logErr("failed to create pSelectWeaponForSelectionGroupTarget");
 		return false;
 	}
 
-
-	pisKeyPressedTarget = reinterpret_cast<isKeyPressed>(MinHookManager::GetIsKeyPressedAddr());	
-	if (MH_CreateHook(reinterpret_cast<void**>(pisKeyPressedTarget), &isKeyPressedHook, reinterpret_cast<void**>(&pisKeyPressed)) != MH_OK) {
+	pisKeyPressedTarget = reinterpret_cast<isKeyPressed>(MinHookManager::GetIsKeyPressedAddr());
+	if (MH_CreateHook(pisKeyPressedTarget, &isKeyPressedHook,
+					  reinterpret_cast<void**>(&pisKeyPressed)) != MH_OK) {
 		logErr("failed to create pisKeyPressedTarget");
 		return false;
 	}
 
-
-	pidMenu_UpdateTarget = reinterpret_cast<idMenu_Update>(MinHookManager::GetIdMenuUpdateAddr());	
-	if (MH_CreateHook(reinterpret_cast<void**>(pidMenu_UpdateTarget), &idMenu_UpdateHook, reinterpret_cast<void**>(&pidMenu_Update)) != MH_OK) {
+	pidMenu_UpdateTarget = reinterpret_cast<idMenu_Update>(MinHookManager::GetIdMenuUpdateAddr());
+	if (MH_CreateHook(pidMenu_UpdateTarget, &idMenu_UpdateHook,
+					  reinterpret_cast<void**>(&pidMenu_Update)) != MH_OK) {
 		logErr("failed to create pidMenu_UpdateTarget");
 		return false;
 	}
 
-
 	pBindsStrSetTarget = reinterpret_cast<BindsStrSet>(MinHookManager::GetPBindsStrSetAddr());
-	if (MH_CreateHook(reinterpret_cast<void**>(pBindsStrSetTarget), &BindsStrSetHook, reinterpret_cast<void**>(&pBindsStrSet)) != MH_OK) {
+	if (MH_CreateHook(pBindsStrSetTarget, &BindsStrSetHook,
+					  reinterpret_cast<void**>(&pBindsStrSet)) != MH_OK) {
 		logErr("failed to create pBindsStrSetTarget");
 		return false;
 	}
 
-	pidHUD_Reticle_SetActiveReticleTarget = reinterpret_cast<idHUD_Reticle_SetActiveReticle>(MinHookManager::GetSetActiveReticleAddr());
-	if (MH_CreateHook(reinterpret_cast<void**>(pidHUD_Reticle_SetActiveReticleTarget), &idHUD_Reticle_SetActiveReticleHook, reinterpret_cast<void**>(&pidHUD_Reticle_SetActiveReticle)) != MH_OK) {
+	pidHUD_Reticle_SetActiveReticleTarget = reinterpret_cast<idHUD_Reticle_SetActiveReticle>(
+		MinHookManager::GetSetActiveReticleAddr());
+	if (MH_CreateHook(pidHUD_Reticle_SetActiveReticleTarget,
+					  &idHUD_Reticle_SetActiveReticleHook,
+					  reinterpret_cast<void**>(&pidHUD_Reticle_SetActiveReticle)) != MH_OK) {
 		logErr("failed to create pidHUD_Reticle_SetActiveReticleTarget");
 		return false;
 	}
 
-	pconvertIdDeclUIColorToidColorTarget = reinterpret_cast<convertIdDeclUIColorToidColor>(MinHookManager::GetConvertIdDeclUIColorToIdColorTargetAddr());	
-	if (MH_CreateHook(reinterpret_cast<void**>(pconvertIdDeclUIColorToidColorTarget), &convertIdDeclUIColorToidColorHook, reinterpret_cast<void**>(&pconvertIdDeclUIColorToidColor)) != MH_OK) {
+	pconvertIdDeclUIColorToidColorTarget = reinterpret_cast<convertIdDeclUIColorToidColor>(
+		MinHookManager::GetConvertIdDeclUIColorToIdColorTargetAddr());
+	if (MH_CreateHook(pconvertIdDeclUIColorToidColorTarget,
+					  &convertIdDeclUIColorToidColorHook,
+					  reinterpret_cast<void**>(&pconvertIdDeclUIColorToidColor)) != MH_OK) {
 		logErr("failed to create pconvertIdDeclUIColorToidColorTarget");
 		return false;
 	}
 
-	
-
-	psetSpriteInstanceColorTarget = reinterpret_cast<setSpriteInstanceColor>(MinHookManager::GetSetSpriteInstanceAddr());
-	if (MH_CreateHook(reinterpret_cast<void**>(psetSpriteInstanceColorTarget), &setSpriteInstanceColorHook, reinterpret_cast<void**>(&psetSpriteInstanceColor)) != MH_OK) {
+	psetSpriteInstanceColorTarget = reinterpret_cast<setSpriteInstanceColor>(
+		MinHookManager::GetSetSpriteInstanceAddr());
+	if (MH_CreateHook(psetSpriteInstanceColorTarget, &setSpriteInstanceColorHook,
+					  reinterpret_cast<void**>(&psetSpriteInstanceColor)) != MH_OK) {
 		logErr("failed to create psetSpriteInstanceColorTarget");
 		return false;
 	}
 
-
-	pPrintOutlinedStringMB_target = reinterpret_cast<printOutlinedStringMB_func>(MinHookManager::GetPrintOutlinedStringMBFuncAddr());
+	pPrintOutlinedStringMB_target = reinterpret_cast<printOutlinedStringMB_func>(
+		MinHookManager::GetPrintOutlinedStringMBFuncAddr());
 	//pPrintOutlinedStringMB_target = reinterpret_cast<printOutlinedStringMB_func>(MemHelper::getFuncAddr(0x4CAD00));
-	if (MH_CreateHook(reinterpret_cast<void**>(pPrintOutlinedStringMB_target), &printOutlinedStringMB_hook, reinterpret_cast<void**>(&pPrintOutlinedStringMB)) != MH_OK) {
+	if (MH_CreateHook(pPrintOutlinedStringMB_target, &printOutlinedStringMB_hook,
+					  reinterpret_cast<void**>(&pPrintOutlinedStringMB)) != MH_OK) {
 		logErr("failed to create pPrintOutlinedStringMB_target");
 		return false;
-	}	
-
-
+	}
 
 	/*p_idInventoryCollection_Smth_Target = reinterpret_cast<idInventoryCollection_Smth_t>(MinHookManager::GetIdInventoryCollectionSmthFuncAdd());
 	if (MH_CreateHook(reinterpret_cast<void**>(p_idInventoryCollection_Smth_Target), &idInventoryCollection_Smth_Hook, reinterpret_cast<void**>(&p_idInventoryCollection_Smth)) != MH_OK) {
 		logErr("Failed to create idInventoryCollection_Smth hook.");
 		return false;
 	}*/
-		
 
 	p_customAnimSmth_t_Target = reinterpret_cast<customAnimSmth_t>(MinHookManager::GetCustomAnimSmthFuncAdd());
-	if (MH_CreateHook(reinterpret_cast<void**>(p_customAnimSmth_t_Target), &customAnimSmth_t_Hook, reinterpret_cast<void**>(&p_customAnimSmth_t)) != MH_OK) {
+	if (MH_CreateHook(p_customAnimSmth_t_Target, &customAnimSmth_t_Hook,
+					  reinterpret_cast<void**>(&p_customAnimSmth_t)) != MH_OK) {
 		logErr("Failed to create p_customAnimSmth_t_Target hook.");
 		return false;
 	}
-	
 
-	p_idHUDMenu_CurrencyConfirmation_t_Target = reinterpret_cast<idHUDMenu_CurrencyConfirmation_t>(MinHookManager::GetIdHUDMenu_CurrencyConfirmationSmthFuncAdd());
-	if (MH_CreateHook(reinterpret_cast<void**>(p_idHUDMenu_CurrencyConfirmation_t_Target), &idHUDMenu_CurrencyConfirmation_t_Hook, reinterpret_cast<void**>(&p_idHUDMenu_CurrencyConfirmation_t)) != MH_OK) {
+	p_idHUDMenu_CurrencyConfirmation_t_Target = reinterpret_cast<idHUDMenu_CurrencyConfirmation_t>(
+		MinHookManager::GetIdHUDMenu_CurrencyConfirmationSmthFuncAdd());
+	if (MH_CreateHook(p_idHUDMenu_CurrencyConfirmation_t_Target,
+					  &idHUDMenu_CurrencyConfirmation_t_Hook,
+					  reinterpret_cast<void**>(&p_idHUDMenu_CurrencyConfirmation_t)) != MH_OK) {
 		logErr("Failed to create p_idHUDMenu_CurrencyConfirmation_t_Target hook.");
 		return false;
-	}	
-	
-
+	}
 
 	p_StartSync_t_Target = reinterpret_cast<StartSync_t>(MinHookManager::GetStartSyncFuncAdd());
-	if (MH_CreateHook(reinterpret_cast<void**>(p_StartSync_t_Target), &StartSync_t_Hook, reinterpret_cast<void**>(&p_StartSync_t)) != MH_OK) {
+	if (MH_CreateHook(p_StartSync_t_Target, &StartSync_t_Hook,
+					  reinterpret_cast<void**>(&p_StartSync_t)) != MH_OK) {
 		logErr("Failed to create p_StartSync_t_Target hook.");
 		return false;
 	}
 
-
 	p_idPlayerFovLerp_Target = reinterpret_cast<idPlayerFovLerp_t>(MinHookManager::GetIdPlayerFovLerpFuncAdd());
-	if (MH_CreateHook(reinterpret_cast<void**>(p_idPlayerFovLerp_Target), &idPlayerFovLerp_Hook, reinterpret_cast<void**>(&p_idPlayerFovLerp)) != MH_OK) {
+	if (MH_CreateHook(p_idPlayerFovLerp_Target, &idPlayerFovLerp_Hook,
+					  reinterpret_cast<void**>(&p_idPlayerFovLerp)) != MH_OK) {
 		logErr("Failed to create p_idPlayerFovLerp_Target hook.");
 		return false;
 	}
 
-
 	p_syncEnd_Target = reinterpret_cast<syncEnd_t>(MinHookManager::GetSyncEndFuncAdd());
-	if (MH_CreateHook(reinterpret_cast<void**>(p_syncEnd_Target), &syncEnd_Hook, reinterpret_cast<void**>(&p_syncEnd)) != MH_OK) {
+	if (MH_CreateHook(p_syncEnd_Target, &syncEnd_Hook,
+					  reinterpret_cast<void**>(&p_syncEnd)) != MH_OK) {
 		logErr("Failed to create p_syncEnd_Target hook.");
 		return false;
 	}
 
-
 	p_RenderSprite_Target = reinterpret_cast<RenderSprite_t>(MinHookManager::GetRenderSpriteFuncAdd());
-	if (MH_CreateHook(reinterpret_cast<void**>(p_RenderSprite_Target), &RenderSprite_Hook, reinterpret_cast<void**>(&p_RenderSprite_Original)) != MH_OK) {
+	if (MH_CreateHook(p_RenderSprite_Target, &RenderSprite_Hook,
+					  reinterpret_cast<void**>(&p_RenderSprite_Original)) != MH_OK) {
 		logErr("Failed to create RenderSprite hook.");
 		return false;
 	}
 
-
 	p_idHud_PerspectiveSmth_t_Target = reinterpret_cast<idHud_PerspectiveSmth_t>(MemHelper::getFuncAddr(0x1549D80));
-	if (MH_CreateHook(reinterpret_cast<void**>(p_idHud_PerspectiveSmth_t_Target), &idHud_PerspectiveSmth_t_Hook, reinterpret_cast<void**>(&p_idHud_PerspectiveSmth_t)) != MH_OK) {
+	if (MH_CreateHook(p_idHud_PerspectiveSmth_t_Target, &idHud_PerspectiveSmth_t_Hook,
+					  reinterpret_cast<void**>(&p_idHud_PerspectiveSmth_t)) != MH_OK) {
 		logErr("Failed to create p_idHud_PerspectiveSmth_t_Target hook.");
 		return false;
 	}
 
-	
 	p_hud_drawPerspectiveSmth_t_Target = reinterpret_cast<hud_drawPerspectiveSmth_t>(MemHelper::getFuncAddr(0x1549A70));
-	if (MH_CreateHook(reinterpret_cast<void**>(p_hud_drawPerspectiveSmth_t_Target), &hud_drawPerspectiveSmth_t_Hook, reinterpret_cast<void**>(&p_hud_drawPerspectiveSmth_t)) != MH_OK) {
+	if (MH_CreateHook(p_hud_drawPerspectiveSmth_t_Target, &hud_drawPerspectiveSmth_t_Hook,
+					  reinterpret_cast<void**>(&p_hud_drawPerspectiveSmth_t)) != MH_OK) {
 		logErr("Failed to create p_hud_drawPerspectiveSmth_t_Target hook.");
 		return false;
 	}
 
-
-
 	//? this can only be changed by restarting the game mod, as this hook is only enabled in debug mode and if user enables it in menu
-	if ((Config::get() != ModConfig::nexusRelease) && modSettings::isLogConsoleToLogFile()) {
-
+	if (Config::get() != ModConfig::nexusRelease && modSettings::isLogConsoleToLogFile()) {
 		pIdLib_PrintfTarget = reinterpret_cast<IdLib_Printf>(MinHookManager::GetConsoleLogFuncAdd());
-		if (MH_CreateHook(reinterpret_cast<void**>(pIdLib_PrintfTarget), &IdLib_PrintfHook, reinterpret_cast<void**>(&pIdLib_Printf)) != MH_OK) {
+		if (MH_CreateHook(pIdLib_PrintfTarget, &IdLib_PrintfHook,
+						  reinterpret_cast<void**>(&pIdLib_Printf)) != MH_OK) {
 			logErr("Failed to create pIdLib_Printf hook.");
 			return false;
 		}
 	}
-
-	
-
 
 	//? keep thoses we never know:
 	/*p_idSyncEntity_HandleEvents_t_Target = reinterpret_cast<idSyncEntity_HandleEvents_t>(MemHelper::getFuncAddr(0x21925A0));
@@ -473,57 +440,44 @@ bool InitializeHooks() {
 		return false;
 	}*/
 
-
 	/*p_idHands_handleEvents_t_Target = reinterpret_cast<idHands_handleEvents_t>(MemHelper::getFuncAddr(0x21B7FC0));
 	if (MH_CreateHook(reinterpret_cast<void**>(p_idHands_handleEvents_t_Target), &idHands_handleEvents_t_Hook, reinterpret_cast<void**>(&p_idHands_handleEvents_t)) != MH_OK) {
 		logErr("Failed to create p_idHands_handleEvents_t_Target hook.");
 		return false;
 	}*/
 
-	
-
-
 	pOriginalWndProc = (WNDPROC)SetWindowLongPtr(g_game_hWindow, GWLP_WNDPROC, (LONG_PTR)&HookedWndProc);
-
 
 	Sleep(100); // just in case.
 
 	// Enable all hooks at once
-	if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK) {
+	if (MH_EnableHook(nullptr) != MH_OK) {
 		logErr("InitializeHooks: MH_EnableHook(MH_ALL_HOOKS) failed.");
 		return false;
 	}
 
 	logInfo("All Hooks successfully created and enabled.\n");
 	return true;
-
 }
 
-
-
-
-DWORD __stdcall EjectThread(LPVOID lpParameter) {
+DWORD __stdcall EjectThread(LPVOID /*lpParameter*/)
+{
 	Sleep(100);
 	FreeLibraryAndExitThread(DllHandle, 0);
 }
 
-
-
 //? Reminder: the way to load this dll with xenos is simply to change the output name to smth like somedll.dll.
-DWORD WINAPI ModMain() {
-
-
+DWORD WINAPI ModMain()
+{
 	//? attempting to close the mod if/when idlauncher triggers msimg32.dll 
 	if (!mem.isGameFileNameValid()) {
-		CreateThread(0, 0, EjectThread, 0, 0, 0);
+		CreateThread(nullptr, 0, EjectThread, nullptr, 0, nullptr);
 		return 0;
 	}
-	
 
 	//? if you want to enable/ disable the console just comment/uncomment the DISABLE_LOGGING_CONSOLE line in console.cpp. i haven't tested with imgui so it migth create issues...
 	Console::Enable();
-   
-	
+
 	//! even though we managed to find a way to change a file logging level at runtime, because the mod will have a release and debug version we don't have to get any "version" from the json settings file.
 	//? IF YOU EVER UPDATE THE OLD MOD VERSION MAKE SURE TO ADD ITS MD5 TO THE LIST OF CONFLICTING MODS TO CHECK FOR
 	Config::set(ModConfig::dev); // nexusRelease, nexusDebug, dev
@@ -533,7 +487,7 @@ DWORD WINAPI ModMain() {
 	if (HashManager::isPreviousModVersionInGameFolder()) {
 		TTS::addToQueue(L"ERROR. Found previous version of this mod in the game folder, please check the log file.");
 		TTS::sayAllInQueue(); //! make sure this is called before the isHookError check
-		CreateThread(0, 0, EjectThread, 0, 0, 0);
+		CreateThread(nullptr, 0, EjectThread, nullptr, 0, nullptr);
 		return 0;
 	}
 
@@ -542,18 +496,16 @@ DWORD WINAPI ModMain() {
 		logErr("DllInit failed...Mod 'should' not work.");
 		logErr("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	}
-	
-	FileOp::listModDirectory();
 
+	FileOp::listModDirectory();
 
 	if (HashManager::isMeathookModInGameFolder()) {
 		logWarn("********************************************************************************************");
 		logWarn("User is using meathook mod (logging this for debug purposes in case of conflict/crash/freeze )");
 		logWarn("********************************************************************************************");
-	}	
+	}
 
 	if (!Config::isModError() && FileOp::isGameDirectoryValid()) {
-
 		if (!FileOp::isModDirectory()) {
 			if (!FileOp::CreateModDirectoryV2()) {
 				Config::setModError("initModDirectory failed to create mod directory, mod can not work");
@@ -563,17 +515,14 @@ DWORD WINAPI ModMain() {
 		if (!Config::isModError()) {
 			modSettings::loadSettings();
 			modSettings::saveSettings();
-		}		
+		}
 	}
-
 
 	//? this actually works even if we don't need it atm. KEEP IT
 	/*logInfo("attempting to change Config mid func let's see it if works....");
 	blablaConfig::set(ModConfig::nexusRelease);
 	logWarn("config should now be nexusRelease and you should see this message.");
 	logInfo("config should now be nexusRelease and you should NOT see this message.");*/
-
-
 
 	if (!Config::isModError()) {
 		if (!findGameWindow(Config::GAME_WINDOW_CLASS_NAME)) {
@@ -582,16 +531,13 @@ DWORD WINAPI ModMain() {
 	}
 
 	if (!Config::isModError()) {
-		uintptr_t mainModuleAddr = MemHelper::getModuleBaseAddr();
+		const uintptr_t mainModuleAddr = MemHelper::getModuleBaseAddr();
 		if (mainModuleAddr == NULL) {
 			Config::setModError("Module base address is: NULL: mod can not work.");
-		}
-		else {
+		} else {
 			logInfo("Module base address is: %p", (void*)mainModuleAddr);
 		}
 	}
-	
-
 
 	if (!Config::isModError()) {
 		if (!Scanner::scanForAddrs()) {
@@ -599,14 +545,12 @@ DWORD WINAPI ModMain() {
 		}
 	}
 
-
 	if (!Config::isModError()) {
 		if (!InitializeHooks()) {
 			Config::setModError("Failed to initalize minhook, mod can not work.");
 		}
 	}
 
-	
 	/*if (!Config::isModError()) {
 		if (GameVersionInfoManager::isNewGameUpdateReleased()) {
 			logWarn("This version of the game: %s is newer than the version the mod was made for, mod 'may' not work as attended or not work at all.", GameVersionInfoManager::getBuildVersionStr().c_str());
@@ -616,7 +560,6 @@ DWORD WINAPI ModMain() {
 			logInfo("Game build Version is as expected: %s", GameVersionInfoManager::getBuildVersionStr().c_str());
 		}
 	}*/
-
 
 	/*if (Config::get() != ModConfig::nexusRelease) {
 
@@ -638,68 +581,61 @@ DWORD WINAPI ModMain() {
 		logInfo("**** Done listing %d processes. *****", counter);
 	}*/
 
-
 	if (!Config::isModError()) {
 		if (Config::get() != ModConfig::nexusRelease) {
 			TTS::addToQueue(L"Mod Load Succes !");
 		}
-			
-	}
-	else {
+	} else {
 		TTS::addToQueue(L"Mod Error, check the mod log file in the game folder");
 	}
 
-	
+	bool             isFirstTimeStatusLog = true;
+	static int const loopSleepMs          = 10;
 
+	bool const     lastIsPlayerInGame             = false;
+	uint64_t const lastOwnedItemsGetMs            = 0;
+	uint64_t const lastStringOverwriteAttempMs    = 0;
+	uint64_t const lastGetAsyncKeyPressMs         = 0;
+	uint64_t const lastIniFileReloadMs            = 0;
+	uint64_t const lastDeclWeaponOverwriteMs      = 0;
+	uint64_t const lastGameTimeDebugMs            = 0;
+	uint64_t const lastcustomUICoordsCheckMs      = 0;
+	uint64_t const lastcolorReloadMs              = 0;
+	uint64_t       lastWeaponSwitchCheckMs        = 0;
+	uint64_t       lastIdInventoryGetMs           = 0;
+	uint64_t const lastWeaponSettingCheckMs       = 0;
+	uint64_t       lastHudColorsUpdateCheckMs     = 0;
+	uint64_t const lastImmersiveCrosshairCheckMs  = 0;
+	uint64_t const lastCrosshairScaleCheckMs      = 0;
+	uint64_t const lastCrosshairInScropCheckMs    = 0;
+	uint64_t       lastinGameReticleModeCheckMs   = 0;
+	uint64_t const lastPulseColorUpdateMs         = 0;
+	uint64_t const lastFXCheckMs                  = 0;
+	uint64_t const lastIniFileWatcherCheckMs      = 0;
+	uint64_t const lastDebugWarningMs             = 0;
+	uint64_t const lastFragIconBlinkTestMs        = 0;
+	uint64_t       lastCustomIceNadeIconCheckMs   = 0;
+	uint64_t       lastIceIconCoordsUpdateCheckMs = 0;
+	uint64_t       lastForceDebugStringCheckMs    = 0;
+	uint64_t const lastIsDemonPlayerCheckMs       = 0;
+	uint64_t const lastGameModeCheckMs            = 0;
+	uint64_t const lastIsReticleHideCheckkMs      = 0;
+	uint64_t const lastIsInCinematicCheckkMs      = 0;
+	uint64_t const lastIdPlayerCheckMs            = 0;
+	uint64_t const lastHudDebugMs                 = 0;
+	uint64_t const lastScreenResCheckMs           = 0;
+	uint64_t       lastCustomHudcheckMs           = 0;
+	uint64_t       lastFragSelectedCheckMs        = 0;
+	uint64_t       lastAACheckMs                  = 0;
 
-
-	bool isFirstTimeStatusLog = true;
-	static int loopSleepMs = 10;
-
-	bool lastIsPlayerInGame = false;
-	uint64_t lastOwnedItemsGetMs = 0;
-	uint64_t lastStringOverwriteAttempMs = 0;
-	uint64_t lastGetAsyncKeyPressMs = 0;
-	uint64_t lastIniFileReloadMs = 0;
-	uint64_t lastDeclWeaponOverwriteMs = 0;
-	uint64_t lastGameTimeDebugMs = 0;
-	uint64_t lastcustomUICoordsCheckMs = 0;
-	uint64_t lastcolorReloadMs = 0;
-	uint64_t lastWeaponSwitchCheckMs = 0;
-	uint64_t lastIdInventoryGetMs = 0;
-	uint64_t lastWeaponSettingCheckMs = 0;
-	uint64_t lastHudColorsUpdateCheckMs = 0;
-	uint64_t lastImmersiveCrosshairCheckMs = 0;
-	uint64_t lastCrosshairScaleCheckMs = 0;
-	uint64_t lastCrosshairInScropCheckMs = 0;
-	uint64_t lastinGameReticleModeCheckMs = 0;
-	uint64_t lastPulseColorUpdateMs = 0;
-	uint64_t lastFXCheckMs = 0;
-	uint64_t lastIniFileWatcherCheckMs = 0;
-	uint64_t lastDebugWarningMs = 0;
-	uint64_t lastFragIconBlinkTestMs = 0;
-	uint64_t lastCustomIceNadeIconCheckMs = 0;
-	uint64_t lastIceIconCoordsUpdateCheckMs = 0;
-	uint64_t lastForceDebugStringCheckMs = 0;
-	uint64_t lastIsDemonPlayerCheckMs = 0;
-	uint64_t lastGameModeCheckMs = 0;
-	uint64_t lastIsReticleHideCheckkMs = 0;
-	uint64_t lastIsInCinematicCheckkMs = 0;
-	uint64_t lastIdPlayerCheckMs = 0;
-	uint64_t lastHudDebugMs = 0;
-	uint64_t lastScreenResCheckMs = 0;
-	uint64_t lastCustomHudcheckMs = 0;
-	uint64_t lastFragSelectedCheckMs = 0;
-	uint64_t lastAACheckMs = 0;
-	
 	//uint64_t lastCurrentActiveReticleCheckMs = 0;
-	bool wasPlayerInMenu = false;
+	bool const wasPlayerInMenu = false;
 
-	bool debugIsFragNadeIconToggle = false;
+	bool const debugIsFragNadeIconToggle = false;
 
 	uint64_t lastPlayerFlagUpdateMs = 0;
 	//! in game, not a demon, not in cutscene, not dead.
-	bool isSlayerActiveFlag = false ;
+	bool isSlayerActiveFlag = false;
 	//! in game, playing as a demon not dead
 	bool isDemonActiveFlag = false;
 	//! same above but can be in cutscene
@@ -709,21 +645,14 @@ DWORD WINAPI ModMain() {
 	bool isGameSettingsHudEnabled = false;
 
 	//! the equipment info from UI game settings
-	bool isEquipmentInfoEnabled = false;;
-
-	bool isInScope = false;
+	bool isEquipmentInfoEnabled = false;
 
 	bool isFragNadeOwned = false;
-	bool isIceNadeOwned = false;
+	bool isIceNadeOwned  = false;
 
-	bool last_bShowMenu = false; //! mod menu
-
-
-
+	bool const last_bShowMenu = false; //! mod menu
 
 	while (true) {
-
-
 		if (isFirstTimeStatusLog) {
 			logInfo("FirstTimeStatusLog:");
 			logInfo("main loop Sleep Ms: %d", loopSleepMs);
@@ -735,11 +664,10 @@ DWORD WINAPI ModMain() {
 		//? trying this to check if we can use it to know if game is initialized and mod can "start"
 		//PlayerStateChecker::updateGameState();
 
-		Sleep(loopSleepMs); //! having a long sleep here will not haVK_NUMPADve influence on the hooks which is great. 		
+		Sleep(loopSleepMs);
+		//! having a long sleep here will not haVK_NUMPADve influence on the hooks which is great. 		
 
 		TTS::sayAllInQueue(); //! make sure this is called before the isHookError check
-
-
 
 		if (Config::isModError()) {
 			if (g_isCloseModRequestFlag) {
@@ -751,29 +679,23 @@ DWORD WINAPI ModMain() {
 				logInfo("DEBUG: user just pressed  VK_NUMPAD0: attempting to Unload Mod...");
 				break;
 			}*/
-			continue;   //! keep the mod running so it can output some msg to console/file      
-		}		
-
-
+			continue; //! keep the mod running so it can output some msg to console/file      
+		}
 
 		//! atm initialized state is set in idMenu_UpdateHook
 		if (!PlayerStateChecker::isGameInitialized()) {
 			//logInfo("main loop: ! PlayerStateChecker::isGameInitialized()");
-			continue;	//! if the mod has levelLoaded succesfully, we don't do anything until the game is levelLoaded.
+			continue; //! if the mod has levelLoaded succesfully, we don't do anything until the game is levelLoaded.
 		}
-
 
 		//! the hook will make sure the init only happen if menu update has been called once and if we haven't tried init imgui before 
 		initImguiV2();
 
-
-		modInit();	//! <= this will execute only once whatever happen.	
-
-
+		modInit(); //! <= this will execute only once whatever happen.	
 
 		//! haven't seen any crash in horde mod, since then but let's be vigilent...
 		//x unfortunately this will not help with the random crash of loading horde mode level
-		bool isReadyToRenderIceIcon = LoadingScreenManager::isReadyToRenderIceIcon();
+		const bool isReadyToRenderIceIcon = LoadingScreenManager::isReadyToRenderIceIcon();
 		if (isReadyToRenderIceIcon != g_debugIsReadyToRenderIceNadeIcon) {
 			g_debugIsReadyToRenderIceNadeIcon = isReadyToRenderIceIcon;
 			logInfo("isReadyToRenderIceIcon has changed to: %d", isReadyToRenderIceIcon);
@@ -783,7 +705,6 @@ DWORD WINAPI ModMain() {
 
 		PlayerStateChecker::updatePlayerState();
 
-		
 		if (PlayerStateChecker::isGameLoading()) {
 			//logInfo(" main loop: PlayerStateChecker::isGameLoading())");
 			//? this is horrible....
@@ -793,46 +714,38 @@ DWORD WINAPI ModMain() {
 			//logInfo("Game is loading....resetting inventory count");
 			//switcher.resetInventoryCount();
 			continue; //! not doing anything while game loads as this is too prone to crashes.
-		}		
-
+		}
 
 		if (EpochMillis() - lastAACheckMs > 1000) {
-
 			idCmd::setAntiAliasingState(modSettings::getIsDisableAA());
 
 			lastAACheckMs = EpochMillis();
 		}
 
-		
+		if (PlayerStateChecker::isPlayingAndActive()) {
+			//? means not in cutscene too
 
-
-
-		if (PlayerStateChecker::isPlayingAndActive()) { //? means not in cutscene too
-
-
-			if ((EpochMillis() - lastPlayerFlagUpdateMs) > 200) {
-
+			if (EpochMillis() - lastPlayerFlagUpdateMs > 200) {
 				//logInfo("PlayerStateChecker::isPlayingAndActive() .......");
 
 				//? not sure if those 2 are necessary after all...
-				isSlayerActiveFlag = idPlayer_K::isSlayerActiveFlag();
-				isDemonActiveFlag = idPlayer_K::isDemonActiveFlag();
+				isSlayerActiveFlag     = idPlayer_K::isSlayerActiveFlag();
+				isDemonActiveFlag      = idPlayer_K::isDemonActiveFlag();
 				isSlayerInTheWorldFlag = idPlayer_K::isSlayerInTheWorldFlag();
 
 				isFragNadeOwned = idInventoryCollectionManager::isFragNadeOwned();
-				isIceNadeOwned = idInventoryCollectionManager::isIceNadeOwned();
+				isIceNadeOwned  = idInventoryCollectionManager::isIceNadeOwned();
 
 				isGameSettingsHudEnabled = fastCvarManager::getIsShowHudEnabled();
-				isEquipmentInfoEnabled = fastCvarManager::getIsEquipmentInfoEnabled();
+				isEquipmentInfoEnabled   = fastCvarManager::getIsEquipmentInfoEnabled();
 
-				isInScope = idPlayer_K::isInScope();
-
+				bool const isInScope = idPlayer_K::isInScope();
 
 				lastPlayerFlagUpdateMs = EpochMillis();
 			}
 
-
-			if (modSettings::isImprovedWeaponSwitching() && isSlayerActiveFlag && (EpochMillis() - lastWeaponSwitchCheckMs) > 100) {
+			if (modSettings::isImprovedWeaponSwitching() && isSlayerActiveFlag && EpochMillis() -
+				lastWeaponSwitchCheckMs > 100) {
 				lastWeaponSwitchCheckMs = EpochMillis();
 				switcher.checkWeaponSwitchV2();
 			}
@@ -844,21 +757,21 @@ DWORD WINAPI ModMain() {
 			//}
 
 			//! this is used to check if a weapon or a nade is owned. 500ms should be good enough.
-			if (EpochMillis() - lastIdInventoryGetMs > 400 && isSlayerInTheWorldFlag) {				
+			if (EpochMillis() - lastIdInventoryGetMs > 400 && isSlayerInTheWorldFlag) {
 				idInventoryCollectionManager::updateCustomInventory();
 				lastIdInventoryGetMs = EpochMillis();
 				//idInventoryCollectionManager::updateOwnedItemsIds();
 			}
 
-
 			//! custom Hud			
 			if (EpochMillis() - lastCustomHudcheckMs > 200) {
-
 				//logInfo("hello?????: isSlayerActiveFlag: %d", isSlayerActiveFlag);
 
-				Menu::bShowKaibzCrosshairWindow = modSettings::getIsUseImguiDotCrosshair() && (isSlayerActiveFlag || isDemonActiveFlag);			
+				Menu::bShowKaibzCrosshairWindow = modSettings::getIsUseImguiDotCrosshair() && (isSlayerActiveFlag ||
+					isDemonActiveFlag);
 
-				Menu::bShowKaibzHudWindow = modSettings::getIsUseKaibzHud() && (isSlayerActiveFlag || isDemonActiveFlag);		
+				Menu::bShowKaibzHudWindow = modSettings::getIsUseKaibzHud() && (isSlayerActiveFlag ||
+					isDemonActiveFlag);
 
 				lastCustomHudcheckMs = EpochMillis();
 			}
@@ -866,44 +779,40 @@ DWORD WINAPI ModMain() {
 			//? it doesn't work.....
 			// enforcing frag just to be absolutely sure there is no way ice can be selected when dedicated nade key is enabled
 			if (EpochMillis() - lastFragSelectedCheckMs > 1000) {
-
-				if (modSettings::getIsUseDedicatedNadeKeys() && idPlayer_K::getSelectedGrenadeType() == equipmentType_t::EQUIPMENT_ICE_BOMB) {
-
+				if (modSettings::getIsUseDedicatedNadeKeys() && idPlayer_K::getSelectedGrenadeType() ==
+					EQUIPMENT_ICE_BOMB) {
 					logInfo("idPlayer_K::setGrenadeType(GrenadeType::Frag); trig....");
-					EquipmentManager::switchEquipment(equipmentType_t::EQUIPMENT_FRAG_GRENADE);
+					EquipmentManager::switchEquipment(EQUIPMENT_FRAG_GRENADE);
 				}
 
 				lastFragSelectedCheckMs = EpochMillis();
 			}
 
-			
-			
-
 			//! Game hud Ice Nade Icon:			
-			if (EpochMillis() - lastCustomIceNadeIconCheckMs > 200) {		
-
+			if (EpochMillis() - lastCustomIceNadeIconCheckMs > 200) {
 				//logInfo("isFragNadeOwned in lskdjf is: %d and isIceNadeOwned: %d", isFragNadeOwned, isIceNadeOwned);
 				//! we don't render if frag is not owned cause if player uses console to give himself ice and not frag at game start it will show double ice icon and as a side note when using the ice in that config the icon shows up while reloading and then disappears, certainly cause it's not meant to be this way.
-				if (!isSlayerActiveFlag || !isIceNadeOwned || !isFragNadeOwned || !isEquipmentInfoEnabled || !isGameSettingsHudEnabled || ! modSettings::getIsUseDedicatedNadeKeys()) {
-
+				if (!isSlayerActiveFlag || !isIceNadeOwned || !isFragNadeOwned || !isEquipmentInfoEnabled || !
+					isGameSettingsHudEnabled || !modSettings::getIsUseDedicatedNadeKeys()) {
 					CustomIceNadeIconManager::updateIsRenderingAllowed(false);
-				}
-				else {
+				} else {
 					CustomIceNadeIconManager::updateIsRenderingAllowed(true);
 				}
 
-				if (idRenderModelGuiManager::getScreenWidth() != g_debugScreenWidth || idRenderModelGuiManager::getScreenHeight() != g_debugScreenHeight) {
-
-					g_debugScreenWidth = idRenderModelGuiManager::getScreenWidth();
+				if (idRenderModelGuiManager::getScreenWidth() != g_debugScreenWidth ||
+					idRenderModelGuiManager::getScreenHeight() != g_debugScreenHeight) {
+					g_debugScreenWidth  = idRenderModelGuiManager::getScreenWidth();
 					g_debugScreenHeight = idRenderModelGuiManager::getScreenHeight();
-					logInfo("Screen Resolution has changed: width: %.2f height:  %.2f updating ice icon coords", g_debugScreenWidth, g_debugScreenHeight);
+					logInfo("Screen Resolution has changed: width: %.2f height:  %.2f updating ice icon coords",
+							g_debugScreenWidth, g_debugScreenHeight);
 
 					CustomIceNadeIconManager::updateCoords();
 				}
 				//! may be overkill but safety first.
-				else if (PlayerStateChecker::getPlayerState() != g_debug_lastPlayerState || (EpochMillis() - lastIceIconCoordsUpdateCheckMs) > 1000) {
+				else if (PlayerStateChecker::getPlayerState() != g_debug_lastPlayerState || EpochMillis() -
+					lastIceIconCoordsUpdateCheckMs > 1000) {
 					lastIceIconCoordsUpdateCheckMs = EpochMillis();
-					g_debug_lastPlayerState = PlayerStateChecker::getPlayerState();
+					g_debug_lastPlayerState        = PlayerStateChecker::getPlayerState();
 
 					CustomIceNadeIconManager::updateCoords();
 				}
@@ -917,22 +826,17 @@ DWORD WINAPI ModMain() {
 				lastCustomIceNadeIconCheckMs = EpochMillis();
 			}
 
-
-
 			//! making sure the debugHud is active even if user tries to disable the debug string somehow through console cmd.
 			if (EpochMillis() - lastForceDebugStringCheckMs > 5000) {
 				lastForceDebugStringCheckMs = EpochMillis();
 				idCmd::forceDebug_hud_string();
 			}
 
-
-
 			if (EpochMillis() - lastHudColorsUpdateCheckMs > 200 && !idPlayer_K::isPlayerDemon()) {
 				//! i know it's not elegant but i'd rather be sure that i triggers for now		
-				
 
 				ColorManager::reapplySwfColors();
-				
+
 				//if (idPlayer_K::isBloodPunchCountChanged()) {
 				//	ColorManager::reapplySwfColors();
 				//}
@@ -961,8 +865,6 @@ DWORD WINAPI ModMain() {
 				lastHudColorsUpdateCheckMs = EpochMillis();
 			}
 
-
-
 			//! this is not great but this is a way to make sure user will see a crosshair in the immersive weapons ads otherwiser he might think the feature is broken because there are no crosshair anywhere and think that this feature need the None crosshair mode to work. We can't just do a check in the iniFile load cause user can change the in game Crosshair mode at any tim
 			if (EpochMillis() - lastinGameReticleModeCheckMs > 300) {
 				lastinGameReticleModeCheckMs = EpochMillis();
@@ -982,7 +884,7 @@ DWORD WINAPI ModMain() {
 			CustomIceNadeIconManager::updateIsRenderingAllowed(false);
 
 			Menu::bShowKaibzCrosshairWindow = false;
-			Menu::bShowKaibzHudWindow = false;
+			Menu::bShowKaibzHudWindow       = false;
 		}
 
 		//x in cutscene or technically the reticle update func stops being triggered which means the crosshair should not be drawn, so slayer is not ready to fight. (doesn't matter what crosshair setting from the game menu)
@@ -992,106 +894,79 @@ DWORD WINAPI ModMain() {
 		//	CustomIceNadeIconManager::updateIsRenderingAllowed(false);
 		//}
 
-	
-
-
 		//? !!!!!!!!!!!!!     CRITICAL    !!!!!!!!!!!!!!!!!!!!!!!!
 		if (g_isCloseModRequestFlag) {
 			logInfo("DEBUG: loop: setting g_isCloseModRequestFlag is true, attempting to Unload Mod...");
 			break;
-		}			
-			
+		}
 	}
 
-
-
-	(logWarn("mod is closing, forcing in_mouse to 1 to prevent mouse being disabled next time game is launched "));
+	logWarn("mod is closing, forcing in_mouse to 1 to prevent mouse being disabled next time game is launched ");
 	idCmd::SetInMouseEnabled(true);
-
 
 	//? disabling this as H::Free(); will disable minhook globally and if we leave disableHooks(); it seems to create a conflict and mod can not be unloaded completely which create issue for testing the mod when using Xenos.
 	//disableHooks();
-	
 
-	H::bShuttingDown = true;	
-	
+	H::bShuttingDown = true;
+
 	H::Free();
 
 	DisableWndProcHook(g_game_hWindow);
-	
-	MH_STATUS mhStatus = MH_Uninitialize();
-	auto mhStatusCstr = MH_StatusToString(mhStatus);
+
+	const MH_STATUS   mhStatus     = MH_Uninitialize();
+	const auto* const mhStatusCstr = MH_StatusToString(mhStatus);
 	logInfo("quitting mod debug: mhStatusCstr: %s", mhStatusCstr);
 
 	K_Utils::PlayModUnloadedBeeps();
 	logInfo("attemting to exit mod...");
-	CreateThread(0, 0, EjectThread, 0, 0, 0);	
-	return 0;
-
-	
-}
-
-
-
-DWORD WINAPI OnProcessDetach(LPVOID lpParam) {
-	
-	Console::Hide();	
+	CreateThread(nullptr, 0, EjectThread, nullptr, 0, nullptr);
 	return 0;
 }
 
-
-
-extern "C" BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+DWORD WINAPI OnProcessDetach(LPVOID /*lpParam*/)
 {
-    UNREFERENCED_PARAMETER(lpReserved);
+	Console::Hide();
+	return 0;
+}
 
+extern "C" BOOL APIENTRY DllMain(const HMODULE hModule, const DWORD ul_reason_for_call, LPVOID lpReserved)
+{
+	UNREFERENCED_PARAMETER(lpReserved);
 
 	if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
-
-		
 		DllHandle = hModule;
 		DllInit();
 		DisableThreadLibraryCalls(hModule);
-		
 
-		HANDLE hHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ModMain, DllHandle, 0, NULL);
-		if (hHandle != NULL) {
+		HANDLE hHandle = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)ModMain,
+									  DllHandle, 0, nullptr);
+
+		if (hHandle != nullptr) {
 			CloseHandle(hHandle);
 		}
-	}
-	else if (ul_reason_for_call == DLL_PROCESS_DETACH && !lpReserved) {
-		OnProcessDetach(NULL);
+	} else if (ul_reason_for_call == DLL_PROCESS_DETACH && (lpReserved == nullptr)) {
+		OnProcessDetach(nullptr);
 	}
 
 	return TRUE;
 
+	// switch (ul_reason_for_call)
+	// {
+	//     case DLL_PROCESS_ATTACH:
+	//DllHandle = hModule;
+	////std::cout << "DllHandle value is DllMain: " << reinterpret_cast<uintptr_t>(DllHandle) << std::endl;
+	//         DisableThreadLibraryCalls(hModule);
 
+	//U::SetRenderingBackend(VULKAN);
+	//         //InitInstance();
+	//CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)ModMain, DllHandle, 0, nullptr);
+	//         break;
 
+	//     case DLL_PROCESS_DETACH:
+	//         break;
+	// }
 
-
-
-
-
-
-
-
-   // switch (ul_reason_for_call)
-   // {
-   //     case DLL_PROCESS_ATTACH:
-			//DllHandle = hModule;
-			////std::cout << "DllHandle value is DllMain: " << reinterpret_cast<uintptr_t>(DllHandle) << std::endl;
-   //         DisableThreadLibraryCalls(hModule);
-
-			//U::SetRenderingBackend(VULKAN);
-   //         //InitInstance();
-			//CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)ModMain, DllHandle, 0, nullptr);
-   //         break;
-
-   //     case DLL_PROCESS_DETACH:
-   //         break;
-   // }
-
-   // return TRUE;
+	// return TRUE;
 }
 
 //DWORD WINAPI OnProcessAttach(LPVOID lpParam) {
@@ -1110,4 +985,3 @@ extern "C" BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVO
 //
 //	return 0;
 //}
-

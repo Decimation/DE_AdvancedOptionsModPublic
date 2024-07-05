@@ -3,11 +3,10 @@
 #include <Windows.h>
 #include "../dependencies/imgui/imgui.h"
 //#include "menu.hpp"
-#include "../../Debug/ImGuiDebugWin.h"
+#include <../ImGui/ImGuiDebug.h>
 #include "../../K_Utils/K_Utils.h"
 #include "../../DE/idInventoryManager.h"
 #include "../../Hud/CustomCrosshairManager.h"
-
 
 class KaibzCrosshair
 {
@@ -21,7 +20,6 @@ public:
 
 	static void showCircleCrosshair(KaibzHudData& data);
 	//static void showCircleCrosshair(bool* p_open = NULL);
-
 
 };
 

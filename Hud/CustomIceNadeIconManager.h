@@ -2,15 +2,9 @@
 
 #include <string>
 
-#include "../DE/idLib.h"
-#include "../DE/idColor.h"
 #include "CustomIceNadeIconUIData.h"
 #include "../DE/GameHudColorsManager.h"
-#include "../DE/idMapInstanceLocalManager.h"
 #include "../DE/idPlayer.h"
-#include "../DE/MaterialLib.h"
-#include "../DE/UserColorSet.h"
-
 
 struct debugTimersData {
 	std::string gameTimeStr;
@@ -21,21 +15,16 @@ struct debugTimersData {
 	std::string countdownStr;
 };
 
-
-
 class CustomIceNadeIconManager {
 
 private:
 
 	//! i'm usure about this being a ref for the hook or copying it in the hook...i guess we could see the perf but i'm not sure we'll see a diff on our machine but may be some people would, like the ones with old cpus(?)
 	static inline CustomIceNadeIconUIData m_iceNadeIconUIData;
-	
 
 	static inline idPlayer_equipmentInfo_t_itemData_t m_timersData;
 
 	//! when this function triggers, it will call our IdHudDebugPrintHook that draws our custom ice nade icon 4 times per image rendered, which is overkill as we don't want our icon drawn 3 times for nothing so that flag allow us to skip those 3 render calls hopefully.
-	
-	
 
 public:
 	
@@ -49,13 +38,9 @@ public:
 
 	static void updateCooldownTimeLeftStr();
 
-
 	static CustomIceNadeIconUIData getData();
 
-
 	//static debugTimersData getDebugTimersStrs();
-
-
 
 	//! i guess those should be triggered in main loop as we want the less computing possible in the hook, now when do we trigger it, should be at least when data changes, when changing state from menu to ingame, when ini reloading, when res changes, and as a safety, every second...
 	
@@ -66,10 +51,6 @@ public:
 	static void updateIsRenderingAllowed(bool isAllowed) {
 		m_iceNadeIconUIData.isRenderingAllowed = isAllowed;
 	}*/
-
-	
-
-	
 
 	//! will have to trigger updateIceNadeCooldownStatus (yes this is state but don't want to have the hook trigger idPlayer_K::getIceNadeCount() > 0.
 	//static void updateColors() {
@@ -128,12 +109,6 @@ public:
 	//	//m_iceNadeIconUIData.backgroundColor = baseIceBackGroundColor;
 	//}
 
-
-
-	
-
-
-
 	//	long long gameTime = idMapInstanceLocalManager::getGameTime_t();
 	//	auto timers = idPlayer_K::getEquipmentTimers(equipmentIndex_t::ICE);
 	//	int countdown = (int)((timers.equipmentRechargeTime - gameTime) / 1000000) + 1; //! we need to add 1 to make it look correct.
@@ -148,11 +123,6 @@ public:
 	//	}	
 	//}
 
-
-	
-
-	
-
 	//! methods to use by printOutlinedStringMB_hook:
 	
 	/*static bool isIceNadeOwned() {
@@ -163,9 +133,7 @@ public:
 
 	}*/
 
-
 };
-
 
  //const float CustomIceNadeIconManager::m_starIconScale = .27f; // was .27 the lower the val the bigger the icon
  //const float CustomIceNadeIconManager::m_abilityAvailableStarIconWhiteBlend = .40f; // was .45

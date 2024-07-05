@@ -1,5 +1,11 @@
+// #include "../DE/idLib.h"
+// #include "../DE/idColor.h"
 #include "CustomIceNadeIconUIData.h"
 
+#include "../DE/GameHudColorsManager.h"
+#include "../DE/idPlayer.h"
+#include "../DE/MaterialLib.h"
+#include "../DE/UserColorSet.h"
 
 bool CustomIceNadeIconUIData::isIceNadeOnCoolDown() {
 	return isIceOnCoolDown;
@@ -78,7 +84,6 @@ void CustomIceNadeIconUIData::updateIsIceNadeCooldownStatus() {
 
 		/*GameHudColorsManager::setIconWhiteBlendColor(baseIceIconColor, m_iceNadeIconUIData.iconColor, m_abilityAvailableStarIconWhiteBlend);*/
 
-
 	}
 	else { //! if ice not available
 		if (UserColorSet::isDefaultColorIceNadeCoolDownArrow()) {
@@ -100,7 +105,6 @@ void CustomIceNadeIconUIData::updateIsIceNadeCooldownStatus() {
 	GameHudColorsManager::setAlpha(baseIceBackGroundColor, borderColor, m_BorderAlpha);
 
 	GameHudColorsManager::setAlpha(baseIceBackGroundColor, extraBorderColor, m_ExtraBorderAlpha);
-
 
 	//m_iceNadeIconUIData.backgroundColor = baseIceBackGroundColor;
 }

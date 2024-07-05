@@ -1,13 +1,9 @@
 #pragma once
 
-
 #include <string>
 #include "../DE/idLib.h"
 #include "../DE/idColor.h"
-#include "../DE/idPlayer.h"
-#include "../DE/MaterialLib.h"
-#include "../DE/GameHudColorsManager.h"
-
+// #include "../DE/GameHudColorsManager.h"
 
 class CustomIceNadeIconUIData
 {
@@ -19,7 +15,6 @@ public:
 	const float m_ExtraBorderAlpha = .1f;
 	const float m_BorderAlpha = 1.0f;
 	const float m_BackgroundAlpha = .3f;
-
 
 	bool isRenderingAllowed;
 	bool isIceOnCoolDown;
@@ -34,7 +29,6 @@ public:
 	__int64 backgroundMrt;
 	__int64 iconMrt;
 	std::string cooldownText = "??";
-
 
 	bool isIceNadeOnCoolDown();
 

@@ -1,7 +1,5 @@
 #include "DebugGui.h"
 
-
-
 void DebugGui::drawFullScreenBlackBackground(bool* p_open) {
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImVec2 window_pos = ImVec2(viewport->Pos.x, viewport->Pos.y);
@@ -9,7 +7,6 @@ void DebugGui::drawFullScreenBlackBackground(bool* p_open) {
 
     ImGui::GetWindowDrawList()->AddRectFilled(window_pos, window_size, IM_COL32(0, 0, 0, 255));
 }
-
 
 //void DebugGui::drawBg(ImVec2& window_pos, ImVec2& window_size, float bgAlpha) {
 //
@@ -23,7 +20,6 @@ void DebugGui::drawFullScreenBlackBackground(bool* p_open) {
 //    drawList->AddRectFilled(window_pos, window_size, bgColor);
 //}
 
-
 //! drawing text with outline, it works but there is a small issue with lines spacing
 void DebugGui::showDebugWindow(bool* p_open) {
 
@@ -35,7 +31,7 @@ void DebugGui::showDebugWindow(bool* p_open) {
     }
 
     ImGui::PushFont(Menu::debugWindow_font);
-
+    
     ImGuiDebugWin::ClearMessages();
     ImGuiDebugWin::AddMessage("DEBUG GUI:\n");   
 
@@ -85,9 +81,6 @@ void DebugGui::showDebugWindow(bool* p_open) {
     ImGui::PopFont();
     ImGui::End();
 }
-
-
-
 
 //void DebugGui::showDebugWindow(bool* p_open)
 //{

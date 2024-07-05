@@ -1,5 +1,8 @@
 #include "GameHudColorsManager.h"
 
+#include "idPlayer.h"
+#include "../ModSettings/modSettings.h"
+
 //! this is trigger in convertIdDeclUIColorToidColorHook
 void GameHudColorsManager::acquireIdDeclUIColorAddr(__int64 IdDeclUIColorAddr) {
 	static  __int64 lastIdDeclUIColorAddr = -1;
@@ -11,7 +14,6 @@ void GameHudColorsManager::acquireIdDeclUIColorAddr(__int64 IdDeclUIColorAddr) {
 
 	m_currentIdDeclUIColor = IdDeclUIColorAddr;
 }
-
 
 //! color manipulation to make sure the ice icon will pop whatever color user chooses:
 idColor GameHudColorsManager::blendWithWhite(const idColor& color, float blendFactor) {
@@ -41,7 +43,6 @@ void GameHudColorsManager::setAlpha(const idColor& baseColor, idColor& destColor
 	destColor.a = 1.0f;
 }
 
-
 //! lowered alpha
 void GameHudColorsManager::setIconExtraBorderColor(const idColor& baseColor, idColor& destColor) {
 
@@ -59,9 +60,6 @@ void GameHudColorsManager::setIconBackgroundColor(const idColor& baseColor, idCo
 	destColor.b = baseColor.b;
 	destColor.a = .3f;
 }
-
-
-
 
 //? it's good to minimise to the maximum the use of function in hooks as one func could be called twice at the same time in the hook and in the mod main loop (?)
 const idColor* GameHudColorsManager::getCustomIdColor(int namedColorId) {
@@ -127,16 +125,9 @@ const idColor* GameHudColorsManager::getCustomIdColor(int namedColorId) {
 	}
 }
 
-
 bool GameHudColorsManager::isUserColorCustom(swfNamedColors_t userColorId) {
 	return ((userColorId > swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT) && (userColorId <= swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_INVISIBLE));
 }
-
-
-
-
-
-
 
 idColor GameHudColorsManager::getCurrentProfileFragNadeIconColor() {
 	logDebug("getCurrentProfileFragNadeIconColor");
@@ -160,7 +151,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	return m_defaultFragNadeBackgroundColor;
 }
 
-
 //! the reason why the color would change is because user might change the color profile
  idColor GameHudColorsManager::getCurrentProfileIceNadeIconColor() {
 	logDebug("getCurrentProfileIceNadeIconColor");
@@ -175,7 +165,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	return m_defaultIceNadeIconColor;
 }
 
-
  idColor GameHudColorsManager::getCurrentProfileIceNadeBackgroundColor() {
 	logDebug("getCurrentProfileIceNadeBackgroundColor");
 
@@ -188,7 +177,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	logWarn("getCurrentProfileIceNadeBackgroundColor could not find color, returning default");
 	return m_defaultIceNadeBackgroundColor;
 }
-
 
  bool GameHudColorsManager::isHudElementWeaponRelated(int fullPathHash) {
 	return(fullPathHash == weaponInfoBgModlessSpriteId || fullPathHash == weaponInfoTextSpriteId || fullPathHash == weaponInfoAmmoIconSpriteId || fullPathHash == weaponInfoBgSpriteId || fullPathHash == weaponInfoModIconId);
@@ -232,16 +220,10 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	ColorManager::reapplySwfColors();
 }
 
-
-
-
-
-
 //! this func shoulg get trigger everytime reapplyswfcolors is called
 //! will return overridden color or original color depending if each mod's feature is enabled or not
 //! this func is triggered in setSpriteInstanceColor hook
  unsigned int GameHudColorsManager::getColor(__int64 spriteInstanceAddr, unsigned int namedColorId) {
-
 
 	if (MemHelper::isBadReadPtr((void*)spriteInstanceAddr)) {
 		logErr("getColor: bad ptr: %p This should not happen...", (void*)spriteInstanceAddr);
@@ -249,7 +231,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	}
 	idSWFSpriteInstance* spriteInstance = (idSWFSpriteInstance*)spriteInstanceAddr;
 	int fullPathHash = spriteInstance->fullPathHash;
-
 
 	//! dbg:
 	/*if (fullPathHash == equipmentArrowSpriteId) {
@@ -259,8 +240,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	if (fullPathHash == equipmentBackerSpriteId) {
 		logInfo("getColor: debug: found equipmentBackerSpriteId, namedColorId: 0x%X spriteInstanceAddr: %p", namedColorId, (void*)spriteInstanceAddr);
 	}*/
-
-
 
 	if (modSettings::getOverrideFuel3PipsColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && isHudElementFuelIcon(fullPathHash)) {
 		
@@ -274,7 +253,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 		return namedColorId;
 	}
 
-
 	if (!modSettings::getIsWeaponBarColored() && isHudElementWeaponRelated(fullPathHash)) {
 		if (isHudElementWeaponColor(namedColorId)) {
 			//return UserColorSet::getIceNadeArrow_Color();
@@ -282,8 +260,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 		}
 		return namedColorId;
 	}
-
-
 
 	//! indeed this works much better than the method below
 	if (isHudElementFragNadeBackGround(fullPathHash)) {
@@ -306,8 +282,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 		}
 		return namedColorId;
 	}
-
-
 
 	//? 1/5/24: should not need this anymore as we simply prevent them to render
 	////! at start of the game when slayer does not own nades, their count value will be one be careful !
@@ -348,7 +322,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 		}
 	}
 
-
 	for (size_t i = 0; i < radSuitSpriteIdsVec.size(); i++)
 	{
 
@@ -378,11 +351,7 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	//! this should set the hud element to its default color, right(?!)
 	return namedColorId;
 
-
 }
-
-
-
 
 //! carefull with that test it to make sure it works
  __int32 GameHudColorsManager::getOriginalColorAlt(int spriteId) {
@@ -412,8 +381,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	return SWF_NAMED_COLOR_HUD_BASE;
 }
 
-
-
  __int32 GameHudColorsManager::getOriginalColor(int spriteId) {
 	logDebug("getOriginalColor");
 
@@ -442,12 +409,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	return SWF_NAMED_COLOR_HUD_BASE;
 }
 
-
-
-
-
-
-
  bool GameHudColorsManager::isEquipmentArrow(__int64 spriteInstanceAddr) {
 	logDebug("isEquipmentArrow");
 
@@ -463,7 +424,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	return false;
 }
 
-
 /*static unsigned int changeTestColor() {
 	logDebug("changeTestColor");
 
@@ -477,11 +437,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	logInfo("changeTestColor m_debugNamedColorIndex: %d", m_debugNamedColorIndex);
 	return m_debugNamedColorIndex;
 }*/
-
-
-
-
-
 
  void GameHudColorsManager::acquireMonitoredSpriteInstanceAddr(__int64 addr) {
 	if (MemHelper::isBadReadPtr((void*)addr)) {
@@ -655,15 +610,11 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	}
 }
 
-
-
 //static void debugPrintFragIconSpriteInstanceInfo() {
 //	//idSWFSpriteInstanceManager::debugPrintSpriteInstanceInfo(m_debug_fragIconSpriteAddr);
 //	//idSWFSpriteInstanceManager::debugPrintSpriteInstanceInfo(m_fragCoolDownFillGlowSpriteAddr);
 //	idSWFSpriteInstanceManager::debugPrintSpriteInstanceInfo(m_debug_EquipmentSpriteInstanceAddr);
 //}
-
-
 
 //? ok so this will crash at some point during horde mode start at least
 /*static void debugPrintFragIconSpriteInstanceInfo() {
@@ -677,10 +628,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 
 }*/
 
-
-
-
-
  swfRect_t GameHudColorsManager::getFragIconCoords() {
 	if (!m_fragCoolDownFillGlowSpriteAddr) {
 		logWarn("getFragIconCoords: m_fragCoolDownFillGlowSpriteAddr is null returning empty  swfRect_t");
@@ -692,8 +639,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	}*/
 	return idSWFSpriteInstanceManager::getBounds((idSWFSpriteInstance*)m_fragCoolDownFillGlowSpriteAddr);
 }
-
-
 
 //! using this atm for debugging to show the bounds of hud elements and if it can be usefull do display text over them
  swfRect_t GameHudColorsManager::getEquipmentArrowBounds() {
@@ -723,15 +668,7 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	return swfRect_t();
 }
 
-
-
-
-
 //! DEBUG:	
-
-
-
-
 
  unsigned int GameHudColorsManager::debugLogInstancesDefaultNamesColors(__int64 spriteInstanceAddr, unsigned int namedColorId) {
 	logDebug("debugLogInstancesDefaultNamesColors");
@@ -764,7 +701,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	return namedColorId;
 }
 
-
  unsigned int GameHudColorsManager::testColors(__int64 spriteInstanceAddr, unsigned int namedColorId) {
 	logDebug("testColors");
 
@@ -796,8 +732,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	return namedColorId;
 }
 
-
-
  void GameHudColorsManager::debugLogFragIconCoords() {
 	if (!MemHelper::isBadReadPtr((void*)m_fragCoolDownFillGlowSpriteAddr)) {
 		idSWFSpriteInstance* spriteInstance = (idSWFSpriteInstance*)m_fragCoolDownFillGlowSpriteAddr;
@@ -814,7 +748,6 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 		logWarn("debugLogFragIconCoords: m_fragCoolDownFillGlowSpriteAddr is bad ptr: %p", (void*)m_fragCoolDownFillGlowSpriteAddr);
 	}
 }
-
 
 //! used in setSpriteInstanceColorHook 
  void GameHudColorsManager::addSpriteInstanceAddrToDebugVec(__int64 addr) {
