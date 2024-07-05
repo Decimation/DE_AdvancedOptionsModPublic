@@ -24,7 +24,7 @@ using OrigFunctionAlphaBlend = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, 
 //ORIG_FUNCTION_AlphaBlend orig_AlphaBlend ;
 OrigFunctionAlphaBlend orig_AlphaBlend = nullptr;
 
-extern "C"  BOOL WINAPI AlphaBlend(HDC hdcDest, const int xoriginDest, const int yoriginDest, const int wDest, const int hDest,
+  BOOL WINAPI AlphaBlend(HDC hdcDest, const int xoriginDest, const int yoriginDest, const int wDest, const int hDest,
 					   HDC hdcSrc, const int xoriginSrc,
 					   const int yoriginSrc, const int wSrc, const int hSrc, const BLENDFUNCTION ftn)
 {
@@ -46,7 +46,7 @@ extern "C"  BOOL WINAPI AlphaBlend(HDC hdcDest, const int xoriginDest, const int
 using ORIG_FUNCTION_GradientFill = BOOL(WINAPI*)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
 ORIG_FUNCTION_GradientFill orig_GradientFill;
 
-extern "C" BOOL WINAPI GradientFill(HDC hdc, PTRIVERTEX pVertex, const ULONG dwNumVertex, PVOID pMesh, const ULONG dwNumMesh,
+BOOL WINAPI GradientFill(HDC hdc, PTRIVERTEX pVertex, const ULONG dwNumVertex, PVOID pMesh, const ULONG dwNumMesh,
 						 const ULONG dwMode)
 {
 	return (orig_GradientFill)(hdc, pVertex, dwNumVertex, pMesh, dwNumMesh, dwMode);
@@ -55,7 +55,7 @@ extern "C" BOOL WINAPI GradientFill(HDC hdc, PTRIVERTEX pVertex, const ULONG dwN
 using OrigFunctionTransparentBlt = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, UINT);
 OrigFunctionTransparentBlt orig_TransparentBlt;
 
-extern "C" BOOL WINAPI TransparentBlt(HDC hdcDest, const int xoriginDest, const int yoriginDest, const int wDest, const int hDest,
+BOOL WINAPI TransparentBlt(HDC hdcDest, const int xoriginDest, const int yoriginDest, const int wDest, const int hDest,
 						   HDC hdcSrc,
 						   const int xoriginSrc, const int yoriginSrc, const int wSrc, const int hSrc,
 						   const UINT crTransparent)

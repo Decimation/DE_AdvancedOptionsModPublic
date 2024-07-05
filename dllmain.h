@@ -15,7 +15,6 @@
 #include <cstring>
 #include "SWIP.h"
 
-
 #include "DE/MemHelper.h"
 
 #include "DE/WeaponSettings.h"
@@ -91,31 +90,23 @@
 #include "DE/EquipmentManager.h"
 #include "DE/playerSoundManager.h"
 
-
-
-
-
-
 //#include "Asm/GetRBPValueWithRAxPreserved.asm"
 //#include "DE/TypesGenerated.h"
 //#include "DE/idSWFWidget_Hud_Reticle.h"
 
-
-#if _WIN64 
+#if _WIN64
 #pragma comment(lib, "libMinHook.x64.lib")
 #else
 #pragma comment(lib, "libMinHook.x86.lib")
 #endif
 
-
 //extern "C" __int64 GetRBPValueWithRAxPreserved();
-
 
 bool g_debugIsReadyToRenderIceNadeIcon = false;
 
 PlayerState g_debug_lastPlayerState = PlayerState::undefined;
 
-float g_debugScreenWidth = -1;
+float g_debugScreenWidth  = -1;
 float g_debugScreenHeight = -1;
 
 idPlayer* g_debugLastIdPlayerPtr = nullptr;
@@ -138,19 +129,16 @@ bool g_isGameCrosshairHidden = false;
 
 bool g_isDebugHudEnabled = false;
 
-idVec4 g_iceNadeIconDebugVec4;
+idVec4  g_iceNadeIconDebugVec4;
 __int64 g_debugMaterialAddr = 0;
-
 
 bool g_isGameInitialized = false;
 bool g_isDllCalledByGame = false;
-
 
 //! key pressed
 uint64_t g_lastGetAsyncKeyPress = 0;
 
 bool g_debugReticleScale = true;
-
 
 //! matr debug:
 static std::vector<std::string> matrNamesVec;
@@ -172,25 +160,25 @@ std::string g_plusSignStr = "+";
 
 //? *****  looks like we have to be careful when instanciating those objects as, if one has a ctor that tries to writes to our console it will prevent the console from working.
 HINSTANCE DllHandle;
-HWND g_game_hWindow = NULL;
-HMODULE customMeatHook_hMod;
+HWND      g_game_hWindow = NULL;
+HMODULE   customMeatHook_hMod;
 
-bool g_isDllInitOk = true;
+bool g_isDllInitOk           = true;
 bool g_isCloseModRequestFlag = false;
 
-WNDPROC wndproc_original = NULL;
+WNDPROC   wndproc_original = NULL;
 MemHelper mem;
 //BindHelper binderHelper;
 //EquipmentLauncher eql;
 //WeaponSettings ws;
 //idInventory inv;
 WeaponSwitcher switcher;
-PlayerState playerState;
-ButtonCheck buttonCheck;
+PlayerState    playerState;
+ButtonCheck    buttonCheck;
 //StringChanger stringChanger;
 //IniFile iniFile;
 //IniFileData iniFileData;
-LangManager lang;
+LangManager      lang;
 BindLabelChanger bindLabelChanger;
 //Md5Check md5Check;
 //ModStatus modStatus;
@@ -202,52 +190,36 @@ BindLabelChanger bindLabelChanger;
 //idFont IdFont;
 //? looks like we have to be careful when instanciating those objects as, if one has a ctor that tries to writes to our console it will prevent the console from working. *****
 
-
 //static idColor colorCustom_main = idColor{ 1.00f, 1.00f, 0.00f, 1.00f };
 
 //void loadModSettingsFromFile();
 
-
-
 // Define a custom struct to represent a 128-bit integer-like structure
-struct Int128 {
+struct Int128
+{
 	int64_t high;
 	int64_t low;
 };
 
-
-
-
 WNDPROC pOriginalWndProc = nullptr;
 
-
-LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-
-
-
-	if (uMsg == WM_KEYDOWN) {			
-		
-		
-
-
+LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	if (uMsg == WM_KEYDOWN) {
 		if (Config::isDevMode()) {
 			if (wParam == VK_F1) {
-
-				idCmd::setGameSpeed(gameSpeed_K::defaultSpeed);		
-
+				idCmd::setGameSpeed(gameSpeed_K::defaultSpeed);
 
 				//idDeclUIColorManager::acquireDefaultColors();
-			/*	logInfo("HookedWndProc: VK_F1 pressed");
-				__int64 result = idResourceListManager::getResourceListFirstElementPtr("idDeclUIColor");
-				logInfo("idDeclUIColor add: result: %p", (void*)result);*/
-						
+				/*	logInfo("HookedWndProc: VK_F1 pressed");
+					__int64 result = idResourceListManager::getResourceListFirstElementPtr("idDeclUIColor");
+					logInfo("idDeclUIColor add: result: %p", (void*)result);*/
+
 				//idCmd::executeCommandText_K2("activateConsole 1");
-			}
-			else if (wParam == VK_F2) {
+			} else if (wParam == VK_F2) {
 				logInfo("HookedWndProc: VK_F2 pressed");
 
 				idCmd::setGameSpeed(gameSpeed_K::maxSpeed);
-
 
 				/*idPlayer* idPlayerObj = idMapInstanceLocalManager::getIdPlayer();
 				if (idPlayerObj) {
@@ -257,12 +229,8 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 						
 					}
 				}*/
-				
-
-
 
 				//ColorManager::reapplySwfColors();
-
 			}
 
 			//? this is our default show mod key dont use it !!!!!!!	
@@ -272,11 +240,10 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			}*/
 
 			else if (wParam == VK_F4) {
-				logInfo("HookedWndProc: VK_F4 pressed");				
+				logInfo("HookedWndProc: VK_F4 pressed");
 
 				playerSoundManager::playOutOfItemSound();
-				
-				
+
 				/*std::string propsStr = playerPropsManager::getDebugStrV2();
 				logInfo("propsStr: %s ", propsStr.c_str());*/
 
@@ -300,16 +267,13 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 				//Menu::debugLogHudColors();
 
-			/*	std::string kaibzHudFlagsDbgStr =  modSettings::debuGetFlagString();
-				logInfo("kaibzHudFlagsDbgStr: %s", kaibzHudFlagsDbgStr.c_str());*/
+				/*	std::string kaibzHudFlagsDbgStr =  modSettings::debuGetFlagString();
+					logInfo("kaibzHudFlagsDbgStr: %s", kaibzHudFlagsDbgStr.c_str());*/
 
-
-			/*	std::string customHudDbgStr = KaibzHudManager::getDdgStrForImgui();
-				logInfo("customHudDbgStr: %s", customHudDbgStr.c_str());*/
-
+				/*	std::string customHudDbgStr = KaibzHudManager::getDdgStrForImgui();
+					logInfo("customHudDbgStr: %s", customHudDbgStr.c_str());*/
 
 				//idResourceListManager::debugLogPlayerDeclWeapons();
-
 
 				//CustomizedWeaponManager::debugLogWeaponsVals();
 
@@ -322,20 +286,13 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 				/*std::string dgbStr = idPlayer_K::getDbgStrForImgui();
 				logInfo("dgbStr: %s", dgbStr.c_str());*/
-										
-
-			}
-
-			
-			else if (wParam == VK_F5) {
+			} else if (wParam == VK_F5) {
 				logInfo("HookedWndProc: VK_F5 pressed");
 				Menu::bShowDebugWindow = !Menu::bShowDebugWindow;
 				//cvarInfoGenerator::dumpCvarsListToFile();
 				//cmdInfoGenerator::dumpCmdListToFile();
 				//idCmd::executeCommandText_K2("activateConsole");
 			}
-
-
 
 			if (wParam == VK_F6) {
 				logInfo("HookedWndProc: VK_F6 pressed");
@@ -346,18 +303,16 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 				//! this works:
 				//idHudEventManager::testSendHudEvent();
 
-
 				//! this works
 				//idDeclGlobalShellManager::disableNewCampaignPopUp();
 
 				//void* entityPtr = idMapInstanceLocalManager::findEntity("intro_game_info_logic");
 				//logInfo("entityPtr: %p", entityPtr);
-				
+
 				// idEventManager::testSendEvent();
 
-			/*	eventsInfoGenerator eventGen;
-				eventGen.dumpEventsListEnumToFile();*/
-
+				/*	eventsInfoGenerator eventGen;
+					eventGen.dumpEventsListEnumToFile();*/
 
 				//idEventManager::debug();
 
@@ -365,7 +320,6 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 				logInfo("idEventDefAddr : %p", (void*)idEventDefAddr);*/
 
 				/*idFxManager::setDashEffect(true);*/
-
 			}
 			//else if (wParam == VK_F7) {
 			//	logInfo("HookedWndProc: VK_F7 pressed");
@@ -373,38 +327,29 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			//	//EquipmentManager::useEquipmentItem(equipmentType_t::EQUIPMENT_ICE_BOMB);
 			//	EquipmentManager::switchEquipment(equipmentType_t::EQUIPMENT_ICE_BOMB);
 
-
 			//
 
 			//}
 
-
-
 			else if (wParam == VK_NUMPAD0) {
 				logInfo("HookedWndProc: VK_NUMPAD0 pressed setting g_isCloseModRequestFlag to true");
-				g_isCloseModRequestFlag = true;				
+				g_isCloseModRequestFlag = true;
 			}
 
-
 			//! this is what you have to press to ouput the cls definitions if game updates someday as this will trigger when you press those keys whether the mod status is allgood or not:
-			else if (wParam == VK_NUMPAD1 ) {
+			else if (wParam == VK_NUMPAD1) {
 				logInfo("Debug: user just pressed  VK_NUMPAD1: dumping class defs:");
 				TTS::addToQueue(sayGeneratingTypes);
 				EnumsDefFileGenerator::DumpEnumDefs();
 				ClassDefFileGenerator::dumpClassDefs();
 
 				//? this will take a VERY long time only use it if necessary.
-			/*	auto idLib = idLibManager();
-				idLib.generateIdLibFiles();*/
+				/*	auto idLib = idLibManager();
+					idLib.generateIdLibFiles();*/
 
 				auto evGen = eventsInfoGenerator();
 				evGen.dumpEventsListToFile();
-			}
-
-
-
-
-			else if (wParam == VK_NUMPAD2) {
+			} else if (wParam == VK_NUMPAD2) {
 				logInfo("HookedWndProc: VK_NUMPAD2 pressed ");
 
 				//? many of those are old....
@@ -434,55 +379,46 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 				auto fuelMatAdd = idDeclInfo::getMaterialPtr("swf/hud/hud_abilityindicators_singlestack_textures/swf_images/icons/icon_ammo_fuel_", 0);
 				logInfo("fuelMatAdd: %p", (void*)fuelMatAdd);*/
 
-
 				/*auto colorProfileListAddr = idDeclGlobalShellManager::getColorProfileColorsListAddr();
 				logInfo("debug: colorProfileListAddr: %p", (void*)colorProfileListAddr);*/
 			}
-		}		
+		}
 	}
 	return CallWindowProc(pOriginalWndProc, hwnd, uMsg, wParam, lParam);
 }
 
-
-
-
-
 //! This works great to prevent hud elements from rendering like the the equipment arrows or the right side of the hud. RenderSprite_4FEC90
-typedef char(__fastcall* RenderSprite_t)(
-	void* idSwf_a1,
-	__int64 a2,
+typedef char (__fastcall*RenderSprite_t)(
+	void*                idSwf_a1,
+	__int64              a2,
 	idSWFSpriteInstance* spriteInstance_a3,
-	__int64 a4,
-	unsigned int a5,
-	char a6);
+	__int64              a4,
+	unsigned int         a5,
+	char                 a6);
 
 // Pointers to the original function and the target function
 RenderSprite_t p_RenderSprite_Original = nullptr;
-RenderSprite_t p_RenderSprite_Target = nullptr;
+RenderSprite_t p_RenderSprite_Target   = nullptr;
 
 // Hooked function definition
 char __fastcall RenderSprite_Hook(
-	void* idSwf_a1,
-	__int64 a2,
+	void*                idSwf_a1,
+	__int64              a2,
 	idSWFSpriteInstance* spriteInstance_a3,
-	__int64 a4,
-	unsigned int a5,
-	char a6) {
-	
-
+	__int64              a4,
+	unsigned int         a5,
+	char                 a6)
+{
 	if (!modSettings::getIsUseDedicatedNadeKeys()) {
 		return p_RenderSprite_Original(idSwf_a1, a2, spriteInstance_a3, a4, a5, a6);
 	}
 
 	if (spriteInstance_a3) {
-
 		int fullPathHash = spriteInstance_a3->fullPathHash;
 
 		if (fullPathHash == equipmentArrowSpriteId) {
 			return 0;
-		}
-
-		else if (fullPathHash == equipmentBackerSpriteId) {
+		} else if (fullPathHash == equipmentBackerSpriteId) {
 			return 0;
 		}
 
@@ -493,26 +429,18 @@ char __fastcall RenderSprite_Hook(
 		/*else if (GameHudColorsManager::isHudElementWeaponRelated(fullPathHash)) {
 			return 0;
 		}*/
-
 	}
-	
-
 
 	return p_RenderSprite_Original(idSwf_a1, a2, spriteInstance_a3, a4, a5, a6);
 }
 
-
-
-
-
-
 //! this lets us set the fov we want in GK, battery use..
-typedef void* (__fastcall* idPlayerFovLerp_t)(__int64 idPlayer_a1, float a2, float a3, char a4);
-idPlayerFovLerp_t p_idPlayerFovLerp = nullptr;
-idPlayerFovLerp_t p_idPlayerFovLerp_Target = nullptr;
+typedef void* (__fastcall*idPlayerFovLerp_t)(__int64 idPlayer_a1, float a2, float a3, char a4);
+idPlayerFovLerp_t         p_idPlayerFovLerp        = nullptr;
+idPlayerFovLerp_t         p_idPlayerFovLerp_Target = nullptr;
 
-void* __fastcall idPlayerFovLerp_Hook(__int64 idPlayer_a1, float lerpFOV_a2, float a3, char a4) {
-
+void* __fastcall idPlayerFovLerp_Hook(__int64 idPlayer_a1, float lerpFOV_a2, float a3, char a4)
+{
 	if (modSettings::getIsOverideInteractionFOV()) {
 		lerpFOV_a2 = modSettings::getInteractionFOV();
 	}
@@ -520,57 +448,52 @@ void* __fastcall idPlayerFovLerp_Hook(__int64 idPlayer_a1, float lerpFOV_a2, flo
 	return p_idPlayerFovLerp(idPlayer_a1, lerpFOV_a2, a3, a4);
 }
 
-
-
 //! this will trigger, once, everytime a battery in socket animation starts. so a good place to set the timsescale X2, X4...
 //? the only thing is that could trigger for other animations, so we'll have to make sure that this specific anim is what we want...
 //! void __fastcall idSyncEntity::StartSync_13CEF20(__int64 idSyncEntity_a1, __int64 idDeclAnimWeb_a2, __int64 idPlayer_a3, float a4, __int64 a5)
-typedef void(__fastcall* StartSync_t)(__int64 idSyncEntity_a1, __int64 idDeclAnimWebPTR_a2, __int64 idPlayer_a3, float a4, __int64 a5);
-StartSync_t p_StartSync_t = nullptr;
+typedef void (__fastcall*StartSync_t)(__int64 idSyncEntity_a1, __int64 idDeclAnimWebPTR_a2, __int64 idPlayer_a3,
+									  float   a4, __int64              a5);
+StartSync_t p_StartSync_t        = nullptr;
 StartSync_t p_StartSync_t_Target = nullptr;
 
-void __fastcall StartSync_t_Hook(__int64 idSyncEntity_a1, __int64 idDeclAnimWebPTR_a2, __int64 idPlayer_a3, float a4, __int64 a5) {
-
+void __fastcall StartSync_t_Hook(__int64 idSyncEntity_a1, __int64 idDeclAnimWebPTR_a2, __int64 idPlayer_a3, float a4,
+								 __int64 a5)
+{
 	if (modSettings::getIsSpeedUpBatterySocketAnimation() && !MemHelper::isBadReadPtr((void*)idDeclAnimWebPTR_a2)) {
-		idResource* res = (idResource*)*(__int64*)idDeclAnimWebPTR_a2;
+		idResource* res      = (idResource*)*(__int64*)idDeclAnimWebPTR_a2;
 		std::string declName = res->name.str;
 		if (declName == "animweb/interact/hub_battery_socket/hub_battery_socket_syncanimweb") {
 			logInfo("StartSync_t_Hook batter interaction detected !");
 			idCmd::setGameSpeed(gameSpeed_K::X2_Speed);
+		} else {
+			logInfo("StartSync_t_Hook: found sync animation we're not speeding up (atm) declName: %s ",
+					declName.c_str());
 		}
-		else {
-			logInfo("StartSync_t_Hook: found sync animation we're not speeding up (atm) declName: %s ", declName.c_str());
-		}
-	}	
+	}
 	return p_StartSync_t(idSyncEntity_a1, idDeclAnimWebPTR_a2, idPlayer_a3, a4, a5);
 }
 
-
 //! syncEnd_13D1960 this is triggered once when a sync animation endds like the battery in socket one
-typedef char(__fastcall* syncEnd_t)(__int64 a1, __int64 a2, int a3, unsigned int a4, unsigned __int8 a5);
-syncEnd_t p_syncEnd = nullptr;
-syncEnd_t p_syncEnd_Target = nullptr;
+typedef char (__fastcall*syncEnd_t)(__int64 a1, __int64 a2, int a3, unsigned int a4, unsigned __int8 a5);
+syncEnd_t                p_syncEnd        = nullptr;
+syncEnd_t                p_syncEnd_Target = nullptr;
 
-char __fastcall syncEnd_Hook(__int64 a1, __int64 a2, int a3, unsigned int a4, unsigned __int8 a5) {
-
+char __fastcall syncEnd_Hook(__int64 a1, __int64 a2, int a3, unsigned int a4, unsigned __int8 a5)
+{
 	logInfo("syncEnd_Hook: reseting timescale....");
 	idCmd::setGameSpeed(gameSpeed_K::defaultSpeed);
 
 	return p_syncEnd(a1, a2, a3, a4, a5);
 }
 
-
-
-
-
 //! returning from this will disable custom animations like secret find, battery cell find animations
 //! char __fastcall customAnimSmth_19DA8A0(__int64 idHands_a1, const char *str_a2, int a3, int a4, int a5)
-typedef char(__fastcall* customAnimSmth_t)(__int64 idHands_a1, const char* str_a2, int a3, int a4, int a5);
-customAnimSmth_t p_customAnimSmth_t = nullptr;
-customAnimSmth_t p_customAnimSmth_t_Target = nullptr;
+typedef char (__fastcall*customAnimSmth_t)(__int64 idHands_a1, const char* str_a2, int a3, int a4, int a5);
+customAnimSmth_t         p_customAnimSmth_t        = nullptr;
+customAnimSmth_t         p_customAnimSmth_t_Target = nullptr;
 
-char __fastcall customAnimSmth_t_Hook(__int64 idHands_a1, const char* str_a2, int a3, int a4, int a5) {
-
+char __fastcall customAnimSmth_t_Hook(__int64 idHands_a1, const char* str_a2, int a3, int a4, int a5)
+{
 	if (modSettings::getIsSkipCustomAnimations()) {
 		return 0;
 	}
@@ -579,49 +502,45 @@ char __fastcall customAnimSmth_t_Hook(__int64 idHands_a1, const char* str_a2, in
 	return p_customAnimSmth_t(idHands_a1, str_a2, a3, a4, a5);
 }
 
-
-
-
-typedef __int64(__fastcall* idHUDMenu_CurrencyConfirmation_t)(__int64 idHUDMenu_CurrencyConfirmation_a1, __int64 struct_a2);
-idHUDMenu_CurrencyConfirmation_t p_idHUDMenu_CurrencyConfirmation_t = nullptr;
+typedef __int64 (__fastcall*idHUDMenu_CurrencyConfirmation_t)(__int64 idHUDMenu_CurrencyConfirmation_a1,
+															  __int64 struct_a2);
+idHUDMenu_CurrencyConfirmation_t p_idHUDMenu_CurrencyConfirmation_t        = nullptr;
 idHUDMenu_CurrencyConfirmation_t p_idHUDMenu_CurrencyConfirmation_t_Target = nullptr;
 
-__int64 __fastcall idHUDMenu_CurrencyConfirmation_t_Hook(__int64 idHUDMenu_CurrencyConfirmation_a1, __int64 struct_a2) {
-		
+__int64 __fastcall idHUDMenu_CurrencyConfirmation_t_Hook(__int64 idHUDMenu_CurrencyConfirmation_a1, __int64 struct_a2)
+{
 	if (modSettings::getIsDisableBatterySocketPopUp()) {
 		idHudEventManager::send_HUD_EVENT_CURRENCY_CONFIRM((idHUDElement*)idHUDMenu_CurrencyConfirmation_a1);
-	}	
+	}
 
 	return p_idHUDMenu_CurrencyConfirmation_t(idHUDMenu_CurrencyConfirmation_a1, struct_a2);
 }
 
-
-
 //! this triggers continuously when in any menu, main menu or pause menu. 183F0A0
 //? however the idMenu ptr will be different when in main menu or pause menu ofc.
-typedef __int64(__fastcall* idMenu_Update)(__int64 idMenu, __int64 a2);
-idMenu_Update pidMenu_Update = nullptr;
-idMenu_Update pidMenu_UpdateTarget;
+typedef __int64 (__fastcall*idMenu_Update)(__int64 idMenu, __int64 a2);
+idMenu_Update               pidMenu_Update = nullptr;
+idMenu_Update               pidMenu_UpdateTarget;
 
-__int64 __fastcall idMenu_UpdateHook(__int64 idMenu, __int64 a2) {
-
+__int64 __fastcall idMenu_UpdateHook(__int64 idMenu, __int64 a2)
+{
 	ImGuiManager::setIsInitFlag(true);
 
-	PlayerStateChecker::updateLastMenuRefresh(); //! this is a hacky and not so good way to know that the game has been (may be) initialized	
+	PlayerStateChecker::updateLastMenuRefresh();
+	//! this is a hacky and not so good way to know that the game has been (may be) initialized	
 
 	return pidMenu_Update(idMenu, a2);
 }
 
-
-
 //! float __fastcall getFovTargetValMB_1D2F860(_QWORD *idWeaponPtr_a1)
-typedef float(__fastcall* getFovTargetValMB)(idWeapon* idWeaponAddr_a1);
+typedef float (__fastcall*getFovTargetValMB)(idWeapon* idWeaponAddr_a1);
 //typedef float(__fastcall* getFovTargetValMB)(__int64 idWeaponAddr_a1);
 getFovTargetValMB pgetFovTargetValMB = nullptr;
 getFovTargetValMB pgetFovTargetValMBTarget;
 
 //float __fastcall getFovTargetValMB_Hook(__int64 idWeaponAddr_a1) {<
-float __fastcall getFovTargetValMB_Hook(idWeapon* idWeaponObj_a1) {
+inline float __fastcall getFovTargetValMB_Hook(idWeapon* idWeaponObj_a1)
+{
 	logDebug("SelectWeaponForSelectionGroupHook");
 
 	idWeaponManager::acquirreCurrentIdWeapon(idWeaponObj_a1);
@@ -634,14 +553,14 @@ float __fastcall getFovTargetValMB_Hook(idWeapon* idWeaponObj_a1) {
 	return pgetFovTargetValMB(idWeaponObj_a1);
 }
 
-
 //! SelectWeaponForSelectionGroup Hook: char __fastcall SelectWeaponForSelectionGroupHook(__int64 gui_a1, int x_a2)
-typedef char(__fastcall* SelectWeaponForSelectionGroup)(__int64 a1, int a2);
+typedef char (__fastcall*     SelectWeaponForSelectionGroup)(__int64 a1, int a2);
 SelectWeaponForSelectionGroup pSelectWeaponForSelectionGroup = nullptr;
 SelectWeaponForSelectionGroup pSelectWeaponForSelectionGroupTarget;
 
 //! this is triggered everytime user presses a dedicated weapon key
-char __fastcall SelectWeaponForSelectionGroupHook(__int64 a1, int weaponIndex_a2) {
+char __fastcall SelectWeaponForSelectionGroupHook(__int64 a1, int weaponIndex_a2)
+{
 	logDebug("SelectWeaponForSelectionGroupHook");
 
 	/*static int lastA2debug = -1;
@@ -658,16 +577,13 @@ char __fastcall SelectWeaponForSelectionGroupHook(__int64 a1, int weaponIndex_a2
 	return pSelectWeaponForSelectionGroup(a1, weaponIndex_a2);
 }
 
-
-
 //! bool __fastcall isKeyPressed_1AE54F0(__int64 gui_a1, __int64 x_a2)
-typedef bool(__fastcall* isKeyPressed)(__int64 a1, __int64 a2);
-isKeyPressed pisKeyPressed = nullptr;
-isKeyPressed pisKeyPressedTarget;
+typedef bool (__fastcall*isKeyPressed)(__int64 a1, __int64 a2);
+isKeyPressed             pisKeyPressed = nullptr;
+isKeyPressed             pisKeyPressedTarget;
 
-bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum) {
-	
-
+bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum)
+{
 	if (!modSettings::getIsUseDedicatedNadeKeys()) {
 		return pisKeyPressed(ptr, btnEnum);
 	}
@@ -678,21 +594,20 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum) {
 
 	usercmdButton userCmdBtn = (usercmdButton)btnEnum;
 	switch (userCmdBtn) {
-
-		/*case usercmdButton::BUTTON_NONE: // not checking this cause NONE is the value of the default weapon btn to resend.
-			break;	*/
-			// afaik BUTTON_ZOOM is not triggered even when in scop of the HAR
-			//case usercmdButton::BUTTON_ZOOM:
-			//	if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_ZOOM)) {
-			//		logInfo("BUTTON_ZOOM pressed");
-			//		/*if (g_debugIsReticleTest) {
-			//			if (idCmd::getReticleMode() != UI_ReticleMode::Full) {
-			//				idCmd::setReticleMode(UI_ReticleMode::Full);
-			//			}
-			//		}*/
-			//	}
-			//	
-			//	break;
+	/*case usercmdButton::BUTTON_NONE: // not checking this cause NONE is the value of the default weapon btn to resend.
+		break;	*/
+	// afaik BUTTON_ZOOM is not triggered even when in scop of the HAR
+	//case usercmdButton::BUTTON_ZOOM:
+	//	if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_ZOOM)) {
+	//		logInfo("BUTTON_ZOOM pressed");
+	//		/*if (g_debugIsReticleTest) {
+	//			if (idCmd::getReticleMode() != UI_ReticleMode::Full) {
+	//				idCmd::setReticleMode(UI_ReticleMode::Full);
+	//			}
+	//		}*/
+	//	}
+	//	
+	//	break;
 
 	//! experimenting with disabling force weap switch system when melee key (BUTTON_ATTACK2) pressed
 	case usercmdButton::BUTTON_ATTACK2:
@@ -701,7 +616,7 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum) {
 		}
 		break;
 
-		//! we disable our for weap switch system if a key if change weap key press 
+	//! we disable our for weap switch system if a key if change weap key press 
 	case usercmdButton::BUTTON_CHANGEWEAPON:
 		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_CHANGEWEAPON)) {
 			switcher.disableEnumResend(usercmdButton::BUTTON_CHANGEWEAPON);
@@ -767,20 +682,20 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum) {
 	case usercmdButton::BUTTON_WALK:
 		break;
 	case usercmdButton::BUTTON_DASH:
-		break;	
-		//! use equipment throws frag nade
+		break;
+	//! use equipment throws frag nade
 	case usercmdButton::BUTTON_USE_EQUIPMENT:
 		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_USE_EQUIPMENT)) {
-			EquipmentManager::useEquipmentItem(equipmentType_t::EQUIPMENT_FRAG_GRENADE);			
+			EquipmentManager::useEquipmentItem(equipmentType_t::EQUIPMENT_FRAG_GRENADE);
 			return false;
 		}
 		break;
-		//! switch equipment throws ice nade
+	//! switch equipment throws ice nade
 	case usercmdButton::BUTTON_SWITCH_EQUIPMENT:
 		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_SWITCH_EQUIPMENT)) {
 			EquipmentManager::useEquipmentItem(equipmentType_t::EQUIPMENT_ICE_BOMB);
 			return false;
-		}	
+		}
 		break;
 	case usercmdButton::BUTTON_QUICK_3:
 		break;
@@ -808,7 +723,6 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum) {
 
 	return pisKeyPressed(ptr, btnEnum);
 }
-
 
 //! this is a BAK of snippet relevant code of previous pisKeyPressed that used the old method of triggering the throw of grenades:
 //! 
@@ -861,40 +775,37 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum) {
 //	break;
 //case usercmdButton::BUTTON_QUICK_3:
 
-
-
 //! __int64 __fastcall BindsStrSet_35CEC0(__int64 *gui_a1, unsigned __int8 *x_a2)
-typedef __int64(__fastcall* BindsStrSet)(__int64* a1, unsigned char* a2);
-BindsStrSet pBindsStrSet = nullptr;
-BindsStrSet pBindsStrSetTarget;
+typedef __int64 (__fastcall*BindsStrSet)(__int64* a1, unsigned char* a2);
+BindsStrSet                 pBindsStrSet = nullptr;
+BindsStrSet                 pBindsStrSetTarget;
 
-__int64 __fastcall BindsStrSetHook(__int64* a1, unsigned char* a2) {
-
+__int64 __fastcall BindsStrSetHook(__int64* a1, unsigned char* a2)
+{
 	if (!modSettings::getIsUseDedicatedNadeKeys()) {
 		return pBindsStrSet(a1, a2);
 	}
-	
+
 	if (PlayerStateChecker::isInMenus()) {
 		bindLabelChanger.overwriteDynamicBindLabels(a2, lang.getLocalizedBindStringData());
 	}
 	return pBindsStrSet(a1, a2);
 }
 
-
 //! char __fastcall idHUD_Reticle::SetActiveReticle_1576DD0(__int64 idHUD_Reticle_a1, unsigned int eticleIndex_a2,__int64 idDeclWeaponReticle_a3,unsigned __int8 a4) This is triggered many times per second and even if the hud crosshair is disabled in the game options.
-typedef void(__fastcall* idHUD_Reticle_SetActiveReticle)(idHUD_Reticle* a1, unsigned int a2, idDeclWeaponReticle* a3, unsigned __int8 a4);
+typedef void (__fastcall*idHUD_Reticle_SetActiveReticle)(idHUD_Reticle*  a1, unsigned int a2, idDeclWeaponReticle* a3,
+														 unsigned __int8 a4);
 idHUD_Reticle_SetActiveReticle pidHUD_Reticle_SetActiveReticle = nullptr;
 idHUD_Reticle_SetActiveReticle pidHUD_Reticle_SetActiveReticleTarget;
 
-
-void __fastcall idHUD_Reticle_SetActiveReticleHook(idHUD_Reticle* idHUD_Reticle_a1, unsigned int reticleIndex_a2,  idDeclWeaponReticle* idDeclWeaponReticle_a3, unsigned __int8 a4) {	
-	
-	
+void __fastcall idHUD_Reticle_SetActiveReticleHook(idHUD_Reticle*       idHUD_Reticle_a1, unsigned int reticleIndex_a2,
+												   idDeclWeaponReticle* idDeclWeaponReticle_a3, unsigned __int8 a4)
+{
 	//! 29/4/24: still using this system from previous mod after all as our new customizedWeapon is extremely frustrating to use as some declweapons arbitrarily do not respect the reticule set rule and vary from weapon to weapon so...funk it!
 	//return pidHUD_Reticle_SetActiveReticle(idHUD_Reticle_a1, reticleIndex_a2, idDeclWeaponReticle_a3, a4);
 	//logInfo("idHUD_Reticle_SetActiveReticleHook Triggered");
 
-	PlayerStateChecker::updateLastReticleRefresh(); 		
+	PlayerStateChecker::updateLastReticleRefresh();
 
 	idSWFWidget_Hud_Reticle* idSWFWidget_Hud_Reticle_v8 = 0i64;
 	//unsigned int activeReticleStyle = *(unsigned int*)(idHUD_Reticle_a1 + 0x330);
@@ -902,21 +813,17 @@ void __fastcall idHUD_Reticle_SetActiveReticleHook(idHUD_Reticle* idHUD_Reticle_
 
 	//logInfo("idHUD_Reticle_SetActiveReticleHook: debug 3");
 
-	
 	if (reticleIndex_a2 > idDeclWeaponReticle_reticleStyle_t::RETICLE_STYLE_MAX) {
 		idSWFWidget_Hud_Reticle_v8 = 0i64;
-	}
-	else {
+	} else {
 		idSWFWidget_Hud_Reticle_v8 = idHUD_Reticle_a1->reticles_ptr[reticleIndex_a2]; //! this is fine.	
-
 	}
 
 	CustomCrosshairManager::acquireWeaponCoolDownStatus(idSWFWidget_Hud_Reticle_v8, idDeclWeaponReticle_a3);
 
 	//logInfo("debug:  idSWFWidget_Hud_Reticle_v8 is %p ", idSWFWidget_Hud_Reticle_v8);
 	//! idSWFWidget_Hud_Reticle_v8 will be null when the ingame reticle mode is set to None so the rest of this code will not trigger, obviously
-	if (idSWFWidget_Hud_Reticle_v8) {		
-
+	if (idSWFWidget_Hud_Reticle_v8) {
 		idSWFSpriteInstance* idSWFSpriteInstance_v17 = idSWFWidgetManager::getBoundSprite(idSWFWidget_Hud_Reticle_v8);
 
 		//logInfo("idHUD_Reticle_SetActiveReticleHook: debug 5");
@@ -925,67 +832,62 @@ void __fastcall idHUD_Reticle_SetActiveReticleHook(idHUD_Reticle* idHUD_Reticle_
 		//idSWFSpriteInstance* idSWFSpriteInstance_v17 = idSWFWidget_Hud_Reticle_v8->reticleSprite;
 		//? ...instead of this: 
 		//__int64 idSWFSpriteInstance_v17 = *(__int64*)(idSWFWidget_Hud_Reticle_v8 + 0x18);
-		
+
 		//! looks this work now:
-		idSWFSpriteInstanceManager::setHitMarkerState((idHUD_Reticle*)idHUD_Reticle_a1, modSettings::getIsDisableHitMarker());
+		idSWFSpriteInstanceManager::setHitMarkerState((idHUD_Reticle*)idHUD_Reticle_a1,
+													  modSettings::getIsDisableHitMarker());
 
 		//logInfo("idHUD_Reticle_SetActiveReticleHook: debug 6");
 
-
 		//! this is how we manage to change the scale of the crosshair even when it's already displayed
-		if (idDeclWeaponReticle_a3 && idSWFSpriteInstance_v17) {		
-
-
+		if (idDeclWeaponReticle_a3 && idSWFSpriteInstance_v17) {
 			//! from logs, even when the dot crosshair is set in the game menu, idDeclWeaponReticle_a3->style will have the value of the current weapon reticle style so we can use that to set crosshair color then?
-			
+
 			//logInfo("debug:  idHUD_Reticle_a1->activeReticleDecl: %p and idDeclWeaponReticle_a3: %p activeReticleStyle: %u reticleIndex_a2: %u", idHUD_Reticle_a1->activeReticleDecl, idDeclWeaponReticle_a3, activeReticleStyle, reticleIndex_a2);
-			
+
 			//! if the reticle scale needs to be changed cause user wants it changed, we trigger the sprite reload function
 			if (ReticleScaleManager::updateScale(idDeclWeaponReticle_a3)) {
-				idSWFSpriteInstanceManager::updateScale(idSWFSpriteInstance_v17, idDeclWeaponReticle_a3->reticleModelScale);
+				idSWFSpriteInstanceManager::updateScale(idSWFSpriteInstance_v17,
+														idDeclWeaponReticle_a3->reticleModelScale);
 			}
 
 			//! if game dot:
-			if (activeReticleStyle == idDeclWeaponReticle_reticleStyle_t::RETICLE_STYLE_DOT ) {
-
+			if (activeReticleStyle == idDeclWeaponReticle_reticleStyle_t::RETICLE_STYLE_DOT) {
 				if (modSettings::getIsUseImguiDotCrosshair()) {
-					idSWFWidget_Hud_Reticle_v8->reticleSprite->namedColorId = swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_INVISIBLE;
+					idSWFWidget_Hud_Reticle_v8->reticleSprite->namedColorId =
+						swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_INVISIBLE;
+				} else {
+					idSWFWidget_Hud_Reticle_v8->reticleSprite->namedColorId =
+						swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT;
 				}
-				else {					
-					idSWFWidget_Hud_Reticle_v8->reticleSprite->namedColorId = swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT;
-				}				
-				
+
 				//? doesn't work to force disable dot:
 				//idHUD_Reticle_a1->activeReticleStyle = idDeclWeaponReticle_reticleStyle_t::RETICLE_STYLE_NONE;
-					
+
 				//? doesn't work to force disable dot:
 				//reticleIndex_a2 = idDeclWeaponReticle_reticleStyle_t::RETICLE_STYLE_NONE;
 
 				//idDeclWeaponReticleManager::debugPrintCurrentDeclWeaponReticle(idDeclWeaponReticle_a3);
 				//! this used to crash because of bad padding in our generated classes
-				/*ReticleColorManager::updateDotColorV3(idSWFWidget_Hud_Reticle_v8, idDeclWeaponReticle_a3, idSWFSpriteInstance_v17);*/			
-
+				/*ReticleColorManager::updateDotColorV3(idSWFWidget_Hud_Reticle_v8, idDeclWeaponReticle_a3, idSWFSpriteInstance_v17);*/
 			}
 		}
 	}
 
-
 	return pidHUD_Reticle_SetActiveReticle(idHUD_Reticle_a1, reticleIndex_a2, idDeclWeaponReticle_a3, a4);
 }
 
-
-
-
-
-
 //! this will hopefully let us change the color of ui elements at will
 //! __int64 __fastcall convertIdDeclUIColorToidColor_Mb_4D5630(__int64 idDeclUIColor_a1, __int64 idColor_a2, int y_a3)
-typedef idColor* (__fastcall* convertIdDeclUIColorToidColor)(__int64 idDeclUIColor_a1, idColor* idColor_a2, int colorId_a3);
+typedef idColor* (__fastcall*convertIdDeclUIColorToidColor)(__int64 idDeclUIColor_a1, idColor* idColor_a2,
+															int     colorId_a3);
 convertIdDeclUIColorToidColor pconvertIdDeclUIColorToidColor = nullptr;
 convertIdDeclUIColorToidColor pconvertIdDeclUIColorToidColorTarget;
 
-idColor* __fastcall convertIdDeclUIColorToidColorHook(__int64 idDeclUIColor_a1, idColor* idColorPtr_a2, int colorId_a3) { //! there is a bak of the old version of this hook in debug.h
-	
+idColor* __fastcall convertIdDeclUIColorToidColorHook(__int64 idDeclUIColor_a1, idColor* idColorPtr_a2, int colorId_a3)
+{
+	//! there is a bak of the old version of this hook in debug.h
+
 	//? we get this ptr with our own method as it can change when in main menu. but it's ok to use it for GameHudColorsManager as it only uses it when the player is in game
 	//idDeclUIColorManager::updateCurrentIdDeclUIColorFromHook((idDeclUIColor*)idDeclUIColor_a1);
 
@@ -999,49 +901,42 @@ idColor* __fastcall convertIdDeclUIColorToidColorHook(__int64 idDeclUIColor_a1, 
 	//? would still need a check for the color above old make namedColor and SWF_CUSTOM_NAMED_COLOR_DEFAULT
 
 	//! here in we check if colorId_a3> is not default  and if it's in bound:
-	if ((colorId_a3 > swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT) && (colorId_a3 <= swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_INVISIBLE)) {
-
+	if ((colorId_a3 > swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT) && (colorId_a3 <=
+		swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_INVISIBLE)) {
 		//logInfo("convertIdDeclUIColorToidColorHook: colorId_a3: %d", colorId_a3);
 
 		//? 30/4/24 removing this just 5 min for testing....
-		*idColorPtr_a2 = *(idColor*)GameHudColorsManager::getCustomIdColor(colorId_a3);		
+		*idColorPtr_a2 = *(idColor*)GameHudColorsManager::getCustomIdColor(colorId_a3);
 		return idColorPtr_a2;
-
 	}
 
 	return pconvertIdDeclUIColorToidColor(idDeclUIColor_a1, idColorPtr_a2, colorId_a3);
 }
 
-
 //! void __fastcall setSpriteInstanceColor_Smth_52F290(idSWFSpriteInstance* idSWFSpriteInstance_a1,unsigned int namedColorId_a2) 
-typedef void(__fastcall* setSpriteInstanceColor)(__int64 idSWFSpriteInstance_a1, unsigned int namedColorId_a2);
-setSpriteInstanceColor psetSpriteInstanceColor = nullptr;
-setSpriteInstanceColor psetSpriteInstanceColorTarget = nullptr;
+typedef void (__fastcall*setSpriteInstanceColor)(__int64 idSWFSpriteInstance_a1, unsigned int namedColorId_a2);
+setSpriteInstanceColor   psetSpriteInstanceColor       = nullptr;
+setSpriteInstanceColor   psetSpriteInstanceColorTarget = nullptr;
 
-void __fastcall setSpriteInstanceColorHook(__int64 idSWFSpriteInstance_a1, unsigned int namedColorId_a2) {
+void __fastcall setSpriteInstanceColorHook(__int64 idSWFSpriteInstance_a1, unsigned int namedColorId_a2)
+{
 	logDebug("IdHudDebugPrintHook");
 
 	//! using rbp was a mess, hopefully we'll never have to do that again.
 	/*__int64 val = GetRBPValueWithRAxPreserved();
 	logInfo("setSpriteInstanceColorHook: TEST: rbp val: %p", (void*)val);*/
 
-
-
 	//? this is used to get the addresses of all the sprites instances we are interested in. So at least, the frag icon instances so this should be UNcommented all the time. As those instances addresses are acquired when a level load or when the idCmd::reapplySwfColorsCmd is called.
 	GameHudColorsManager::acquireMonitoredSpriteInstanceAddr(idSWFSpriteInstance_a1);
 
-	
 	//idSWFSpriteInstanceManager::debugPrintSpriteInstanceMaterialOverrideNameForColorId(idSWFSpriteInstance_a1, SWF_NAMED_COLOR_HUD_EQUIPMENT_FLAME_BELCH);
 
 	//! this works GREAT to debug hud elements and find what their fullPathHash is, you just find corresponding named color and watch the log
 	//idSWFSpriteInstanceManager::debugPrintfullPathHashForColorId(idSWFSpriteInstance_a1, SWF_NAMED_COLOR_HUD_EQUIPMENT_FRAG);
 	//GameHudColorsManager::debugPrintfullPathHashIfIsColorId(idSWFSpriteInstance_a1, SWF_NAMED_COLOR_HUD_EQUIPMENT_FRAG_ICON);
 
-
 	//? 30/4/24 removing this just 5 min for testing....
 	namedColorId_a2 = GameHudColorsManager::getColor(idSWFSpriteInstance_a1, namedColorId_a2);
-
-
 
 	//? trying to change dot crosshair color, and everything that is white to red
 	//if (namedColorId_a2 == 258 || namedColorId_a2 == 259) {
@@ -1051,8 +946,6 @@ void __fastcall setSpriteInstanceColorHook(__int64 idSWFSpriteInstance_a1, unsig
 	//	//! See our How our custom color System could work log entry in our log file to understand how this system works.
 	//	namedColorId_a2 = GameHudColorsManager::getColor(idSWFSpriteInstance_a1, namedColorId_a2);
 	//}
-		
-
 
 	//! this is good to identify original colors of a hud element:
 	//GameHudColorsManager::debugLogInstancesDefaultNamesColors(idSWFSpriteInstance_a1, namedColorId_a2);	
@@ -1078,7 +971,6 @@ void __fastcall setSpriteInstanceColorHook(__int64 idSWFSpriteInstance_a1, unsig
 	//! this is great to get a log of every hud elements
 	//GameHudColorsManager::debugLogSpriteInstance(idSWFSpriteInstance_a1);
 
-
 	//! we had an issue with this before when we forgot to add the isPlaying check which cause issue when trying to go back to default profile color.
 	//if (PlayerStateChecker::isPlaying() && GameHudColorsManager::isSpriteInstanceOveridden(idSWFSpriteInstance_a1)) {
 	//	return; //! This is what fixed our issue with for ex the rad suit not returning to original color if overide is disabled once the rad suit is empty.
@@ -1097,57 +989,48 @@ void __fastcall setSpriteInstanceColorHook(__int64 idSWFSpriteInstance_a1, unsig
 
 	//GameHudColorsManager::overideEquipmentArrowNamedColor(idSWFSpriteInstance_a1);
 
-
 	//! ids which modify the hud: (if it doesn't look log all the ids again and look the ones above or below the value
 	/*
 		INFO| print: name: left, fullPathHash: -108148670, visIndex: 17, health smth
 
-
 		*/
 
-		//! this works !:
-		//int hashId = *(int*)(idSWFSpriteInstance_a1 + 0x20);		
-		////if (hashId == -904400581) { // equipment arrow : no change.....
-		//if (hashId == -1637630621) { // equipment arrow
-		//	namedColorId_a2 = g_namedColorBlue;
-		//	logInfo("setSpriteInstanceColorHook found equipment arrow hash id");
-		//	return psetSpriteInstanceColor(idSWFSpriteInstance_a1, namedColorId_a2);
+	//! this works !:
+	//int hashId = *(int*)(idSWFSpriteInstance_a1 + 0x20);		
+	////if (hashId == -904400581) { // equipment arrow : no change.....
+	//if (hashId == -1637630621) { // equipment arrow
+	//	namedColorId_a2 = g_namedColorBlue;
+	//	logInfo("setSpriteInstanceColorHook found equipment arrow hash id");
+	//	return psetSpriteInstanceColor(idSWFSpriteInstance_a1, namedColorId_a2);
 
-		//}
+	//}
 
-		//if (PlayerStateChecker::isPlaying()) {
-		//	//? add the visIndex to the log we never know
-		//	if (!MemHelper::isBadReadPtr((void*)strAddr) && !MemHelper::isBadReadPtr((void*)(idSWFSpriteInstance_a1 + 0x20))) {
-		//		unsigned int hashId = *(unsigned int*)(idSWFSpriteInstance_a1 + 0x20);
-		//		int visIndex = *(int*)(idSWFSpriteInstance_a1 + 0x8);
-		//		logInfo("setSpriteInstanceColorHook name: %s fullPathHash: %u visIndex: %d namedColorId_a2: %u", (const char*)strAddr, hashId, visIndex, namedColorId_a2);
-		//	}
+	//if (PlayerStateChecker::isPlaying()) {
+	//	//? add the visIndex to the log we never know
+	//	if (!MemHelper::isBadReadPtr((void*)strAddr) && !MemHelper::isBadReadPtr((void*)(idSWFSpriteInstance_a1 + 0x20))) {
+	//		unsigned int hashId = *(unsigned int*)(idSWFSpriteInstance_a1 + 0x20);
+	//		int visIndex = *(int*)(idSWFSpriteInstance_a1 + 0x8);
+	//		logInfo("setSpriteInstanceColorHook name: %s fullPathHash: %u visIndex: %d namedColorId_a2: %u", (const char*)strAddr, hashId, visIndex, namedColorId_a2);
+	//	}
 
-		//}		
+	//}		
 
 	return psetSpriteInstanceColor(idSWFSpriteInstance_a1, namedColorId_a2);
 }
 
-
-
-
-
-
-
-
 //! this func, 4CAD00 is triggered 4 times per image rendered and will call hud_string_Print_Smth_4CB340 twice each call in theory we can print 2 strings each call or 1 string and many icons.
 //! However i managed to make it render 8 strings in one call with no apparent perf loss but let's be conservative. 
 //! So far it's working great to show text and strings with not apparent perf loss. Also it fades in and out automatically with menus which is nice. it needs debug_hud_string cmd to be active for it to work though.
-typedef __int64(__fastcall* printOutlinedStringMB_func)(
+typedef __int64 (__fastcall*printOutlinedStringMB_func)(
 	__int64 idRenderModelGui_a1PtrToPtr,
-	int a2,
+	int     a2,
 	__int64 a3,
-	int a4,
+	int     a4,
 	__int64 a5,
-	char* a6,
-	int a7,
-	int a8
-	);
+	char*   a6,
+	int     a7,
+	int     a8
+);
 
 //! all our previous test with this hook is 'backed' in dllmainDebug.h
 
@@ -1156,33 +1039,26 @@ printOutlinedStringMB_func pPrintOutlinedStringMB_target;
 
 __int64 __fastcall printOutlinedStringMB_hook(
 	__int64 idRenderModelGui_a1PtrToPtr,
-	int a2,
+	int     a2,
 	__int64 a3,
-	int a4,
+	int     a4,
 	__int64 a5,
-	char* a6,
-	int a7,
-	int a8
-) {
-
-	
-
-	
-	__int64 gui = *(__int64*)idRenderModelGui_a1PtrToPtr;	
+	char*   a6,
+	int     a7,
+	int     a8
+)
+{
+	__int64 gui = *(__int64*)idRenderModelGui_a1PtrToPtr;
 
 	auto iceNadeIconData = CustomIceNadeIconManager::getData();
-	iceNadeIconData.updateMaterials(); //? this could be the answer to the crashing when loading levels....fingers crossed...Might be a bit slower than before cause of matr fetching (?)...Update no more crash indeed so far.
+	iceNadeIconData.updateMaterials();
+	//? this could be the answer to the crashing when loading levels....fingers crossed...Might be a bit slower than before cause of matr fetching (?)...Update no more crash indeed so far.
 
 	if (iceNadeIconData.isRenderingAllowed) {
 		idRenderModelGuiManager::drawIceIcon(gui, iceNadeIconData);
-		
-
-		
 	}
 
-	
 	return hudString::textForidCmd.size();
-
 
 	//! this did not help to prevent the crash:
 	/*if (!idPlayer_K::isAbilityIndicatorHudActive()) {
@@ -1202,10 +1078,8 @@ __int64 __fastcall printOutlinedStringMB_hook(
 	//! disabling this for now for debugging
 	//return hudString::textForidCmd.size(); //! 
 
-
 	//? setting this just to find where the crash is:
 	//return pPrintOutlinedStringMB(idRenderModelGui_a1PtrToPtr, a2, a3, a4, a5, a6, a7, a8);
-
 
 	//logInfo("printOutlinedStringMB_hook debug: PlayerStateChecker::isPlaying(): %d, idInventoryCollectionManager::isItemOwned(ItemID::IceBomb): %d idPlayer_K::isPlayerDemon(): %d  idPlayer_K::isInCinematic: %d ", PlayerStateChecker::isPlaying(), idInventoryCollectionManager::isItemOwned(ItemID::IceBomb), idPlayer_K::isPlayerDemon(), idPlayer_K::isInCinematic());
 
@@ -1219,9 +1093,7 @@ __int64 __fastcall printOutlinedStringMB_hook(
 	//	return hudString::textForidCmd.size(); //! 
 	//}
 
-
 	//? attempting this to fix crash, problem is this does the same as !PlayerStateChecker::isPlaying() so it's still not fixing the random crash we have when loading horde mode level. Update returning original function now, may be this will make things better(?)
-
 
 	//? COmmenting this as i want to have the consistent crash again to check if the crash itself is related to text drawing
 	//if (!LoadingScreenManager::isReadyToRenderIceIcon()) {
@@ -1229,13 +1101,11 @@ __int64 __fastcall printOutlinedStringMB_hook(
 	//	return pPrintOutlinedStringMB(idRenderModelGui_a1PtrToPtr, a2, a3, a4, a5, a6, a7, a8);
 	//}
 
-
 	//? After all the tests and loging this seemed to prevent crash but i had one during a horde mode load, attempting the LoadingScreenManager method instead even if i'm not optimistic.
 	//if (!PlayerStateChecker::isPlaying()) {		
 	//	//logWarn("printOutlinedStringMB_hook player is not playing => not drawing");
 	//	return 0; //! 
 	//}
-
 
 	//! trying to get rid of this cause the icon flickers...this deosn't seem related
 	//if (!idRenderModelGuiManager::isRenderDrawCallAllowed()) {
@@ -1248,12 +1118,11 @@ __int64 __fastcall printOutlinedStringMB_hook(
 		return 1;
 	}*/
 
-
 	//! keep this:
-//if (MaterialDebug::isMaterialDebugMode()) {
-//	//logWarn("printOutlinedStringMB_hookisMaterialDebugMode is active");
-//	idRenderModelGuiManager::debugDrawMaterialLibMatr(gui, MaterialDebug::getTestMtr(), MaterialDebug::getTestMaterialName());
-//}
+	//if (MaterialDebug::isMaterialDebugMode()) {
+	//	//logWarn("printOutlinedStringMB_hookisMaterialDebugMode is active");
+	//	idRenderModelGuiManager::debugDrawMaterialLibMatr(gui, MaterialDebug::getTestMtr(), MaterialDebug::getTestMaterialName());
+	//}
 
 	//idRenderModelGuiManager::incrementRenderDrawCallCount(); // not using this atm
 	//logInfo("debug: printOutlinedStringMB_hook:... just draw, setting lowering flag");
@@ -1261,66 +1130,59 @@ __int64 __fastcall printOutlinedStringMB_hook(
 	//logInfo("printOutlinedStringMB_hook: debug exiting");
 
 	//? dont forget we have removed comments that could be useful !!!!
-//if (!idInventoryCollectionManager::isItemOwned(ItemID::IceBomb)) {
-//	//logWarn("printOutlinedStringMB_hook ice bomb not owned not drawing");
+	//if (!idInventoryCollectionManager::isItemOwned(ItemID::IceBomb)) {
+	//	//logWarn("printOutlinedStringMB_hook ice bomb not owned not drawing");
 
-//	//logInfo("printOutlinedStringMB_hook: debug exiting");
-//	return hudString::textForidCmd.size(); //! not rendering ice icon if not owned. the value returned here is arbitrary.
-//}
+	//	//logInfo("printOutlinedStringMB_hook: debug exiting");
+	//	return hudString::textForidCmd.size(); //! not rendering ice icon if not owned. the value returned here is arbitrary.
+	//}
 
-//if (idPlayer_K::isPlayerDemon() || idPlayer_K::isInCinematic()) {
-//	//logWarn("printOutlinedStringMB_hook player is demon or in cinematic: not drawing");
+	//if (idPlayer_K::isPlayerDemon() || idPlayer_K::isInCinematic()) {
+	//	//logWarn("printOutlinedStringMB_hook player is demon or in cinematic: not drawing");
 
-//	//logInfo("printOutlinedStringMB_hook: debug exiting");
-//	return hudString::textForidCmd.size(); //! don't want the ice nade to show when playing as demon
-//}
+	//	//logInfo("printOutlinedStringMB_hook: debug exiting");
+	//	return hudString::textForidCmd.size(); //! don't want the ice nade to show when playing as demon
+	//}
 
-
-//! this doesn't work:
-//if (idPlayer_K::getCurrentActiveReticleInt() == -1) {
-//	return 1; //? attempting to detect cinematic but that is not going to work i think.....
-//}
+	//! this doesn't work:
+	//if (idPlayer_K::getCurrentActiveReticleInt() == -1) {
+	//	return 1; //? attempting to detect cinematic but that is not going to work i think.....
+	//}
 
 	// not calling orignal func as we don't want to draw the debug string
 	//return pPrintOutlinedStringMB(idRenderModelGui_a1PtrToPtr, a2, a3, a4, a5, a6, a7, a8);
 }
 
-
-
 //! __int64 idLib::Printf_35F240(const char *a1, ...)
-typedef void(__cdecl* IdLib_Printf)(const char* a1, ...);
-IdLib_Printf  pIdLib_Printf = nullptr;
-IdLib_Printf  pIdLib_PrintfTarget;
+typedef void (__cdecl*IdLib_Printf)(const char* a1, ...);
+IdLib_Printf          pIdLib_Printf = nullptr;
+IdLib_Printf          pIdLib_PrintfTarget;
 
-
-void __cdecl IdLib_PrintfHook(const char* format, ...) {
-
+void __cdecl IdLib_PrintfHook(const char* format, ...)
+{
 	va_list args;
 	va_start(args, format);
 
 	char buffer[2048];
-	int result = vsnprintf(buffer, sizeof(buffer), format, args); // Store the result of vsnprintf
+	int  result = vsnprintf(buffer, sizeof(buffer), format, args); // Store the result of vsnprintf
 
-	va_end(args);  // Call va_end after using va_list
+	va_end(args); // Call va_end after using va_list
 
 	globalVariableString = std::string(buffer);
 	logInfo("id console: %s", globalVariableString.c_str());
-
 
 	return pIdLib_Printf(buffer);
 	// Call the original function
 	//return result; // Return the result of vsnprintf
 }
 
-
-
 //! __int64 __fastcall idHud_PerspectiveSmth_1549D80(__int64 idHud_X_a1)
-typedef __int64(__fastcall* idHud_PerspectiveSmth_t)(idHUDElement* idHUDElementPtr_a1);
-idHud_PerspectiveSmth_t p_idHud_PerspectiveSmth_t = nullptr;
-idHud_PerspectiveSmth_t p_idHud_PerspectiveSmth_t_Target = nullptr;
+typedef __int64 (__fastcall*idHud_PerspectiveSmth_t)(idHUDElement* idHUDElementPtr_a1);
+idHud_PerspectiveSmth_t     p_idHud_PerspectiveSmth_t        = nullptr;
+idHud_PerspectiveSmth_t     p_idHud_PerspectiveSmth_t_Target = nullptr;
 
-__int64 __fastcall idHud_PerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_a1) {
-	
+__int64 __fastcall idHud_PerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_a1)
+{
 	static void* lastDebugHudRenderModel = nullptr;
 
 	if (idHUDElementPtr_a1) {
@@ -1337,42 +1199,33 @@ __int64 __fastcall idHud_PerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_a1
 				logInfo("debug hud: idUIElementPtr: %p idUIElementPtr->swfObject.renderModel: %p", idUIElementPtr, lastDebugHudRenderModel);
 			}*/
 
-
-			if (idHUDElementNameStr == "hud_weaponinfo"){
-
-				
-
+			if (idHUDElementNameStr == "hud_weaponinfo") {
 				//idDeclHUDElement* declHudElemPtr = (idDeclHUDElement*)idHUDElementPtr_a1->decl;
 
 				//declHudElemPtr->swfInfo.depthTest = true; // forcing to true....
 
 				//logInfo("hud_weaponinfo : %p  decl: %p declHudElemPtr->swfInfo.depthTest: %d", idUIElementPtr, declHudElemPtr, declHudElemPtr->swfInfo.depthTest);
 
-
 				//idDeclHUDElement* declHudElemPtr = (idDeclHUDElement*)idHUDElementPtr_a1->decl;
 
-				
 				//logInfo("idUIElementPtr for hud_weaponinfo: %p", idUIElementPtr);
 
 				//? it is null :(
-			/*	if (!idUIElementPtr->viewOrigin) {
-					logWarn("idUIElementPtr->viewOrigin is nullptr...");
-				}
-				else {
-					logInfo("idUIElementPtr->viewOrigin->x: %.3f", idUIElementPtr->viewOrigin->x);
-					logInfo("idUIElementPtr->viewOrigin->y: %.3f", idUIElementPtr->viewOrigin->y);
-					logInfo("idUIElementPtr->viewOrigin->z: %.3f", idUIElementPtr->viewOrigin->z);
-				}*/
-				
-				
+				/*	if (!idUIElementPtr->viewOrigin) {
+						logWarn("idUIElementPtr->viewOrigin is nullptr...");
+					}
+					else {
+						logInfo("idUIElementPtr->viewOrigin->x: %.3f", idUIElementPtr->viewOrigin->x);
+						logInfo("idUIElementPtr->viewOrigin->y: %.3f", idUIElementPtr->viewOrigin->y);
+						logInfo("idUIElementPtr->viewOrigin->z: %.3f", idUIElementPtr->viewOrigin->z);
+					}*/
+
 				//? if used weaponinfo wond't be rendered anymore you'll have to reload checkpoint
 				//idUIElementPtr->swfObject.renderModel = nullptr;
-
 
 				/*logInfo("custom model for hud_weaponinfo: %p", idUIElementPtr->swfObject.customModel);
 				logInfo("guiModel for hud_weaponinfo: %p", idUIElementPtr->swfObject.guiModel);
 				logInfo("renderModel for hud_weaponinfo: %p", idUIElementPtr->swfObject.renderModel);*/
-
 
 				//? doesn't help
 				//declHudElemPtr->swfInfo.perspectiveGUI = hudElementPerspective_t::PERSPECTIVE_NONE;
@@ -1389,28 +1242,21 @@ __int64 __fastcall idHud_PerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_a1
 				/*__int64 idSWF_v8 = *(_QWORD*)((char*)idHUDElementPtr_a1 + 0x10);
 				if (idSWF_v8)
 					*(float*)(idSWF_v8 + 0x38) = 0.5f;*/
-
 			}
 		}
 	}
 
-
-
 	return p_idHud_PerspectiveSmth_t(idHUDElementPtr_a1);
 }
 
-
-
 //! __int64 __fastcall hud_drawPerspectiveSmth_1549A70(__int64 idHUDElementPtr_a1, __int64 a2, __int64 a3, __int64 a4)
-typedef __int64(__fastcall* hud_drawPerspectiveSmth_t)(idHUDElement* idHUDElementPtr_a1, __int64 a2, __int64 a3, __int64 a4);
-hud_drawPerspectiveSmth_t p_hud_drawPerspectiveSmth_t = nullptr;
+typedef __int64 (__fastcall*hud_drawPerspectiveSmth_t)(idHUDElement* idHUDElementPtr_a1, __int64 a2, __int64 a3,
+													   __int64       a4);
+hud_drawPerspectiveSmth_t p_hud_drawPerspectiveSmth_t        = nullptr;
 hud_drawPerspectiveSmth_t p_hud_drawPerspectiveSmth_t_Target = nullptr;
 
-__int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_a1, __int64 a2, __int64 a3, __int64 a4) {
-
-
-
-
+__int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_a1, __int64 a2, __int64 a3, __int64 a4)
+{
 	if (idHUDElementPtr_a1) {
 		idResource* resPtr = (idResource*)idHUDElementPtr_a1->decl;
 		if (resPtr) {
@@ -1419,61 +1265,34 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 
 			/*idUIElement* idUIElementPtr = (idUIElement*)idHUDElementPtr_a1;			
 
-
 			__int64 idGUIComponentAddr = 0;
 
 			if (idGUIComponentPTR_a3) {
 				idGUIComponentAddr = *(__int64*)idGUIComponentPTR_a3;
 			}
 
-
 			logInfo("hud_drawPerspectiveSmth_1549A70: idHUDElementNameStr: %s for idHUDElementPtr_a1 : %p  a2: %p  idGUIComponentPTR_a3 is %p idGUIComponentAddr: %p", idHUDElementNameStr.c_str(), idUIElementPtr, (void*)a2, (void*)idGUIComponentPTR_a3, (void*)idGUIComponentAddr);*/
 
-
-
 			if (idHUDElementNameStr == "hud_weaponinfo") {
-				
 				idUIElement* idUIElementPtr = (idUIElement*)idHUDElementPtr_a1;
 
 				float f0 = *(float*)(a3);
 				float f1 = *(float*)(a3 + 4);
 				float f2 = *(float*)(a3 + 8);
 
-				logInfo("hud_drawPerspectiveSmth_1549A70: for hud_weaponinfo : %p  a3 is %p f0: %.3f f1: %.3f f2: %.3f", idUIElementPtr, (void*)a3, f0, f1, f2);
+				logInfo("hud_drawPerspectiveSmth_1549A70: for hud_weaponinfo : %p  a3 is %p f0: %.3f f1: %.3f f2: %.3f",
+						idUIElementPtr, (void*)a3, f0, f1, f2);
 
 				logInfo("hud_drawPerspectiveSmth_1549A70: forcing floats... ");
-			/*	*(float*)(a3 + 4) = 100.0f;
-				*(float*)(a3 + 8) = -1.0f;*/
-
+				/*	*(float*)(a3 + 4) = 100.0f;
+					*(float*)(a3 + 8) = -1.0f;*/
 			}
 		}
 	}
 
-
-
-
-	
 	return p_hud_drawPerspectiveSmth_t(idHUDElementPtr_a1, a2, a3, a4);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //? XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //? XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //? XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -1534,64 +1353,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //? XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //? XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //? XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //? update 15/5/24 not using it anymore as we have a new way to handle dedicated nade keys so we don't need to check for owned items in the hook but i'll keep cause we never know.....
 //! this is a func which is triggered all the time when in game and which could be a good candidate to get the current inventory. idInventoryCollection_Smth_1CFBB90(__int64 idInventoryCollection_a1, __int64 a2)
@@ -1613,10 +1374,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return p_idInventoryCollection_Smth(idInventoryCollection_a1, a2);
 //}
 
-
-
-
-
 //! checking if this is triggered only when hud should be rendered
 //! char __fastcall idHUD_Reticle_UpdateWeaponInfo_Smth__1576A70(__int64 idHUD_Reticle_a1, _QWORD *a2)
 //typedef char(__fastcall* idHUD_Reticle_UpdateWeaponInfo_Smth_t)(__int64 idHUD_Reticle_a1, _QWORD* a2);
@@ -1630,7 +1387,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return p_idHUD_Reticle_UpdateWeaponInfo_Smth_t(idHUD_Reticle_a1, a2);
 //}
-
 
 //! this is used mainly as a log func atm so not really that useful for release...
 //! __int64 __fastcall idHands_handleEvents_21B7FC0(__int64 idHands_a1, __int64 struct_a2, idEventDef_K *a3, __int64 relatedToEventArgs_a4)
@@ -1661,7 +1417,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return p_idHands_handleEvents_t(idHands_a1, struct_a2, idEventDef_a3, relatedToEventArgs_a4);
 //}
 
-
 //! this is used mainly as a log func atm so not really that useful for release...
 //! __int64 __fastcall idSyncEntity_HandleEvents_MB_21925A0(unsigned int *a1, __int64 a2, idEventDef_K *a3, __int64 a4)
 //typedef __int64(__fastcall* idSyncEntity_HandleEvents_t)(unsigned int* a1, __int64 a2, idEventDef* a3, __int64 a4);
@@ -1688,8 +1443,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return p_idSyncEntity_HandleEvents_t(a1, a2, idEventDef_a3, a4);
 //}
-
-
 
 // ? nope.even when the battery in hole animation starts the output is still like : md6def / objects / doomslayer_armor / doomslayer_armor_set11.md6 and no ref to battery.
 //! __int64 __fastcall idAnimated_HandleEvents_20DA540(__int64 *idAnimated_a1, __int64 a2, idEventDef_K *a3, __int64 a4)
@@ -1742,7 +1495,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return p_idAnimated_HandleEvents_t(idAnimated_a1, a2, idEventDef_a3, a4);
 //}
-
 
 //? i could not get any events from this...weird.
 //! bool __fastcall idEntity_HandleEvents_MB_20A9870(__int64 a1, __int64 a2)
@@ -1845,7 +1597,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return p_ReleaseBroadcastEvent_t(a1, a2, a3, a4);
 //}
 
-
 //! not useful to disable custom animations
 ////! void __fastcall idAnimWebPlayerSmth_B27CA0(__int64 idAnimWebPlayer_a1, __int64 idAnimStack_a2, __int64 a3, __int64 a4)
 //typedef void(__fastcall* idAnimWebPlayerSmth_t)(__int64 idAnimWebPlayer_a1, __int64 idAnimStack_a2, __int64 a3, __int64 a4);
@@ -1864,9 +1615,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	p_idAnimWebPlayerSmth_t(idAnimWebPlayer_a1, idAnimStack_a2, a3, a4);
 //}
-
-
-
 
 //! we actually don't need this for the mod to work 
 //! this is the func that prints not only the strings when using debug_hud_string sdfsdfsdfsdf but also other debug msg which seems to be disable for the game production build. 
@@ -1946,8 +1694,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return pIdHudDebugPrint(idHUD_Debug_a1, idRenderModelGui_a2, a3);
 //}
-
-
 
 // 
 //! 17/10/23 i've been using this as a hook to add strings to the screen, but i managed to do it better in the debugHudString hook func 4CAD00, so this is not really necessary, and even if we have perf issue to display the stats or mod name on the name page it's not a big deal as those should be displayed in moments where perf in not important eg: end of level or main page. 
@@ -2077,17 +1823,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pidRenderModelGui_DrawString(gui_a1, x_a2, y_a3, text_a4, idColor_a5, a6, scale_a7);
 //}
 
-
-
-
-
-
-
-
-
-
-
-
 //! could not make this work
 // void __fastcall SetFontAndPrintStringMB__15A43B0(idRenderModelGui* a1,const char* a2,__int64 a3,__int64 a4,float a5,__int64 a6,int a7,char a8,unsigned int a9)
 //typedef void(__fastcall* SetFontAndPrintStringMB)(__int64 a1, const char* a2, __int64 a3, __int64 a4, float a5, __int64 a6, int a7, char a8, unsigned int a9);
@@ -2117,11 +1852,8 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pSetFontAndPrintStringMB(a1, a2, a3, a4, a5, a6, a7, a8, a9);
 //}
 
-
-
 // __int64 __fastcall sub_4CA590(__int64 a1, __int64 a2)
 //typedef __int64(__fastcall* initRenderModelGuiMb)(__int64 a1, __int64 a2);
-
 
 //? don't mind this, this is usual bs from gepeto:
 //typedef void(__fastcall* SetFontAndPrintStringMB)(
@@ -2158,7 +1890,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pSetFontAndPrintStringMB(thisPointer, rdxArgument, stackArg1, stackArg2, stackArg3, stackArg4, stackArg5);
 //}
 
-
 //! 
 //! 622BB0. Not using this hook anymore as we call this func directly from other hook
 //typedef void(__fastcall* DrawStretchPic_func)(
@@ -2190,13 +1921,10 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	pDrawStretchPic(a1, a2, a3, a4, a5, a6, a7);
 //}
 
-
 //! (guiPtr, x, y, z, w, h, s1, t1, s2, t2, mapPtr). Not using this hook anymore as we call this func directly from other hook
 //typedef void(__fastcall* idRenderModelGui_DrawStretchPic)(__int64 a1, float a2, float a3, float a4, float a5, float a6, float a7, float a8, float a9, float a10, __int64 a11);
 //static idRenderModelGui_DrawStretchPic pidRenderModelGui_DrawStretchPic;
 //idRenderModelGui_DrawStretchPic pidRenderModelGui_DrawStretchPic = reinterpret_cast<idRenderModelGui_DrawStretchPic>(MemHelper::getFuncAddr(0x498A10));
-
-
 
 //? looks like we can not hook this func as everytime we do it modifies the func itself, probably cause ida decompile is wrong
 //!__int64 __fastcall debug_hud_string_4CB340(idRenderModelGui* a1,float a2,__int64 a3,float a4,float* a5,_BYTE* a6,int a7,int a8){
@@ -2242,10 +1970,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pdebug_hud_string(idRenderModelGui_a1, a2, a3, a4, a5, a6, a7, a8);
 //}
 
-
-
-
-
 ////? not triggered.....
 //typedef _int64(__fastcall* sub_544BB0_Type)(_QWORD* a1, __int64 a2, Int128* a3);
 //
@@ -2266,9 +1990,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return result;
 //}
 
-
-
-
 //! afaik we don't need a hook here because we alredy use a function pointer to it in idInventoryCollectionManager.h
 //__int64 __fastcall idInventoryCollection::GetInventoryItem_1D1D6A0(__int64 gui_a1, int x_a2)
 //typedef __int64(__fastcall* idInventoryCollectionGetInventoryItem)(__int64 gui_a1, int x_a2);
@@ -2282,8 +2003,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return pidInventoryCollectionGetInventoryItem(idInventoryCollectionPtr, x_a2);
 //}
-
-
 
 //typedef __int64(__fastcall* equipmentInfo)(__int64 gui_a1);
 //equipmentInfo pEquipmentInfo = nullptr;
@@ -2320,9 +2039,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pidCmdSystemSmth_461060(cmdSystem_a1, a2);
 //}
 
-
-
-
 //! NEW COLOSSUS CODE: game console log
 //typedef void(__cdecl* IdLib_Printf)(const char* a1, ...);
 //IdLib_Printf  pIdLib_Printf = nullptr;
@@ -2347,15 +2063,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pIdLib_Printf(buffer);
 //}
 
-
-
-
-
-
-
-
-
-
 //! this is an attempt to have the console still working, it doesn't work: update it didn't cause of wrong declaration check the working one.
 //int __cdecl IdLib_PrintfHook(const char* format, ...) {
 //	va_list args;
@@ -2373,10 +2080,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	//return result; // Return the result of vsnprintf
 //	return pIdLib_Printf(format, args);
 //}
-
-
-
-
 
 //! char __fastcall idInternalCVar::Set_371CD0(__int64 **a1, char *a2, char a3)
 //typedef char(__fastcall* idInternalCVar_Set)(__int64** a1, char* a2, char a3);
@@ -2408,7 +2111,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pidInternalCVar_Set(a1, a2, a3);
 //}
 
-
 //? this is not triggered 
 //! __int64 __fastcall SoundLangSmth_A8AE00(__int64 a1, const char *a2, const char *lang_a3)
 //typedef __int64(__fastcall* SoundLangSmth_A8AE00)(__int64 a1, const char* a2, const char* lang_a3);
@@ -2421,9 +2123,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return pSoundLangSmth_A8AE00(a1, a2, lang_a3);
 //}
-
-
-
 
 //? Especially not using this anymore as it has a wrong idPlayer pointer when map is loading, which was responsible for very hard to find crash...
 //! char __fastcall idPlayer::ProcessInput_ServerAndClient_Local_1ABBDD0(__int64 gui_a1, char x_a2)
@@ -2450,13 +2149,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return pIdPlayerProcessInput(idPlayerPtr, a2);
 //}
-
-
-
-
-
-
-
 
 //? BAK do not delete!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!:
 //bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum) {
@@ -2596,8 +2288,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pisKeyPressed(ptr, btnEnum);
 //}
 
-
-
 //! void __fastcall BindCopyControllerStrSomething_1C335A0(__int64 gui_a1, unsigned __int8 *x_a2)
 //typedef void(__fastcall* BindCopyControllerStrSomething)(__int64 gui_a1, unsigned __int8* x_a2);
 //BindCopyControllerStrSomething pBindCopyControllerStrSomething = nullptr;
@@ -2626,9 +2316,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pBindCopyControllerStrSomething(gui_a1, x_a2);
 //}
 
-
-
-
 //! __int64 __fastcall idMaterial2_SomeInitFunc_464250(__int64 gui_a1)
 //typedef __int64(__fastcall* idResourceSmth)(__int64 a1);
 //idResourceSmth pidResourceSmth = nullptr;
@@ -2640,7 +2327,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	idRes.addResourcePtr(a1);
 //	return pidResourceSmth(a1);
 //}
-
 
 //! used to trigger the current game state: loading, main menu or ingame (in game doesn' necesserally mean playing)this func is triggered on map loading once.
 // __int64 __fastcall idGameSystemLocal__MinimalGameCleanup_sub_CED020(	__int64 idGameSystemLocal_a1,	__int64 x_a2,	__int64* y_a3)
@@ -2659,10 +2345,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return pidGameSystemLocalMinimalGameCleanup(idGameSystemLocal_a1, x_a2, y_a3);
 //}
-
-
-
-
 
 //! x_a2 will have a value of 15 when pause menu is active and value of 12 when the settings of the pause menu, and val of 0 when not in pause menu.
 //! char __fastcall idHUDMenu_Screen_Pause::HandleActionMb_16003D0(__int64 idHUDMenu_Screen_Pause_a1, __int64 x_a2)
@@ -2687,8 +2369,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //
 //	return pidHUDMenuScreenPause_HandleAction(idHUDMenu_Screen_Pause_a1, x_a2);
 //}
-
-
 
 //! void __fastcall idDebugHUDLocal::Render(idDebugHUDLocal *idMenuPtr_a1, idRenderModelGuis *x_a2)
 //! void __fastcall idDebugHUDLocal::Render_499690(__int64 idMenuPtr_a1, __int64 x_a2)
@@ -2730,7 +2410,6 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pidDebugHUDLocal_Render(idDebugHudAddr_a1, idRenderModelGuiAddr_a2);
 //}
 
-
 //! this func is trigger whether perf metrics is enabled or not in the settings so it's better than 48FE40
 //! void **__fastcall showPerfMetricsSmth_48E580(__int64 a1, char a2)
 //typedef void** (__fastcall* showPerfMetricsSmth)(__int64 a1, char a2);
@@ -2744,18 +2423,15 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //	return pshowPerfMetricsSmth(idConsoleLocal, a2);
 //}
 
-
-
-
 //? not using this anymore cause it's not trigger if user does not use perf metrics.
 //! this func is triggered when game is about to print performance metrics is it's enabled.
 //! char __fastcall GetPerfMetricsStr_Smth_48FE40(__int64 idConsoleLocal, __int64 x_a2, float *y_a3)
-typedef char(__fastcall* GetPerfMetricsStr)(__int64 idConsoleLocal, __int64 a2, float* a3);
-GetPerfMetricsStr pGetPerfMetricsStr = nullptr;
-GetPerfMetricsStr pGetPerfMetricsStrTarget;
+typedef char (__fastcall*GetPerfMetricsStr)(__int64 idConsoleLocal, __int64 a2, float* a3);
+GetPerfMetricsStr        pGetPerfMetricsStr = nullptr;
+GetPerfMetricsStr        pGetPerfMetricsStrTarget;
 
-char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float* a3) {
-
+char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float* a3)
+{
 	//ObjectLocator::acquire_idConsoleLocal_And_idRenderModelGuiAddr(idConsoleLocal); //! modelgui ptr at gui_a1 + 0xD8
 
 	//idRenderModelGui::isGetPerfMetricsStrTriggered = 1;
@@ -2782,13 +2458,8 @@ char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float*
 
 	//return 1; // <= this doesn't reduce perf issue.
 
-
 	return pGetPerfMetricsStr(idConsoleLocal, a2, a3);
 }
-
-
-
-
 
 //! void __fastcall RenderShape_4FDD30(__int64 gui_a1, __int64 x_a2, __int64 y_a3, __int64 text_a4, float *idColor_a5, float *a6)
 //typedef void (__fastcall* RenderShape)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, float* a5, float* a6);
@@ -2885,7 +2556,6 @@ char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float*
 //	return pRenderShape(a1, a2, a3, a4, a5, a6);
 //}
 
-
 //! this func does calculation on the renderModelgui which is going to render the hud so let's try to use it:
 //! void __fastcall Calls_idSWF_Render_1C09690(__int64 gui_a1, __int64 x_a2, __int64 *y_a3, char text_a4, char idColor_a5, char a6)
 //typedef void(__fastcall* idSWF_Render_Caller)(__int64 gui_a1, __int64 x_a2, __int64* y_a3, char text_a4, char idColor_a5, char a6);
@@ -2904,7 +2574,6 @@ char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float*
 //	return pidSWF_Render_Caller(gui_a1, x_a2, y_a3, text_a4, idColor_a5, a6);
 //}
 
-
 //! trying to get material name so we can change color for elements we want
 //! void __fastcall renderSWF_Smth_4FCF80(__int64 idDeclSWF_Ptr_a1,__int64 x_a2,float* y_a3,float* text_a4,__int64 idMaterial2_a5,unsigned int a6,char scale_a7)
 //typedef void(__fastcall* renderSWF)(__int64 idDeclSWF_Ptr_a1, __int64 a2, float* a3, float* a4, __int64 idMaterial2_a5, unsigned int a6, char a7);
@@ -2921,14 +2590,6 @@ char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float*
 //	}*/
 //	return prenderSWF(idDeclSWF_Ptr_a1, a2, a3, a4, idMaterial2_a5, a6, a7);
 //}
-
-
-
-
-
-
-
-
 
 //! void __fastcall idRenderModelGui::DrawStretchPic_498ED0(__int64 gui_a1,float x_a2,float y_a3,float text_a4,float idColor_a5,float a6,float scale_a7,float a8,float a9,float a10,__int64 a11)
 //typedef void(__fastcall* idRenderModelGui_DrawStretchPic_498ED0)(__int64 a1, float a2, float a3, float a4, float a5, float a6, float a7, float a8, float a9, float a10, __int64 a11);
@@ -2972,7 +2633,6 @@ char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float*
 //			
 //}
 
-
 //! this is used to hopefully intercet menus state, gamestate, game initialized and things like that
 //! void __fastcall idBroadcastManager::ReleaseBroadcastEvent_4899C0(__int64 gui_a1, __int64 x_a2, __int64 y_a3)
 //typedef void(__fastcall* idBroadcastManager_ReleaseBroadcastEvent)(__int64 a1, __int64 a2, __int64 a3);
@@ -2987,10 +2647,6 @@ char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float*
 //
 //	return pidBroadcastManager_ReleaseBroadcastEvent(a1, a2, a3);
 //}
-
-
-
-
 
 //? BAK of WIP convertIdDeclUIColorToidColorHook:
 ////! this will hopefully let us change the color of ui elements at will
@@ -3030,6 +2686,3 @@ char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float*
 //
 //	return pconvertIdDeclUIColorToidColor(idDeclUIColor_a1, idColorPtr_a2, colorId_a3);
 //}
-
-
-
