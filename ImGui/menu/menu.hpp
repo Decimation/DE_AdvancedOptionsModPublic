@@ -9,7 +9,6 @@
 #include "GoToSettingsGui.h"
 #include "KaibzHud.h"
 
-
 #include "../Fonts/Robotto.h"
 #include "../Fonts/EternalUiRegular_BWZGd.h"
 #include "../Fonts/icomoonDoomEternal.h"
@@ -20,12 +19,9 @@
 #include "../../DE/PlayerStateChecker.h"
 #include "../../DE/idDeclUIColorManager.h"
 
-#include "../../DE/winFocusManager.h"
-
+#include "../../DE/WinFocusManager.h"
 
 //#include "../../DE/CustomizedWeaponManager.h"
-
-
 
 namespace Menu {
    
@@ -85,12 +81,8 @@ namespace Menu {
     inline ImVec4 CriticalColorImVec4 = BlackColorImVec4;
     inline ImVec4 DisabledColorImVec4 = BlackColorImVec4;
 
-   
-
     //? doesn't help:
     /*inline bool bIsMenuInitialised = false;*/ //! an attempt to prevent issues where mod shortcut text randomly doesn't show up in main page                                         
-                             
-
 
     void InitializeContext(HWND hwnd);
     void raiseAltTabFlag();
@@ -103,8 +95,6 @@ namespace Menu {
     ImVec4 getHudColor(KaibzHudColor_t colorId);
     void debugLogColor(ImVec4 ImVec4Color, std::string colorName);
     void debugLogHudColors();
-
-
 
     //inline static idColor colorCustom_test1 = idColor{ 1.00f, 1.00f, 0.00f, 1.00f };
     //inline static idColor colorCustom_test2 = idColor{ 1.00f, 0.00f, 0.00f, 1.00f };

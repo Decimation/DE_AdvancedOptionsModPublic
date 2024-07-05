@@ -1,6 +1,4 @@
 #pragma once
-#include "Types.h"
-#include "../IniFile/IniFileData.h"
 #include "idPlayer.h"
 
 class ReticleScaleManager {
@@ -29,7 +27,7 @@ public:
         if (!declWeaponReticle) return false;
         logDebug("updateScale");
 
-        float computedReticleScale = computeReticleScale(declWeaponReticle, modSettings::getReticleScale(), fastCvarManager::getReticleMode());
+        float computedReticleScale = computeReticleScale(declWeaponReticle, modSettings::getReticleScale(), FastCvarManager::getReticleMode());
         //float computedReticleScale = computeReticleScale(declWeaponReticle, modSettings::getReticleScale(), idCmd::getReticleMode());
 
         //logInfo("updateScale debug: computedReticleScale: %.3f and declWeaponReticle->reticleModelScale: %.3f", computedReticleScale, declWeaponReticle->reticleModelScale);
@@ -47,7 +45,6 @@ public:
         return false;
 	}
 
-
     static bool isModSettingsChanged() {
         if (modSettings::getReticleScale() != m_lastIniReticleScaleVal) {
             m_lastIniReticleScaleVal = modSettings::getReticleScale();
@@ -59,7 +56,6 @@ public:
         }
         return false;
     }
-
 
     /*static bool isImmersiveCrosshairMode() {
         static ImmersiveCrosshairLevel debugLastImmersiveCrosshairMode = ImmersiveCrosshairLevel::IMMERSIVE_CROSSHAIR_LEVEL_UNKNOWN;
@@ -75,7 +71,6 @@ public:
 
     static float getReticleScaleForImmersiveCrosshairMode(std::string& reticleName) {
         ImmersiveCrosshairLevel immersiveCrosshairLevel = modSettings::getImmersiveCrosshairLevel();
-        
 
         if (immersiveCrosshairLevel == ImmersiveCrosshairLevel::HAR_ADS) {
             if (reticleName == Reticle::g_weaponreticleHeavyCannonBoltActionZoomed) {
@@ -109,7 +104,6 @@ public:
         //}
         return Reticle::g_invisibleReticleScale;
     }
-
 
     static float getDefaultReticleScaleFor(idDeclWeaponReticle* weaponReticlePtr) {
         logDebug("getDefaultReticleScaleFor");
@@ -173,11 +167,9 @@ public:
         return false;
     }
 
-
     static bool isIniCrosshairScaleDefault() {
         return (modSettings::getReticleScale() == Reticle::g_defaultReticleScale);
     }
-
 
     static float computeReticleScale(idDeclWeaponReticle* weaponReticlePtr, float userRequestedReticleScaleFloat, UI_ReticleMode reticleMode) {
         logDebug("computeReticleScale debug called and weaponReticlePtr name is %s and userRequestedReticleScaleFloat is %.3f", idResourceManager::getDeclWeaponReticleName(weaponReticlePtr).c_str(), userRequestedReticleScaleFloat);
@@ -210,7 +202,6 @@ public:
         return userRequestedReticleScaleFloat; //! returning input if it doen't need change.
     }
 };
-
 
 std::vector<std::string> ReticleScaleManager::m_ballistaReticlesNamesVec = { Reticle::g_weaponreticleGaussCannon , Reticle::g_weaponreticleGaussBallista , Reticle::g_weaponreticleGaussSiege , Reticle::g_weaponreticleBallistaDestroyerMastery };
 

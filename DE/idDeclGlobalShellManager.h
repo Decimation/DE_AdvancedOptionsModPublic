@@ -4,8 +4,7 @@
 #include "GeneratedClasses.h"
 #include "../K_Utils/K_Utils.h"
 #include "idResourceListManager.h"
-#include "fastCvarManager.h"
-
+#include "FastCvarManager.h"
 
 class idDeclGlobalShellManager {
 
@@ -30,7 +29,6 @@ public:
 	//! the beauty here is that setting a list num to zero will make the game logic thing the list is empty...
 	//! also if the pop up is currently displayed, sure it will not dismiss it but it will not crash the game, and next time user launches a campaign it will be gone.
 	static void disableNewCampaignPopUp(bool isDisabled);
-	
 
 };
 

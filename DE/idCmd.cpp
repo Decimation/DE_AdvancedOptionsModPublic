@@ -1,7 +1,5 @@
 #include "idCmd.h"
 
-
-
 bool idCmd::acquireIdCmdSystemLocalPtr(__int64 idCmdSystemLocalPtr) {
 	if (MemHelper::isBadReadPtr((void*)idCmdSystemLocalPtr)) {
 		logErr("acquireIdCmdSystemLocalPtr: failed to acquire idCmdSystemLocalPtr (bad ptr): %p", (void*)idCmdSystemLocalPtr);
@@ -20,7 +18,6 @@ bool idCmd::acquireIdCmdSystemLocalPtr(__int64 idCmdSystemLocalPtr) {
 	return true;
 }
 
-
 bool idCmd::acquirreExecuteCommandTextFuncPtr() {
 	if (!m_idCmdSystemLocal) {
 		logErr("executeCommandText: m_idCmdSystemLocal is null can not execute");
@@ -35,8 +32,6 @@ bool idCmd::acquirreExecuteCommandTextFuncPtr() {
 	return true;
 }
 
-
-
 uintptr_t idCmd::executeCommandText(const char* txt) {
 	
 	if (!m_idCmdSystemLocal || !m_idCmdSystemLocal_ExecuteFp) {
@@ -47,9 +42,6 @@ uintptr_t idCmd::executeCommandText(const char* txt) {
 	return m_idCmdSystemLocal_ExecuteFp((idCmdSystemLocal*)m_idCmdSystemLocal, txt);
 
 }
-
-
-
 
 void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 	if (gameSpeed == gameSpeed_K::maxSpeed) {
@@ -65,7 +57,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 		logErr("setGameSpeed failed to find gameSpeed: %d can not execute cmd", (int)gameSpeed);
 	}
 }
-
 
  void idCmd::setReticleMode(UI_ReticleMode mode) {
 
@@ -83,7 +74,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 	}
 
 }
-
 
  void idCmd::showEquipmentInfo(bool isTrue) {
 
@@ -119,14 +109,12 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 	executeCommandText(cmdStr.c_str());
  }
 
-
 //! this works but changing it will not update the scale if it's changed through the ini file
  void idCmd::setReticleOverride(reticleStyle_t reticleStyle) {
 	std::string cmd = "hud_reticle_styleOverride " + std::to_string(static_cast<int>(reticleStyle));
 	logInfo("setReticleOverride: reticleStyle: %d", (int)reticleStyle);
 	executeCommandText(cmd.c_str());
  }
-
 
  void idCmd::setMinMaxFov(bool isUnlockedFovInMenu) {
 	 if (isUnlockedFovInMenu) {		
@@ -149,8 +137,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 	 }
  }
 
-
-
 //! this is slow (i assmue) but it's ok cause triggered only when user is out of mod menu
 
  void idCmd::setHandsFov(int iniFileValue) {
@@ -161,7 +147,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 
 	//return m_pIdCvar_Set((__m128i***)m_handsFovScale_SideNotificationOffset, valAsStr.c_str(), 4);
  }
-
 
  std::string idCmd::getHandsFovFloatValAsStr(int iniFileValue) { //! 1 - 100
 	logDebug("getHandsFovFloatValAsStr: iniFileValue: %d", iniFileValue);
@@ -188,8 +173,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 	return valAsStr;
  }
 
-
-
  void idCmd::SetInMouseEnabled(bool isEnable) {
 	 if(isEnable) {
 		 executeCommandText("in_mouse 1");
@@ -202,15 +185,13 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 	 }
  }
 
-
  void idCmd::ToggleMainMenu() {
 	 executeCommandText("ToggleMainMenu");
  }
 
-
  void idCmd::setAntiAliasingState(bool isDisableAA) {	
 	
-	 antialiasingLevel curAALevel = fastCvarManager::getCurAntiAliasLevel();
+	 antialiasingLevel curAALevel = FastCvarManager::getCurAntiAliasLevel();
 
 	 if (isDisableAA) {
 
@@ -261,7 +242,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 	 }
  }
 
-
  void idCmd::setDecalLifetimeMultiplier(int value) {
 	 if (value < 1) {
 		 value = 1;
@@ -276,7 +256,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 	 executeCommandText(cmdStr.c_str());
  }
 
-
  void idCmd::setDesaturate(float value) {
 	 if (value < 0.0f) {
 		 value = 0.0f;
@@ -290,7 +269,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 
 	 executeCommandText(cmdStr.c_str());
  }
-
 
  void idCmd::setIsForceAiHaste(bool isForceAiHaste) {
 
@@ -307,8 +285,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 
 	 executeCommandText(cmdStr.c_str());
  }
-
-
 
  // uintptr_t idCmd::executeCommandText_K2(const char* txt) {
 //
@@ -420,9 +396,6 @@ void idCmd::setGameSpeed(gameSpeed_K gameSpeed) {
 //	idCVar* cvarPtr = (idCVar*)getCvarPtr(txt);
 //	return cvarPtr->data->valueInteger;
 //}
-
-
-
 
  /*UI_ReticleMode idCmd::getReticleMode() {
 	logDebug("getReticleMode");

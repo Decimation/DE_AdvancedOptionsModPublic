@@ -11,17 +11,15 @@
 #include <sstream>
 //#include "stdafx.h
 
-
 //#include "spdlog/spdlog.h"
 //#include "spdlog/sinks/basic_file_sink.h"
 #include "../DE/UtilsDE.h"
 #include "../DE/CommonDE.h"
-#include "../Voice/Voice.h"
-
+#include "../Tools/Voice.h"
 
 #ifndef logDebug
 #define logDebug(...) VLOG_F(loguru::Verbosity_1 , __VA_ARGS__)
-#endif 
+#endif
 
 #ifndef logInfo
 #define logInfo(...) VLOG_F(loguru::Verbosity_0 , __VA_ARGS__)
@@ -34,7 +32,6 @@
 #ifndef logErr
 #define logErr(...) VLOG_F(loguru::Verbosity_ERROR , __VA_ARGS__)
 #endif // 
-
 
 //enum class ModDebugVersion
 //{
@@ -56,36 +53,29 @@
 //	
 //};
 
-
 enum class ModConfig
 {
 	nexusRelease,
 	nexusDebug,
 	dev,
 	MAX_VERSIONS
-
 };
 
 class Config
 {
 private:
-
 	static inline ModConfig m_modConfig;
-	static inline FILE* fp;
-	static inline bool m_isModError;
-
-	
+	static inline FILE*     fp;
+	static inline bool      m_isModError;
 
 public:
-
 	static const inline float MOD_VERSION_F = 2.0f;
 
-	static const inline std::string MOD_FOLDER_NAME = "DE_AdvancedOptionsMod";
+	static constexpr std::string MOD_FOLDER_NAME = "DE_AdvancedOptionsMod";
 
 	static const inline std::string MOD_FULL_NAME = "Doom Eternal Advanced Options Mod";
 
 	static const inline std::string MOD_NAME_IMGUI = "DE Advanced Options";
-
 
 	static const inline std::string MOD_LOG_FILE_NAME = "DE_AdvancedOptionsMod_Log.txt";
 
@@ -97,38 +87,38 @@ public:
 
 	static const inline std::string GAME_FILE_NAME_TO_LOWER = "doometernalx64vk.exe";
 
-
 	static const inline std::string GAME_WINDOW_CLASS_NAME = "Ghost_CLASS";
 
 	//static const inline std::string MOD_NEXUS_LINK = "https://www.nexusmods.com/doometernal/mods/1255";
 
-	static const inline std::vector<std::string> CREDITS_VEC = { "MethanHydrat for the inspiration and advices", "SamPT for his help, testing and advices", "SunBeam for his idTech findings and articles", "Chrispy for his amazing Meathook mod", "Zwip - Zwap Zapony for all that he has done for the DE modding community", "Crazyslugger for testing and feedback", "The Doom Eternal Modding Discord Community" };
-	
-
+	static const inline std::vector<std::string> CREDITS_VEC = {
+		"MethanHydrat for the inspiration and advices", "SamPT for his help, testing and advices",
+		"SunBeam for his idTech findings and articles", "Chrispy for his amazing Meathook mod",
+		"Zwip - Zwap Zapony for all that he has done for the DE modding community",
+		"Crazyslugger for testing and feedback", "The Doom Eternal Modding Discord Community"
+	};
 
 	static bool isModError();
 	static void setModError(std::string erroMsg);
 
 	loguru::Verbosity VerbosityForFile(const loguru::Verbosity& verbosity);
 
-	
-	static void set(ModConfig config);
+	static void      set(ModConfig config);
 	static ModConfig get();
 
 	static std::string getModuleName();
 	static std::string getModBuildStr();
 	static std::string getModConfigStr();
-	static bool isDevMode();
+	static bool        isDevMode();
 	static std::string getGameFileNameToLowerStr();
 
 	static std::string getCreditsStr();
 
-	static void printHeaderInLogFile();
+	static void        printHeaderInLogFile();
 	static std::string getLogHeaderString();
 	static std::string getTimeDateStr();
 
 	static std::string getModInfoTextForGui();
-
 
 	//static const bool isDebug = true;
 	//static std::string getImprovedWeaponSwitchFeatureStateStr();
@@ -152,9 +142,4 @@ public:
 	//static bool isSecretMaxVerboseDebugLevel;
 
 	//void loguru_callback(const loguru::CallbackParams& params);
-
-
 };
-
-
-

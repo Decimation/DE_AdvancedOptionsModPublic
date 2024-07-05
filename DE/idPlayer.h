@@ -3,9 +3,7 @@
 #include "CommonDE.h"
 #include "MemHelper.h"
 #include "../Config/Config.h"
-#include "Types.h"
 #include "idCmd.h"
-#include <Logger.h>
 #include "idHudManager.h"
 #include "GeneratedClasses.h"
 #include "idMapInstanceLocalManager.h"
@@ -22,7 +20,6 @@ enum class equipmentIndex_t {
     UNKNOWN = 3
 };
 
-
 class idPlayer_K {
 
 private:
@@ -37,7 +34,6 @@ private:
 
     //static classVariableInfo_t* m_idGK_UpgradeHandler_fxBloodPunchAOE_VarInfo;
     //static classVariableInfo_t* m_idGK_UpgradeHandler_bloodPunchSuperChargedSoundActivated_VarInfo;
-
 
     //! bool __fastcall idPlayer::UseEquipmentItem_A5F3D90(__int64 *idPlayer_a1, __int64 idDeclThrowable_a2, char a3, int a4)
     //typedef bool(__fastcall* idPlayer_UseEquipmentItem)(__int64* idPlayer_a1, __int64 idDeclThrowable_a2, char a3, int a4);
@@ -61,7 +57,6 @@ private:
    static inline int m_lastIceGrenadeCount = -1;
    //static inline GrenadeType  m_lastHudSelectedGrenadeType = GrenadeType::None;
 
-
 public:
 
     //? delete this when done
@@ -80,22 +75,14 @@ public:
 
     static bool isDesperatePunchRuneEquipped();
 
-
     static bool isDesperatePunchSoundActivated();
 
     static bool isDesperatePunchAvailable();
 
-
-       
-
     //! Imo this is better to use this method than using the hook simply because we cache the data we get from the hook so there is a possibility that this data is not accurate so i think this is better.
     static weaponSlot_t getcurrentWeaponSlotIndex();
 
-
-   
-
     static bool wantZoom();
-
 
     static bool isInScope();
 
@@ -132,12 +119,7 @@ public:
         return idHUDElementObj->isFaded;
     }*/
 
-
-
-    
-
    static bool isPlayerDemon();
-   
 
     static void resetLastIceGrenadeCount();
 
@@ -150,7 +132,6 @@ public:
 
     static int getEquipmentCount(equipmentIndex_t equipmentIndex);
 
-
     static idPlayer_equipmentInfo_t_itemData_t getEquipmentTimers(equipmentIndex_t equipmentIndex);
 
     static bool isFragNadeCountChanged();
@@ -161,10 +142,6 @@ public:
 
     //! this seems to be a copy of flame so we can ignore it.
     static int getUnknowEquipmentCount();
-
-
-
-
 
     //static bool isHudSelectedGrenadeChanged();
 
@@ -181,7 +158,6 @@ public:
     //    //logInfo("getHudSelectedGrenadeType called, this is what used to ");
     //    //__int64 idPlayerAddr = ObjectLocator::getIdPlayerAdrr();
 
-
     //    
     //    //__int64 idPlayerFromGameLocalDebug = idGameLocal::getIdPlayer_1_Addr();
     //    //idPlayer_t* idPlayerPtr = idMapInstanceLocalManager::getIdPlayerPtr();
@@ -190,7 +166,6 @@ public:
 
     //   
     //    idHUD_WeaponInfo* idHud_WeaponInfo = (idHUD_WeaponInfo*)idHudManager::getIdHud_Element(HudElementName::WeaponInfo);
-
 
     //    //? we need to know and log if this fails even we're going to change the way we find that data anyway...
     //    if (MemHelper::isBadReadPtr(idHud_WeaponInfo)) {
@@ -274,33 +249,23 @@ public:
     //
     
     static equipmentType_t getSelectedGrenadeType();
-   
 
     //static void setGrenadeType(GrenadeType grenadeType);
 
-
     static swfRect_t getEquipmentIconCoords(int fullpathHash);
-
-
-
 
     //! DEBUG:
 
     static void debugPrintFragNadeCoordsFromWeaponInfoV2();
 
-
     static void debugPrintFragNadeCoordsFromWeaponInfo();
 
-
     static void debugEquipmentCount();
-
-   
 
     static bool isAbilityIndicatorHudActive();
 
     //? AbilityIndicators are actually the small icons close to the crosshair not the ones in the equipment hud bottom right
     static void debugSpriteInstanceFromidHUD_AbilityIndicators();
-
 
     //? AbilityIndicators are actually the small icons close to the crosshair not the ones in the equipment hud bottom right
     static void debugAbilityIndicatorsiceGrenadeWidget();
@@ -315,7 +280,6 @@ public:
 
     //! only broadcastSystemId changes and i'm not even sure what's it's supposed to be, great.
     static void debug_Id_Hud();
-
 
     //? doesn't work to get state like if it's hidden cause in menu, cinamtic or else it's always 1. Keep this though
     static void debugEquipmentWidgetState();
@@ -337,7 +301,6 @@ public:
     //    std::string nameStr = std::string(widget->spriteName.data);
     //    logInfo("debugEquipmentDeferredOp: widget: %s deferredOperations: %d", nameStr.c_str(), widget->deferredOperations);
     //}
-
 
     //! don't need this we already have this value at idPlayer + 0x6F48
     //static GrenadeType getUISelectedGrenadeType() {
@@ -383,8 +346,6 @@ public:
     //    return 0;
     //}
 
-
-
     //! if reticuleScaleUserOveride 
     //static void setReticleScaleTest(float reticuleScaleUserOverideFloat) {
     //    logDebug("setReticleScaleTest");
@@ -397,7 +358,6 @@ public:
     //    try
     //    {
     //        idPlayer_t* idPlayer = idMapInstanceLocalManager::getIdPlayerPtr();
-
 
     //        //__int64 idPlayerAddr = ObjectLocator::getIdPlayerAdrr();
     //        if (idPlayer) {
@@ -416,13 +376,6 @@ public:
     //        logErr("setReticleScaleTest: ERROR: %s ", ex.what());
     //    }
     //}
-
-
-
-
-
-
-
 
     /* static HudAmmoDataV2 debugGetFakeAmmoData() {
          __int64 idPlayerAddr = ObjectLocator::getIdPlayerAdrr();
@@ -455,7 +408,6 @@ public:
      //    }
      //    return false;
      //}
-
 
     ////? need to add actual user defined colors from inifile
     //static void updateDotReticleColor() {
@@ -519,9 +471,7 @@ public:
     //static void setDotReticleScaleV2(float reticuleScaleUserOverideFloat) {
     //    logDebug("setDotReticleScaleV2");
 
-
     //    idPlayer_t* idPlayer = idMapInstanceLocalManager::getIdPlayerPtr();
-
 
     //    //__int64 idPlayerAddr = ObjectLocator::getIdPlayerAdrr();
     //    if (idPlayer) {
@@ -536,13 +486,11 @@ public:
     //                reticleDataPtr->currentReticle->reticleModelScale = reticuleScaleUserOverideFloat;
     //            }
 
-
     //            //idPlayerPtr->idHUD_ReticlePtr->activeReticleDecl->reticleModelScale = reticuleScaleUserOverideFloat;
 
     //            /*idHUDEvent_ReticleDataUpdate_idReticleData_t* reticleDataPtr = (idHUDEvent_ReticleDataUpdate_idReticleData_t*)&idPlayerPtr->idHUD_ReticlePtr->idSWFWidget_Hud_ReticlePtr_Dot->idHUDEvent_ReticleDataUpdate_idReticleData_t_currentData;*/
     //            //! chargeCooldown will be 1.0 when the weapon is ready to be used and less than 1 when not.
     //            //return reticleDataPtr->chargeCooldown != 1.0f;
-
 
     //            //! the cooldown will always be 0 whether the meathook is recharging or not
     //            //logInfo("debug_printWeaponCoolDownValOfDotReticle: chargeCooldown: %.2f  cooldown: %.2f", reticleDataPtr->chargeCooldown, reticleDataPtr->cooldown);
@@ -556,13 +504,10 @@ public:
     //    }
     //}
 
-
     //static void setDotReticleScale(float reticuleScaleUserOverideFloat) {
     //    logDebug("setDotReticleScale");
 
-
     //    idPlayer_t* idPlayer = idMapInstanceLocalManager::getIdPlayerPtr();
-
 
     //    //__int64 idPlayerAddr = ObjectLocator::getIdPlayerAdrr();
     //    if (idPlayer) {
@@ -585,7 +530,6 @@ public:
     //            //! chargeCooldown will be 1.0 when the weapon is ready to be used and less than 1 when not.
     //            //return reticleDataPtr->chargeCooldown != 1.0f;
 
-
     //            //! the cooldown will always be 0 whether the meathook is recharging or not
     //            //logInfo("debug_printWeaponCoolDownValOfDotReticle: chargeCooldown: %.2f  cooldown: %.2f", reticleDataPtr->chargeCooldown, reticleDataPtr->cooldown);
 
@@ -597,9 +541,6 @@ public:
 
     //    }
     //}
-
-
-    
 
     //static void debugLogCurrentIdDeclWeaponName() {
   //    logDebug("debugLogCurrentIdDeclWeaponName");
@@ -617,14 +558,12 @@ public:
 
   //    }
 
-
   //    __int64 declWeaponAddr = *(__int64*)(idWeaponAddr + m_idDeclWeaponPtrOffset);
   //    if (declWeaponAddr != debugLastDeclWeaponAddr) {
   //        debugLastDeclWeaponAddr = declWeaponAddr;
   //        logInfo("declWeaponAddr has changed to: %p", (void*)(declWeaponAddr));
   //    }*/
   //}
-
 
     //! this actually works, the only issus is that it doesn't trigger the "empty" sound when equipment is recharging.
     //static void testThrowNade(int type) {
@@ -657,7 +596,6 @@ public:
     //    }
     //    return 0.0f;
     //}
-
 
     //static bool isMeatHookOnCoolDown() {
     //    __int64 idPlayerAddr = ObjectLocator::getIdPlayerAdrr();
@@ -718,7 +656,6 @@ public:
         }
     }*/
 
-
     /* static uint64_t getIceNadeCoolDownSec() {
          __int64 idPlayerAddr = ObjectLocator::getIdPlayerAdrr();
          if (!MemHelper::isBadReadPtr((void*)idPlayerAddr)) {
@@ -748,8 +685,6 @@ public:
 //const char* idPlayer_K::m_idPlayerClsName = "idPlayer";
 
 //classVariableInfo_t* idPlayer_K::m_idHud_VarInfo = nullptr;
-
-
 
 //classVariableInfo_t* idPlayer_K::m_idPlayer_dashboard_VarInfo = nullptr;
 

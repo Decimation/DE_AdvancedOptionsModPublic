@@ -155,7 +155,7 @@
 	__int64 gameTimeManagerLocalPtr = idMapInstanceLocal + m_undocumentedIdGameTimeManagerLocalOffset;
 	auto v3 = *(__int64*)(gameTimeManagerLocalPtr + 0x10);
 	//if (idCmd::isGameTimeScalingEnabled()) {
-	if (fastCvarManager::isGameTimeScalingEnabled()) {
+	if (FastCvarManager::isGameTimeScalingEnabled()) {
 		return *(__int64*)(v3 + 0x48i64 * a3 + 0x18);
 	}
 	else {

@@ -5,10 +5,9 @@
 #include "../Config/Config.h"
 
 #include "LocalizedBindStringData.h"
-#include "fastCvarManager.h"
+#include "FastCvarManager.h"
 
 //#include "Scanner.h"
-
 
 class LangManager
 {
@@ -21,7 +20,6 @@ private:
 
 	static inline LocalizedBindStringData m_LocalizedBindStringData; 
 
-
 	static GameLanguage setGameLanguage(std::string inGameLanguageStr);
 
 	static std::string GameLanguageToString(GameLanguage language);
@@ -29,10 +27,7 @@ private:
 	//! get current language from the game mem
 	static bool acquireGameLanguage();
 
-
-
 public:	
-	
 
 	//static bool acquirreSysLangFuncStartAddr(__int64 sysLangFuncStartAddr);
 
@@ -42,8 +37,5 @@ public:
 
 	static LocalizedBindStringData& getLocalizedBindStringData();
 
-
 };
-
-
 

@@ -1,6 +1,5 @@
 #include "idDeclUIColorManager.h"
 
-
 //void idDeclUIColorManager::initColors() {
 //    acquireDefaultColors();
 //    updateCustomIdColors();
@@ -17,8 +16,6 @@
 //    m_currentIdDeclUIColor = idDeclUIColorPtr;
 //}
 
-
-
 //? alpha should always be 1.0. at least from my tests
 ImU32 idDeclUIColorManager::ConvertIdColorToU32(const idColor& idColor)
 {
@@ -30,15 +27,12 @@ ImU32 idDeclUIColorManager::ConvertIdColorToU32(const idColor& idColor)
     return out;
 }
 
-
-
 // forcing alpha to max as user can not change alpha value in color picker cause it's a bit confusing.
 //ImVec4 idDeclUIColorManager::convertIdColorToImVec4(idColor idcolor) {
 //    logInfo("convertIdColorToImVec4: idcolor.r: %.3f idcolor.g: %.3f idcolor.b: %.3f idcolor.a: %.3f (forcing alpha to 1.0)", idcolor.r, idcolor.g, idcolor.b, idcolor.a);
 //    return ImVec4(idcolor.r, idcolor.g, idcolor.b, 1.0f);
 //    //return ImVec4(idcolor.r, idcolor.g, idcolor.b, idcolor.a);
 //}
-
 
 void idDeclUIColorManager::setKaibzHudColorsToGameColorProfile() {
 
@@ -67,7 +61,6 @@ void idDeclUIColorManager::setKaibzHudColorsToGameColorProfile() {
     //modSettings::setKaibzHudCriticalColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->weaponHammerFull.color));
     //! this seems to work fine
     modSettings::setKaibzHudCriticalColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudBossHealthBase.color));
-
 
     //? none of the extralives field do have a color corresponding to the game icon, weird. hudText seems to work well though.
     modSettings::setKaibzHudExtraLivesColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudText.color));
@@ -103,7 +96,6 @@ void idDeclUIColorManager::setKaibzHudColorsToGameColorProfile() {
     modSettings::setKaibzHudIceColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentCyro.color));
 }
 
-
 ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t color_k) {
 
     idDeclUIColor* currentIdDeclUIColorPtr = idDeclGlobalShellManager::getCurrentColorProfile();
@@ -112,7 +104,6 @@ ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t colo
         return IM_COL32(255, 255, 255, 255); // white;
     }
 
-    
     switch (color_k)
     {
   /*  case KaibzHudColor_t::disabledColor:
@@ -178,7 +169,6 @@ ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t colo
 //    return m_defaultFragNadeIconColor;
 //}
 
-
 //void idDeclUIColorManager::debugLogCurrentColorProfileName(int index) {
 //
 //    idList* idDeclUIColorListPtr = idDeclGlobalShellManager::getColorProfileColorsIdList();
@@ -188,7 +178,7 @@ ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t colo
 //        return;
 //    }
 //
-//    int curColorProfileIndex = fastCvarManager::getColorProfileIndex();
+//    int curColorProfileIndex = FastCvarManager::getColorProfileIndex();
 //
 //    logInfo("debugLogCurrentColorProfileName: idDeclUIColorListPtr: %p idDeclUIColorListPtr->num : %d curColorProfileIndex: %d", idDeclUIColorListPtr, idDeclUIColorListPtr->num, curColorProfileIndex);
 //
@@ -412,7 +402,6 @@ ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t colo
 //    logInfo("restoreAllProfilesColorsForHudElement: done restoring %d color profiles for hud element: %d", debugCounter, hudElementRef);
 //}
 
-
 //idColor idDeclUIColorManager::getDefaultColorForElement(idDeclUIColor* originalColorPtr) {
 //
 //}
@@ -435,7 +424,6 @@ ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t colo
 //    }
 //}
 
-
 //? we need an update func tion taht will be triggered in main t hat will check if current color profile index has changed and if yes will get the nuw idDeclUIColor ptr, then it will do all the checks made in GameHudColorsManager::getColor and that's  it.
 
 //void idDeclUIColorManager::applyUserSettingsToColorProfile(idDeclUIColor* colorProfilePtr) {
@@ -452,7 +440,6 @@ ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t colo
 //    originalColorPtr->hudEquipmentFrag = customColor.hudEquipmentFrag;
 //    originalColorPtr->hudEquipmentFragIcon = customColor.hudEquipmentFragIcon;
 //}
-
 
 //void idDeclUIColorManager::updateCustomIdColors() {
 //
@@ -518,10 +505,6 @@ ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t colo
 //
 //
 //}
-
-
-
-
 
 //void idDeclUIColorManager::restoreOriginalColorProfile(idDeclUIColor_Custom customColor, idDeclUIColor* originalColorPtr) {
 //

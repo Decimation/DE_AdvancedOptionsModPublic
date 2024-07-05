@@ -2,7 +2,6 @@
 // Date: 2024/07/05 @ 14:07:55
 
 #include "stdafx.h"
-#include "Common.h"
 #include "dllmain.h"
 
 //#include "spdlog/spdlog.h"
@@ -13,7 +12,6 @@
 //#include "DE/HudAmmoData.h"
 //#include "Debug/idPlayerDebug.h"
 //#include "Debug/idInventoryManagerDebug.h"
-#include "Rtti/Rtti_Helper.h"
 //#include "Debug/ReticleSettingsDebug.h"
 #include "DE/GameVersionInfoManager.h"
 #include "DE/idDebugManager.h"
@@ -734,8 +732,8 @@ DWORD WINAPI ModMain()
 				isFragNadeOwned = idInventoryCollectionManager::isFragNadeOwned();
 				isIceNadeOwned  = idInventoryCollectionManager::isIceNadeOwned();
 
-				isGameSettingsHudEnabled = fastCvarManager::getIsShowHudEnabled();
-				isEquipmentInfoEnabled   = fastCvarManager::getIsEquipmentInfoEnabled();
+				isGameSettingsHudEnabled = FastCvarManager::getIsShowHudEnabled();
+				isEquipmentInfoEnabled   = FastCvarManager::getIsEquipmentInfoEnabled();
 
 				bool const isInScope = idPlayer_K::isInScope();
 
@@ -869,7 +867,7 @@ DWORD WINAPI ModMain()
 
 				if (!idPlayer_K::isPlayerDemon() && modSettings::isImmersiveCrosshairModeEnabled()) {
 					//if (idCmd::getReticleMode() == UI_ReticleMode::None) {
-					if (fastCvarManager::getReticleMode() == UI_ReticleMode::None) {
+					if (FastCvarManager::getReticleMode() == UI_ReticleMode::None) {
 						idCmd::setReticleMode(UI_ReticleMode::Full);
 						logInfo("mod main loop: forcing UI_ReticleMode::Full because immersive crosshair is on");
 					}

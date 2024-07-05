@@ -10,7 +10,6 @@ namespace ig = ImGui;
 
 namespace Menu {
 
-
     void InitializeContext(HWND hwnd) {
         if (ig::GetCurrentContext())
             return;
@@ -33,14 +32,12 @@ namespace Menu {
         debugWindow_font_cfg.FontDataOwnedByAtlas = false;
         debugWindow_font = io.Fonts->AddFontFromMemoryTTF(robottoData, sizeof(robottoData), 18.0f, &debugWindow_font_cfg);
 
-
         ImFontConfig Eternal1font_cfg;
         Eternal1font_cfg.FontDataOwnedByAtlas = false;
         //qsdfEternal1font_cfg.MergeMode = true;
 
         float etEternalFontSize = guiHelper::getSafeFontSize(modSettings::getEternalFontSize());
         customHud_Eternal1font = io.Fonts->AddFontFromMemoryTTF(eternalRegularData, sizeof(eternalRegularData), etEternalFontSize, &Eternal1font_cfg);
-
 
         float hudIconsSafeFontSize = guiHelper::getSafeFontSize(modSettings::getKaibzHudIconFontSize());
 
@@ -58,11 +55,6 @@ namespace Menu {
 
     }
 
-   
-
-    
-
-
     bool isLeavingModMenu()
     {
         static bool lastbShowMenu = false;
@@ -75,7 +67,6 @@ namespace Menu {
         }
         return false;       
     }
-
 
     void initKaibzHudColors()
     {
@@ -104,9 +95,6 @@ namespace Menu {
         CriticalColorImVec4 = ImGui::ColorConvertU32ToFloat4(modSettings::getKaibzHudCriticalColorImU32());
         DisabledColorImVec4 = ImGui::ColorConvertU32ToFloat4(modSettings::getKaibzHudDisabledColorImU32());
     }
-
-
-
 
     void debugLogColor(ImVec4 ImVec4Color, std::string colorName) {
 
@@ -140,9 +128,6 @@ namespace Menu {
         debugLogColor(DisabledColorImVec4, "DisabledColorImVec4");
        
     }
-
-
-
 
     ImVec4 getHudColor(KaibzHudColor_t colorRef)
     {
@@ -202,9 +187,6 @@ namespace Menu {
         }        
     }
 
-
-
-
     bool isEnteringModMenu() {
 
         static bool lastbShowMenu = false;
@@ -217,16 +199,13 @@ namespace Menu {
         return false;
     }
 
-
     //! this triggers continuously once Imgui is initialized.
     void Render( ) {
-        
-      
+
       static  uint64_t lastInMouseDisabledMs = 0;     
 
       //! attempt to fix issues with shortcut text not rendering
       if (!PlayerStateChecker::isGameInitialized()) return;
-
 
       //! avoiding problems....
       if (PlayerStateChecker::isGameLoading()) {
@@ -234,7 +213,7 @@ namespace Menu {
       }
 
       //? this doesn't work unfortunately, check the cls for more info
-     /* if (!winFocusManager::isGameFocused()) {
+     /* if (!WinFocusManager::isGameFocused()) {
           bShowMenu = false;
       }*/
 
@@ -245,13 +224,12 @@ namespace Menu {
           isAltTabFlag = false;
       }*/
 
-
       //! disabling the game mouse input while in imgui so we can use the mouse:
-      if (bShowMenu && fastCvarManager::isMouseInputEnabled()) {
+      if (bShowMenu && FastCvarManager::isMouseInputEnabled()) {
           idCmd::SetInMouseEnabled(false);
           lastInMouseDisabledMs = EpochMillis();
       }
-      else if (!bShowMenu && !fastCvarManager::isMouseInputEnabled()) {
+      else if (!bShowMenu && !FastCvarManager::isMouseInputEnabled()) {
           idCmd::SetInMouseEnabled(true);
       }
 
@@ -289,12 +267,10 @@ namespace Menu {
           return;
       }
 
-
       if (bShowDebugWindow) {
           //DebugGui::drawFullScreenBlackBackground();
           DebugGui::showDebugWindow();
       }
-
 
       if (PlayerStateChecker::isPlayingAndActive()) {
 
@@ -312,16 +288,9 @@ namespace Menu {
               }
           }
       }
-      
-
-
 
       //ig::ShowDemoWindow( );
     }
-
-
-
-
 
     void showModMenu(bool* p_open) {
 
@@ -333,13 +302,11 @@ namespace Menu {
             bShowMenu = false;
         }       
 
-
         ImGui::SetNextWindowPos(ImVec2(0, 0));
         ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 
         ImGuiViewport* viewport = ImGui::GetMainViewport();
         float verticalSpacingEndTab = viewport->Size.y * .1f;
-
 
         IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing dear imgui context. Refer to examples app!");
 
@@ -349,9 +316,7 @@ namespace Menu {
 
         ImGui::Begin("Settings (Press ESC to go close Mod Menu)", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-
         if (ImGui::BeginTabBar("Tabs")) { 
-
 
             if (ImGui::BeginTabItem("Welcome")) {
 
@@ -359,13 +324,11 @@ namespace Menu {
                 ImGui::NewLine();
 
                 ImGui::TextWrapped("Welcome to Doom Eternal Advanced Options Mod!\n\n\n\t* The [?] symbol will show you a tooltip for almost every option, just hover your mouse over it to see the tooltip.\n\n\t* If you have spent time configuring colors or settings you should make a back up of the .json file. that way you can have as many configurations as you want \n\n\t* The troubleshooting section on the nexus page of this mod should give you clues if you have any issue, launching the mod.\n\n\t* This mod took more than 2000 hours of work, if you enjoy it please give feedback on the nexus comments.\n\n\nKaibz");
-                             
 
                 ImGui::Dummy(ImVec2(0.0f, verticalSpacingEndTab));
                 ImGui::Unindent();
                 ImGui::EndTabItem();
             }
-
 
             if (ImGui::BeginTabItem("Q.O.L")) {
 
@@ -378,8 +341,6 @@ namespace Menu {
                 modSettings::setIsUseDedicatedNadeKeys(isUseDedicatedGrenadeKeys);
 
                 ImGui::NewLine();
-
-
 
                 static bool isDisableNewCampaignPopUp = modSettings::getIsDisableNewCampaignPopUp();
                 ImGui::Checkbox("Disable New Campaign Pop up", &isDisableNewCampaignPopUp);
@@ -400,8 +361,6 @@ namespace Menu {
 
                 ImGui::NewLine();
 
-
-
                 static bool isSpeedUpBatterySocketAnimation = modSettings::getIsSpeedUpBatterySocketAnimation();
                 ImGui::Checkbox("Speed Up Battery in Socket Animation", &isSpeedUpBatterySocketAnimation);
                 guiHelper::insertToolTipSameLine("Checked: will speed up game speed when slayer put the battery cell in socket to unlock new items. \nUnchecked: defaut game behaviour");
@@ -418,14 +377,12 @@ namespace Menu {
 
                 ImGui::NewLine();
 
-
                 bool isUnlockGameFOVMenu = modSettings::getIsGameFovMenuUnlocked();
                 ImGui::Checkbox("Unlock FOV in Game Menu", &isUnlockGameFOVMenu);
                 guiHelper::insertToolTipSameLine("Checked: unlocks the minimum and maximum FOV you can set in the Video menu of the game min: 70 max: 150.\nYou may need to close and open the game Video Settings again for the changes to take effect \nUnchecked: default game behaviour");
                 modSettings::setIsGameFovMenuUnlocked(isUnlockGameFOVMenu);
 
                 ImGui::NewLine();
-
 
                 static bool isOverideInteractionFOV = modSettings::getIsOverideInteractionFOV();
                 ImGui::Checkbox("Overide Interaction FOV", &isOverideInteractionFOV);
@@ -447,18 +404,15 @@ namespace Menu {
                 }
                 modSettings::setInteractionFOV((float)interactionsFOV_Int);
 
-
                 ImGui::NewLine();
 
                 ImGui::TextWrapped("*** If you are looking to disable the opening Sequence of the main campaign, i suggest you install a mod called: Doom Eternal - Streamlined Campaign ***");              
-
 
                 ImGui::Dummy(ImVec2(0.0f, verticalSpacingEndTab));
                 ImGui::Unindent();
                 ImGui::EndTabItem();
 
             }
-
 
             if (ImGui::BeginTabItem("Custom Hud")) {
                
@@ -469,7 +423,6 @@ namespace Menu {
 
                 ImGui::NewLine(); 
                 ImGui::NewLine();
-               
 
                 if (ImGui::Button("Apply Profile Colors")) {
                     idDeclUIColorManager::setKaibzHudColorsToGameColorProfile();
@@ -519,20 +472,16 @@ namespace Menu {
                 guiHelper::insertToolTipSameLine("Checked: uses a custom dot crosshair, you can change its size, color, cooldown color \nIt has a black outline so it's much easier to see compared to the one from the game\nYou can use this dot with the game crosshair if you want\nBut The InGame Dot will be disabled when you use the custom one \nUnchecked: No custom dot crosshair ");
                 modSettings::setIsUseImguiDotCrosshair(isUseCustomDotCrosshair);
 
-              
-
                 if (modSettings::getIsUseImguiDotCrosshair()) {
                    
                     ImGui::Indent();
                     ImGui::NewLine(); 
-
 
                     bool isShowHealthAsCrosshairColor = modSettings::getCustomCrosshairIsShowHealthAsColor();
                     ImGui::Checkbox("Show Health as crosshair Color", &isShowHealthAsCrosshairColor);
                     guiHelper::insertToolTipSameLine("Checked: Will change the color of the crosshair based how health.\nThis will use the custom colors as so:\nArmor Max Color when health is full (max value of health + armor) \nArmor Color when lower than max health+armor\nHealth Color when no armor and above 50% Health\nCaution Color when below 50% health\nWarning Color when below %25 health\nIf you use the crosshair cooldown color feature make sure the color is not one of those");
                     modSettings::setCustomCrosshairIsShowHealthAsColor(isShowHealthAsCrosshairColor);
 
-                    
                     if (!isShowHealthAsCrosshairColor) {
 
                         ImGui::NewLine();
@@ -543,11 +492,8 @@ namespace Menu {
                         modSettings::setCustomDotCrosshairColorImU32(ImGui::ColorConvertFloat4ToU32(dotCrosshairColorImVec4));
                     }
 
-                    
-
                     ImGui::NewLine();
-                   
-                 
+
                     ImVec4 dotCrosshairCooldownColorImVec4  = ImGui::ColorConvertU32ToFloat4(modSettings::getCustomDotCrosshairCooldownColorImU32());                   
                   
                     ImGui::ColorEdit3("Custom Dot Crosshair Coodown color", (float*)&dotCrosshairCooldownColorImVec4);
@@ -555,7 +501,6 @@ namespace Menu {
                     modSettings::setCustomDotCrosshairCooldownColorImU32(ImGui::ColorConvertFloat4ToU32(dotCrosshairCooldownColorImVec4));
 
                     ImGui::NewLine();   
-
 
                     int dotCrosshairSizePix = (int)modSettings::getImguiCustomDotCrosshairRadiusPix();
                     ImGui::SliderInt("Custom Dot Crosshair Radius", &dotCrosshairSizePix, 0, 25);
@@ -574,12 +519,10 @@ namespace Menu {
                 ImGui::NewLine();
                 ImGui::NewLine();
 
-
                 bool isUseKaibzHud = modSettings::getIsUseKaibzHud();
                 ImGui::Checkbox("Use Custom Hud", &isUseKaibzHud);
                 guiHelper::insertToolTipSameLine("Checked: a customizable hud\nUnckecked: no custom hud");
                 modSettings::setIsUseKaibzHud(isUseKaibzHud);
-
 
                 if (isUseKaibzHud) {
 
@@ -608,7 +551,6 @@ namespace Menu {
                     guiHelper::insertToolTipSameLine("You can move the custom Hud more towards the TOP using a NEGATIVE value ");
                     modSettings::setKaibzHudOffsetY(hudOffsetYPrct);
 
-                   
                     ImGui::NewLine();     
 
                     ImGui::TextColored(WhiteColorImVec4, "Icons Spacing: ");
@@ -620,8 +562,7 @@ namespace Menu {
                     }
                     guiHelper::insertToolTipSameLine("How far apart should the icons be on x axis, in pixels");
                     modSettings::setKaibzHudIconExtraSpacingMul(HudIconExtraSpacingMul);
-                  
-                    
+
                     ImGui::NewLine();
 
                     ImGui::TextColored(WhiteColorImVec4, "Icons/Text Size: ");
@@ -637,9 +578,7 @@ namespace Menu {
                     guiHelper::insertToolTipSameLine("The size of icons and text, REQUIRES RESTART FOR CHANGES TO REFLECT");
                     modSettings::setKaibzHudIconFontSize((float)HudFontSize);
 
-
                     ImGui::NewLine();
-
 
                     bool isHideHudInAds = modSettings::getFlag(KaibzHudFlag::HideHudInAds);
                     ImGui::Checkbox("Hide Hud in ADS", &isHideHudInAds);
@@ -676,9 +615,6 @@ namespace Menu {
 
                     ImGui::NewLine();
 
-                    
-
-
                     ImGui::NewLine();
 
                     ImGui::TextColored(WhiteColorImVec4, "Hud Background Opacity: ");
@@ -691,14 +627,12 @@ namespace Menu {
                     guiHelper::insertToolTipSameLine("How visible should be the black rectangle behind the hud, the lower => the less visible\nIf you have trouble seeing elements on the hud set the opacity higher");
                     modSettings::setKaibzHudBgOpacity(hudBgOpacity);
 
-
                     ImGui::NewLine();
                     ImGui::NewLine();
 
                     ImGui::TextColored(WhiteColorImVec4, "Hud Elements Customisation: (You can set each element color and visibility)");
 
                     ImGui::NewLine();                   
-                   
 
                     bool hudShowExtraLives = modSettings::getFlag(KaibzHudFlag::ShowExtraLives);
                     ImGui::Checkbox("Show Extra Lives Icon", &hudShowExtraLives);
@@ -737,14 +671,12 @@ namespace Menu {
 
                         ImGui::NewLine();
 
-
                          BloodPunch2ColorImVec4 = ImGui::ColorConvertU32ToFloat4(modSettings::getKaibzHudBloodPunch2ColorImU32());
                         ImGui::ColorEdit3("Blood Punch 2 Color", (float*)&BloodPunch2ColorImVec4);
                         guiHelper::insertToolTipSameLine("the color of Blood Punch 2");
                         modSettings::setKaibzHudBloodPunch2ColorImU32(ImGui::ColorConvertFloat4ToU32(BloodPunch2ColorImVec4));
 
                         ImGui::NewLine();
-
 
                          BloodPunchDesperateColorImVec4 = ImGui::ColorConvertU32ToFloat4(modSettings::getKaibzHudBloodPunchDesperateColorImU32());
                         ImGui::ColorEdit3("Blood Punch Desperate Color", (float*)&BloodPunchDesperateColorImVec4);
@@ -782,7 +714,6 @@ namespace Menu {
                     }
 
                     ImGui::NewLine();
-
 
                     bool showBasics = modSettings::getFlag(KaibzHudFlag::ShowBasics);
                     ImGui::Checkbox("Show Health/Armor/Ammo Icons", &showBasics);
@@ -834,11 +765,9 @@ namespace Menu {
                         guiHelper::insertToolTipSameLine("the color for the Ammo text and icon when ammo is NOT critical");
                         modSettings::setKaibzHudAmmoColorImU32(ImGui::ColorConvertFloat4ToU32(AmmoColorImVec4));
 
-
                         ImGui::Unindent();
 
                     }
-
 
                     ImGui::NewLine(); 
                     ImGui::NewLine();
@@ -893,7 +822,6 @@ namespace Menu {
                         ImGui::Indent();
                         ImGui::NewLine();
 
-                       
                          Fuel1ColorImVec4 = ImGui::ColorConvertU32ToFloat4(modSettings::getKaibzHudFuel1ColorImU32()); 
                         ImGui::ColorEdit3("Fuel 1 Color", (float*)&Fuel1ColorImVec4);
                         guiHelper::insertToolTipSameLine("the color for the Fuel 1 HUD element");
@@ -971,14 +899,9 @@ namespace Menu {
 
                     ImGui::NewLine();    
 
-                   
-
-
                     ImGui::Unindent(); // custom hud
 
                 }         
-                
-                
 
                 ImGui::Dummy(ImVec2(0.0f, verticalSpacingEndTab));
                 ImGui::Unindent();
@@ -986,15 +909,12 @@ namespace Menu {
 
             }    
 
-
-
             if (ImGui::BeginTabItem("Game Hud")) {
 
                 ImGui::NewLine();  
                 ImGui::NewLine();
                 ImGui::Indent();
 
-               
                 ImGui::TextColored(WhiteColorImVec4, "Crosshair Scale");
                 static int uiReticleScaleInt = (int)(modSettings::getReticleScale() * 100);
                 ImGui::SliderInt("##reticleScaleInt", &uiReticleScaleInt, 50, 200);
@@ -1010,7 +930,6 @@ namespace Menu {
                     //logInfo("mod menu setting reticle scale to %.3f ", valF);
                     modSettings::setReticleScale(valF);
                 }
-
 
                 ImGui::NewLine();
 
@@ -1030,10 +949,8 @@ namespace Menu {
 
                 }
                 guiHelper::insertToolTipSameLine("This is for people who like to play with no crosshair BUT who think that there should be one in some ADS weapons.\nHere you can select to only show the crosshair in specific situations");
-               
-               
-                ImGui::NewLine();
 
+                ImGui::NewLine();
 
                 bool isCleanHud = modSettings::getIsRemoveBindsReminderOnHud();
                 ImGui::Checkbox("Clean Hud", &isCleanHud);
@@ -1049,19 +966,15 @@ namespace Menu {
 
                 ImGui::NewLine();
 
-
                 bool isDisableDashBlur = modSettings::getIsDisabledDashBlurEffect();
                 ImGui::Checkbox("Disable Dash Blur", &isDisableDashBlur);
                 guiHelper::insertToolTipSameLine("Checked: Removes white blur on the side of the screen when dashing. Unchecked: default game behaviour.");
                 modSettings::setIsDisabledDashBlurEffect(isDisableDashBlur);
 
-             
                 ImGui::NewLine();
                 ImGui::NewLine();
                 
                 ImGui::TextColored(WhiteColorImVec4, "Here you can override some of the game's Hud icons colors");
-
-                              
 
                 ImGui::NewLine();
 
@@ -1076,7 +989,6 @@ namespace Menu {
 
                 //! this seems weird but we have to do this to make this shitty system work. but i tried an alternative with DeclColorManager and i almost went crazy so no thanks.
                 int valStart = (int)SWF_CUSTOM_NAMED_COLOR_DEFAULT;
-               
 
                 // Define variables to store the selected color indices
                 int selectedColorIndex_BloodPunch_1 = modSettings::getOverrideBloodPunchColor1() - valStart;
@@ -1090,7 +1002,6 @@ namespace Menu {
                 int selectedColorIndex_RadsuitMeter = modSettings::getOverrideRadMeterColor() - valStart;
 
                 bool isColoredWeaponBar = modSettings::getIsWeaponBarColored();
-
 
                 ImGui::Text("1 BloodPunch Icon Color:");
                 ImGui::Combo("##BloodPunch_1_Color", &selectedColorIndex_BloodPunch_1, colorOptions, IM_ARRAYSIZE(colorOptions));
@@ -1140,7 +1051,6 @@ namespace Menu {
                 ImGui::Checkbox("Colored Weapon Bar", &isColoredWeaponBar);
                 guiHelper::insertToolTipSameLine("Checked: default game behaviour. \nUnchecked: will make the weapon/ammo info on the hud white instead of being weapon colored like red for rockets or purple for plasma\nThe goal is to reduce the color feedback so the grenades and equipments colors are easier or more intuitive to notice. ");
 
-
                 modSettings::setOverrideBloodPunchColor1(selectedColorIndex_BloodPunch_1 + valStart);
                 modSettings::setOverrideBloodPunchColor2(selectedColorIndex_BloodPunch_2 + valStart);   
                 modSettings::setOverrideDesperatePunchColor(selectedColorIndex_Desperate_Punch + valStart);
@@ -1153,7 +1063,6 @@ namespace Menu {
                
                 modSettings::setIsWeaponBarColored(isColoredWeaponBar);
 
-
                 ImGui::NewLine();
 
                 ImGui::TextColored(WhiteColorImVec4, "Reset Colors To default:  ");
@@ -1162,22 +1071,18 @@ namespace Menu {
                     modSettings::resetGameHudColorsToDefault();
                 }
                 guiHelper::insertToolTipSameLine("Set the game hud colors back to their default values.");
-               
 
                 ImGui::Dummy(ImVec2(0.0f, verticalSpacingEndTab));
                 ImGui::Unindent();
                 ImGui::EndTabItem();
                 
             }
-           
-
 
             if (ImGui::BeginTabItem("Weapons")) {
 
                 ImGui::Indent();
 
                 ImGui::NewLine();
-
 
                 ImGui::TextColored(WhiteColorImVec4, "Weapons FOV Overide:");
                 int weaponsFOV = modSettings::getHandsFOV();
@@ -1191,7 +1096,6 @@ namespace Menu {
 
                 ImGui::NewLine();
 
-
                 ImGui::TextColored(WhiteColorImVec4, "HAR ADS Mouse sensitivity:");
                 int harADSSensitivityMouseInt = (int)(modSettings::getAssaultRiflePrecisionBoltMouseSens() * 100);
                 ImGui::SliderInt("##HARADSMousesensitivity", &harADSSensitivityMouseInt, 0, 100);
@@ -1202,7 +1106,6 @@ namespace Menu {
                 guiHelper::insertToolTipSameLine("You can adjust the mouse sensitivity multiplayer when using the precison bolt rifle in ADS mode here.");
                 float harADSSensitivityMouseFloat = ((float)harADSSensitivityMouseInt / 100);
                 modSettings::setAssaultRiflePrecisionBoltMouseSens(harADSSensitivityMouseFloat);
-
 
                 ImGui::NewLine();
 
@@ -1217,7 +1120,6 @@ namespace Menu {
                 float harADSSensitivityControllerFloat = ((float)harADSSensitivityControllerInt / 100);
                 modSettings::setAssaultRiflePrecisionBoltControllerSens(harADSSensitivityControllerFloat);
 
-
                 ImGui::NewLine();
 
                 ImGui::TextColored(WhiteColorImVec4, "Balista ADS Mouse sensitivity:");
@@ -1230,7 +1132,6 @@ namespace Menu {
                 guiHelper::insertToolTipSameLine("You can adjust the mouse sensitivity multiplayer when using the balista ADS mode here.");
                 float balistaADSSensitivityMouseFloat = ((float)balistaADSSensitivityMouseInt / 100);
                 modSettings::setBallistaArbalestMouseSens(balistaADSSensitivityMouseFloat);
-
 
                 ImGui::NewLine();
 
@@ -1245,9 +1146,7 @@ namespace Menu {
                 float balistaADSSensitivityControllerFloat = ((float)balistaADSSensitivityControllerInt / 100);
                 modSettings::setBallistaArbalestControllerSens(balistaADSSensitivityControllerFloat);
 
-
                 ImGui::NewLine();
-
 
                 bool removeShotgunZoomAndLoweredSens = modSettings::isOverideShotgunConfig();
                 ImGui::Checkbox("Remove Shotgun Zoom And Lowered Sens", &removeShotgunZoomAndLoweredSens);
@@ -1270,7 +1169,6 @@ namespace Menu {
 
                 ImGui::NewLine();
 
-
                 bool isWeaponSwitchFixBeep = modSettings::isImprovedWeaponSwitchingBeep();
                 ImGui::Checkbox("Weapon Switching Fix beep", &isWeaponSwitchFixBeep);
                 guiHelper::insertToolTipSameLine("Checked: Plays a small beep when the mod detects a weapon switch error and resends the right weapon button/key, this is more of a debug feature. Unchecked: no beep.");
@@ -1282,22 +1180,18 @@ namespace Menu {
                 ImGui::Unindent();
                 ImGui::EndTabItem();
 
-
             }           
-
 
             if (ImGui::BeginTabItem("AI")) {
 
                 ImGui::Indent();
 
                 ImGui::NewLine();
-               
 
                 bool isForceAiHaste = modSettings::GetIsForceAiHaste();
                 ImGui::Checkbox("Force Ai Haste", &isForceAiHaste);
                 guiHelper::insertToolTipSameLine("This will make the AI behave/move/attack as if there was a totem nearby. For players who need a challenge. Default setting: Disabled");               
                 modSettings::SetIsForceAiHaste(isForceAiHaste);
-                
 
                 ImGui::Dummy(ImVec2(0.0f, verticalSpacingEndTab));
                 ImGui::Unindent();
@@ -1305,16 +1199,12 @@ namespace Menu {
 
             }
 
-
-
             if (ImGui::BeginTabItem("Other")) {
 
                 ImGui::Indent();
 
                 ImGui::NewLine();
 
-           
-                
                 bool isDisableAA = modSettings::getIsDisableAA();
                 ImGui::Checkbox("Disable Anti Aliasing", &isDisableAA);
                 guiHelper::insertToolTipSameLine("Disable Anti aliasing. \nIf you switch DLSS on, it will force the anti aliasing to level 2\nso forcing it to 0 'could' affect perf or DLSS quality. \nDefault Game Setting: enabled");
@@ -1323,7 +1213,6 @@ namespace Menu {
                 modSettings::setIsDisableAA(isDisableAA); 
 
                 ImGui::NewLine();
-              
 
                 bool isDisableMouseSmoothing = modSettings::GetIsDisableMouseSmoothing();
                 ImGui::Checkbox("Disable Mouse Smoothing", &isDisableMouseSmoothing);
@@ -1331,7 +1220,6 @@ namespace Menu {
                 modSettings::SetIsDisableMouseSmoothing(isDisableMouseSmoothing);
 
                 ImGui::NewLine();
-               
 
                 bool isDisableBloom = modSettings::GetIsDisableBloom();
                 ImGui::Checkbox("Disable Bloom", &isDisableBloom);
@@ -1353,16 +1241,12 @@ namespace Menu {
                 modSettings::SetDesaturate(desaturate);
 
                 ImGui::NewLine();               
-               
-
 
                 ImGui::Dummy(ImVec2(0.0f, verticalSpacingEndTab));
                 ImGui::Unindent();
                 ImGui::EndTabItem();               
 
             }   
-
-
 
             if (ImGui::BeginTabItem("Mod")) {
 
@@ -1401,10 +1285,8 @@ namespace Menu {
                     ImGui::EndCombo();
                 }
 
-
                 ImGui::NewLine(); // spacing  
                 ImGui::NewLine(); // spacing
-
 
                 ImVec4 shortcutTextColorImVec4 = ImGui::ColorConvertU32ToFloat4(modSettings::getModSettingsShortcutTextColorImU32());
 
@@ -1412,7 +1294,6 @@ namespace Menu {
                 ImGui::ColorEdit3("Mod Shortcut Text Color", (float*)&shortcutTextColorImVec4);
                 guiHelper::insertToolTipSameLine("changes the color/alpha of the text in the game menu (Kaibz Mod [X]) to anything you wish"); 
                 modSettings::setModSettingsShortcutTextColorImU32(ImGui::ColorConvertFloat4ToU32(shortcutTextColorImVec4));
-
 
                 ImGui::NewLine();
 
@@ -1427,7 +1308,6 @@ namespace Menu {
                 }
                 guiHelper::insertToolTipSameLine("The size of the text in the game main menu (Kaibz Mod [X]), REQUIRES RESTART FOR CHANGES TO REFLECT");
                 modSettings::setEternalFontSize((float)ModShortcutFontSize);
-
 
                 ImGui::NewLine();
 
@@ -1451,23 +1331,18 @@ namespace Menu {
 
             }
 
-
-
             if (ImGui::BeginTabItem("About")) {
 
                 ImGui::Indent();
 
                 ImGui::NewLine();
                 ImGui::Text(Config::getModInfoTextForGui().c_str());
-               
 
                 ImGui::Dummy(ImVec2(0.0f, verticalSpacingEndTab));
                 ImGui::Unindent();
                 ImGui::EndTabItem();
 
             }
-
-
 
             if (Config::get() != ModConfig::nexusRelease) {
 
@@ -1476,8 +1351,6 @@ namespace Menu {
                     ImGui::Indent();
                     ImGui::NewLine();              
 
-                   
-                    
                     bool isLogGameConsoleToLogFile = modSettings::isLogConsoleToLogFile();
                     ImGui::Checkbox("Log Console To Log File", &isLogGameConsoleToLogFile);
                     guiHelper::insertToolTipSameLine("Checked: log the game console to the mod log file so that mod author can check if anything is conflicting with the mod not working on your machine.\nREQUIRES GAME RESTART TO TAKE EFFECT \nUnchecked: no log to file.");
@@ -1485,20 +1358,12 @@ namespace Menu {
                     ImGui::TextColored(YellowColorImVec4, "  This Setting Requires Restart !");
                     modSettings::setIsLogConsoleToLogFile(isLogGameConsoleToLogFile);                
 
-
-
                     ImGui::Dummy(ImVec2(0.0f, verticalSpacingEndTab));
                     ImGui::Unindent();
                     ImGui::EndTabItem();
 
-                  
-
                 }
             }
-
-
-           
-
 
             ImGui::EndTabBar();
         }
@@ -1510,21 +1375,9 @@ namespace Menu {
 
         ImGui::End();
 
-
-
-
-
     }
 
-    
-
-
-
-
-
 } // namespace Menu
-
-
 
 //? this is the defunc weapons tab that did work, imgui wise, but it just too annoying and frustrating to work on, as there is no consistency between weapons
 
@@ -1575,7 +1428,6 @@ namespace Menu {
 //
 //}
 
-
  //? BAK SO WE CAN EXPERIMENT 6/5/24
     //void InitializeContext(HWND hwnd) {
     //    if (ig::GetCurrentContext( ))
@@ -1596,10 +1448,8 @@ namespace Menu {
 
     //    debugWindow_font = io.Fonts->AddFontFromMemoryTTF(robottoData, sizeof(robottoData), 15.0f, &font_cfg);
 
-
     //    float hudTextFontSize = guiHelper::getSafeFontSize(modSettings::getKaibzHudTextFontSize());  
     //    customHud_Eternal1font = io.Fonts->AddFontFromMemoryTTF(eternalRegularData, sizeof(eternalRegularData), hudTextFontSize, &font_cfg);
-
 
     //    float hudIconsFontSize = guiHelper::getSafeFontSize(modSettings::getKaibzHudIconFontSize());
     //    kaibzHudIconsFont = io.Fonts->AddFontFromMemoryTTF(KaibzDE, sizeof(KaibzDE), hudIconsFontSize, &font_cfg);
@@ -1610,7 +1460,6 @@ namespace Menu {
     //    //kaibzIconsDE_Medium_Font = io.Fonts->AddFontFromMemoryTTF(KaibzDE, sizeof(KaibzDE), 28.0f, &font_cfg);
 
     //    //io.Fonts->AddFontFromMemoryTTF(eternalRegularData, sizeof(eternalRegularData), 28.0f, &font_cfg);
-
 
     //    //! i was crashing because i was not using the FontDataOwnedByAtlas = false method from here: https://github.com/ocornut/imgui/blob/master/docs/FONTS.md#loading-font-data-from-memory and also because i was having: io.Fonts->AddFontDefault(); before this block. Finally i used the code from the video to make sure it works: https://www.youtube.com/watch?v=2B_qzPHV4MQ
     //    static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };

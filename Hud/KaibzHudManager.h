@@ -7,19 +7,12 @@
 #include "../DE/GeneratedEnums.h"
 #include "../K_Utils/K_Utils.h"
 #include "../DE/idHudManager.h"
-#include "../ModSettings/modSettings.h"
+#include "../Config/ModSettings/modSettings.h"
 //#include "kaibzHudData.h";
-
-
-
-
-
-
 
 class KaibzHudManager
 {
 private:
-
 
 public:
 
@@ -27,14 +20,12 @@ public:
 	static std::string getHudValueAsStr(float valueF, float maxValue);
 
 	static int getIntVal(float valueF, float maxValue);
-	
 
 	static ImU32 getCustomCrosshairHealthAsImU32Color(float currentHealthValue, float MaxHealthValue, float currentArmorValue, float MaxArmorValue);
 
 	static KaibzHudColor_t get3StagesCorlor(float currentValue, float MaxValue, KaibzHudColor_t normalColor);
 
 	//static int getIceNadeCooldownTimeLeft();
-	
 
 	static float getIceNadeCooldownProgress();
 

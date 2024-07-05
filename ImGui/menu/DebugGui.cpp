@@ -40,7 +40,7 @@ void DebugGui::showDebugWindow(bool* p_open) {
     //ImGuiDebugWin::AddMessage(idHudManager::getDdgStrForImgui());  
     //ImGuiDebugWin::AddMessage(PlayerStateChecker::getDbgStrForImgui());
     //ImGuiDebugWin::AddMessage(KaibzHudManager::getDdgStrForImgui());
-    ImGuiDebugWin::AddMessage(fastCvarManager::getDbgStrFromImgui());
+    ImGuiDebugWin::AddMessage(FastCvarManager::getDbgStrFromImgui());
     //ImGuiDebugWin::AddMessage(idInventoryCollectionManager::getDebugStr()); 
 
     //ImGuiViewport* viewport = ImGui::GetMainViewport();

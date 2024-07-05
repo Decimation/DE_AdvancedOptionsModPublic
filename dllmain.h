@@ -13,7 +13,6 @@
 #include <sstream> //for std::stringstream 
 #include <vector>
 #include <cstring>
-#include "SWIP.h"
 
 #include "DE/MemHelper.h"
 
@@ -22,7 +21,6 @@
 #include "DE/PlayerStateChecker.h"
 #include "DE/ButtonCheck.h"
 //#include "DE/StringChanger.h"
-#include "IniFile/IniFileData.h"
 //#include "DE/GameStateChecker.h"
 #include "DE/LangManager.h"
 #include "DE/BindLabelChanger.h"
@@ -38,13 +36,11 @@
 #include "DE/idHudEventManager.h"
 #include "DE/GameHudColorsManager.h"
 //#include "DE/Debug.h"
-#include "IniFile/IniFileData.h"
 //#include "DE/HudManager.h"
 //#include "Hud/HudManager.h"
-#include "IniFile/IniFile.h"
-#include "Voice/Voice.h"
+#include "Tools/Voice.h"
 #include "Config/Config.h"
-#include "../System/FileWatcher.h"
+#include "../FileOp/FileOp.h"
 #include "DE/idWeaponManager.h"
 //#include "DE/idHUD_ReticleManager.h"
 //#include "DE/SpriteInstanceManager.h"
@@ -56,7 +52,6 @@
 #include "MinHookManager/MinHookManager.h"
 #include "DE/idConsoleLocalManager.h"
 //#include "Hud/HudDataBuffer.h"
-#include "DE/Debug.h"
 #include "DE/idRenderModelGuiManager.h"
 #include "DE/GameHudColorsManager.h"
 #include "DE/MaterialLib.h"
@@ -72,10 +67,10 @@
 #include "DE/ImGuiManager.h"
 
 #include "DE/idLibManager.h"
-#include "ModSettings/modSettings.h"
+#include "../Config/ModSettings/modSettings.h"
 
-#include "Scanner/Scanner.h"
-#include "MD5/HashManager.h"
+#include "Tools/Scanner.h"
+#include "Tools/HashManager.h"
 #include "Tools/cvarInfoGenerator.h"
 #include "Tools/cmdInfoGenerator.h"
 #include "ImGui/menu/menu.hpp"
@@ -88,7 +83,7 @@
 #include "DE/idDeclUIColorManager.h"
 #include "Hud/CustomCrosshairManager.h"
 #include "DE/EquipmentManager.h"
-#include "DE/playerSoundManager.h"
+#include "DE/PlayerSoundManager.h"
 
 //#include "Asm/GetRBPValueWithRAxPreserved.asm"
 //#include "DE/TypesGenerated.h"
@@ -242,9 +237,9 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			else if (wParam == VK_F4) {
 				logInfo("HookedWndProc: VK_F4 pressed");
 
-				playerSoundManager::playOutOfItemSound();
+				PlayerSoundManager::playOutOfItemSound();
 
-				/*std::string propsStr = playerPropsManager::getDebugStrV2();
+				/*std::string propsStr = PlayerPropsManager::getDebugStrV2();
 				logInfo("propsStr: %s ", propsStr.c_str());*/
 
 				/*idDeclUIColor*  currentColorProfilePtr = idDeclGlobalShellManager::getCurrentColorProfile();

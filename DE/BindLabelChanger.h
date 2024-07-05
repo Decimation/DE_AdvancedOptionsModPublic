@@ -30,20 +30,6 @@ public:
     static bool isControllerStaticStringsOverwriteAttempt();
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //#pragma once
 //#include <vector>
 //#include "ControllerLayout.h"
@@ -155,12 +141,12 @@ public:
 //	19:10:59.677      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: #str_bind_slayer_quick0
 //	19:10:59.677      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: #str_bind_slayer_quick0_CONTROLLER
 //	19:10:59.677      BindLabelChanger.h:112   INFO| m_isSwitchEquipmentFlag detected overwriting...
-//	19:10:59.678      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: Changer d’équipement
+//	19:10:59.678      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: Changer dï¿½ï¿½quipement
 //	19:10:59.678      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: #str_bind_slayer_dash
 //	....
-//	19:11:06.804      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: Changer de module d’arme
+//	19:11:06.804      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: Changer de module dï¿½arme
 //	19:11:06.804      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: #str_bind_slayer_quick0
-//	19:11:06.805      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: Changer d’équipement
+//	19:11:06.805      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: Changer dï¿½ï¿½quipement
 //	19:11:06.805      BindLabelChanger.h:112   INFO| m_isSwitchEquipmentFlag detected overwriting...
 //	19:11:06.805      BindLabelChanger.h:104   INFO| overwriteDynamicBindLabels: str: #str_bind_slayer_weapnext
 //

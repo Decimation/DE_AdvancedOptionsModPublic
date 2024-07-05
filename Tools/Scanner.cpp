@@ -1,8 +1,5 @@
 #include "Scanner.h"
 
-
-
-
  bool Scanner::scanForAddrs() {
 
 	logInfo("scanForAddrs: Pattern Scans Started...");
@@ -23,7 +20,6 @@
 		return false;
 	}
 
-
 	//? getCvarSystemPtrAddr will call get_engine_t(), which itself will make sure we wait long enough for typeinfo tool to be initiallized.
 	//! CVAR.
 	if (!idCvarManager::acquireIdCVarSystemLocalPtr(TypeInfoManager::getCvarSystemPtrAddr())) {
@@ -42,11 +38,10 @@
 	}
 
 	//? this is not technically a scan, but i'll put it here for now...Meaning it will stay here forever surely.
-	if (!fastCvarManager::cacheCriticalCvars()) {
+	if (!FastCvarManager::cacheCriticalCvars()) {
 		logErr("scanForAddrs failed for cacheCriticalCvars");
 		return false;
 	}
-
 
 	//! CMD
 	if (!idCmd::acquireIdCmdSystemLocalPtr(TypeInfoManager::getCmdSystemPtrAddr())) {
@@ -58,7 +53,6 @@
 		return false;
 	}
 
-
 	if (!idGameSystemLocalManager::acquireIdGameSystemLocalAddr(MemHelper::FindPtrFromRelativeOffset(((uintptr_t)MemHelper::ModulePatternScan("findidGameSystemLocalSig", findidGameSystemLocalSig)), 3, 7))) {
 		logErr("scanForAddrs failed for findidGameSystemLocalSig");
 		return false;
@@ -69,12 +63,10 @@
 		return false;
 	}
 
-
 	if (!idEventManager::acquireIdEventDefInterfaceLocal(TypeInfoManager::getIdEventDefInterface())) {
 		logErr("scanForAddrs failed for acquireIdEventDefInterfaceLocal");
 		return false;
 	}
-
 
 	if (!idHudEventManager::acquireBroadcastManager(TypeInfoManager::getIdBroadcastManager())) {
 		logErr("scanForAddrs failed for acquireBroadcastManager");
@@ -86,12 +78,10 @@
 		return false;
 	}
 
-	if (! winFocusManager::acquireWin32Vars(TypeInfoManager::getWin32VarsAddr())) {
+	if (! WinFocusManager::acquireWin32Vars(TypeInfoManager::getWin32VarsAddr())) {
 		logErr("scanForAddrs failed for acquireWin32Vars");
 		return false;
 	}
-
-
 
 	//? We had to find another way to get idDeclGlobalShell this was just VERY inefficient
 	/*qsdfif (!idDeclGlobalShellManager::acquireGlobalDeclAddr(MemHelper::FindPtrFromRelativeOffset(((uintptr_t)MemHelper::ModulePatternScan("globalDeclSig", globalDeclSig)), 3, 7)))
@@ -99,7 +89,6 @@
 		logErr("scanForAddrs failed for globalDeclSig");
 		return false;
 	}*/
-
 
 	//? getting this statically for now.
 	/*qsdfqsfif (!idMapInstanceLocalManager::acquireIdPlayerOffsetInstructionAddr(((uintptr_t)MemHelper::ModulePatternScan("GetidPlayerIntMidFuncSig", GetidPlayerIntMidFuncSig) + 7))) {
@@ -121,7 +110,6 @@
 		anyScanFailed = true;
 	}*/
 
-
 	static const std::vector<unsigned char> UnrestrictIdConsoleNewInstructionVec = { 0x00 };
 	static const std::vector<unsigned char> UnrestrictIdConsoleBindsNewInstructionVec = { 0x00 };
 
@@ -129,7 +117,6 @@
 		logErr("scanForAddrs failed for consoleUnlockAltSig");
 		return false;
 	}
-
 
 	static const std::vector<unsigned char> RestrictIdConsoleNewInstructionVec = { 0x01 };
 	static const std::vector<unsigned char> UnlockMaxNamedIdColorsPatchNewInstructionVec = { 0x02 };
@@ -139,11 +126,9 @@
 		return false;
 	}
 
-
 	/*if (!Patcher::patch("UnlockMaxNamedIdColors", ((uintptr_t)MemHelper::PatternScan(doomEternalExeName.c_str(), maxSwfNamedColorsSig) + 3), UnlockMaxNamedIdColorsPatchNewInstructionVec)) {
 		anyScanFailed = true;
 	}*/
-		
 
 	if (!idRenderModelGuiManager::acquirreSmallCharWidhtAddr(MemHelper::FindPtrFromRelativeOffset(((uintptr_t)MemHelper::ModulePatternScan("smallCharWidthSig", smallCharWidthSig)), 4, 8))) {
 		logErr("scanForAddrs failed for smallCharWidthSig");
@@ -194,7 +179,6 @@
 		return false;
 	}
 
-
 	if (!idFontManager::acquirreConsoleHistoryFontOffsetAddr(MemHelper::ModulePatternScan("fontSetInConsoleHistorySig", fontSetInConsoleHistorySig) + 3)) {
 		logErr("scanForAddrs failed for fontSetInConsoleHistorySig");
 		return false;
@@ -204,7 +188,6 @@
 		logErr("scanForAddrs failed for getGlyphDataFuncSig");
 		return false;
 	}
-
 
 	if (!idRenderModelGuiManager::acquirreDrawStringFuncAdd((uintptr_t)MemHelper::ModulePatternScan("idRenderModelGui_DrawString_623530FuncSig", idRenderModelGui_DrawString_623530FuncSig))) {
 		logErr("scanForAddrs failed for idRenderModelGui_DrawString_623530FuncSig");
@@ -216,7 +199,6 @@
 		return false;
 	}
 
-
 	if (!EquipmentManager::acquireUseEquipmentItemFp((uintptr_t)MemHelper::ModulePatternScan("UseEquipmentItemFpSig", UseEquipmentItemFpSig))) {
 		logErr("scanForAddrs failed for UseEquipmentItemFpSig");
 		return false;
@@ -226,8 +208,6 @@
 		logErr("scanForAddrs failed for SwitchEquipmentItemFpSig");
 		return false;
 	}
-	
-
 
 	if (!MinHookManager::setInitRenderModelGuiMbFuncAdd((uintptr_t)MemHelper::ModulePatternScan("initRenderModelGuiMbFuncSig", initRenderModelGuiMbFuncSig))) {
 		logErr("scanForAddrs failed for initRenderModelGuiMbFuncSig");
@@ -332,11 +312,6 @@
 
 	//! MINHOOK SCAN END
 
-
-
-
-
-
 	if (!ColorManager::acquirreReapplySwfColorsFuncAddr((uintptr_t)MemHelper::ModulePatternScan("reapplySwfColorsSig", reapplySwfColorsSig))) {
 		logErr("scanForAddrs failed for reapplySwfColorsSig");
 		return false;
@@ -356,7 +331,6 @@
 		logErr("scanForAddrs failed for getResourceFpSig");
 		return false;
 	}
-
 
 	//? not needed anymore we're using a cvar
 	/*if (!LangManager::acquirreSysLangFuncStartAddr(MemHelper::FindPtrFromRelativeOffset(((uintptr_t)MemHelper::ModulePatternScan("findSysLangSig", findSysLangSig)), 3, 7))) {
@@ -385,7 +359,6 @@
 		return false;
 	}*/
 
-
 	if (!idSWFSpriteInstanceManager::acquirreSetSpriteInstanceScaleFpAdd((uintptr_t)MemHelper::PatternScan(doomEternalExeName.c_str(), SpriteInstanceSetScaleFuncSig))) {
 		logErr("scanForAddrs failed for SpriteInstanceSetScaleFuncSig");
 		return false;
@@ -401,15 +374,10 @@
 		return false;
 	}
 
-
 	if (!idHudManager::acquireIsWorldMenuAtIndexActiveFuncAddr((uintptr_t)MemHelper::ModulePatternScan("isWorldMenuAtIndexActiveFaddrSig", isWorldMenuAtIndexActiveFaddrSig))) {
 		logErr("scanForAddrs failed for isWorldMenuAtIndexActiveFaddrSig");
 		return false;
 	}
-
-	
-
-
 
 	logInfo("scanForAddrs: all Pattern Scans were Sucessful !");
 	return true;

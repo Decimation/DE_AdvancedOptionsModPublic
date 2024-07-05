@@ -1,8 +1,6 @@
-#include "fastCvarManager.h"
+#include "FastCvarManager.h"
 
-
-
-bool fastCvarManager::cacheCriticalCvars()
+bool FastCvarManager::cacheCriticalCvars()
 {
 
 	m_reticleModeCvarPtr = (idCVar*)idCvarManager::getCvarPtr("g_reticleMode");
@@ -26,14 +24,12 @@ bool fastCvarManager::cacheCriticalCvars()
 		return false;
 	}
 
-
 	m_swf_colorProfileCvarPtr = (idCVar*)idCvarManager::getCvarPtr("swf_colorProfile");
 	if (MemHelper::isBadReadPtr(m_swf_colorProfileCvarPtr)) {
 		logErr("cacheCriticalCvars: failed to find m_swf_colorProfileCvarPtr");
 		m_swf_colorProfileCvarPtr = nullptr;
 		return false;	
 	}
-
 
 	m_g_setting_hud_showCvarPtr = (idCVar*)idCvarManager::getCvarPtr("g_setting_hud_show");
 	if (MemHelper::isBadReadPtr(m_g_setting_hud_showCvarPtr)) {
@@ -77,14 +73,11 @@ bool fastCvarManager::cacheCriticalCvars()
 		return false;
 	}
 
-
-
 	logInfo("cacheCriticalCvars: succes caching critical cvars");
 	return true;
 }
 
-
-UI_ReticleMode fastCvarManager::getReticleMode() {
+UI_ReticleMode FastCvarManager::getReticleMode() {
 
 	if (!m_reticleModeCvarPtr) {
 		logErr("getReticleMode m_reticleModeCvarPtr is nullptr");
@@ -93,7 +86,7 @@ UI_ReticleMode fastCvarManager::getReticleMode() {
 	return (UI_ReticleMode)m_reticleModeCvarPtr->data->valueInteger;
 }
 
-bool fastCvarManager::isGameTimeScalingEnabled() {
+bool FastCvarManager::isGameTimeScalingEnabled() {
 
 	if (!m_enableGameTimeScalingCvarPtr) {
 		logErr("isGameTimeScalingEnabled m_enableGameTimeScalingCvarPtr is nullptr");
@@ -102,7 +95,7 @@ bool fastCvarManager::isGameTimeScalingEnabled() {
 	return (bool)m_enableGameTimeScalingCvarPtr->data->valueInteger;
 }
 
-bool fastCvarManager::isMouseInputEnabled() {
+bool FastCvarManager::isMouseInputEnabled() {
 
 	if (!m_in_mouseCvarPtr) {
 		logErr("isMouseInputEnabled m_in_mouseCvarPtr is nullptr");
@@ -111,7 +104,7 @@ bool fastCvarManager::isMouseInputEnabled() {
 	return (bool)m_in_mouseCvarPtr->data->valueInteger;
 }
 
-int fastCvarManager::getColorProfileIndex() {
+int FastCvarManager::getColorProfileIndex() {
 	if (!m_swf_colorProfileCvarPtr) {
 		logErr("getColorProfileIndex m_swf_colorProfileCvarPtr is nullptr");
 		return -1;
@@ -119,8 +112,7 @@ int fastCvarManager::getColorProfileIndex() {
 	return m_swf_colorProfileCvarPtr->data->valueInteger;
 }
 
-
-bool fastCvarManager::getIsShowHudEnabled() {
+bool FastCvarManager::getIsShowHudEnabled() {
 	if (!m_g_setting_hud_showCvarPtr) {
 		logErr("getIsShowHudEnabled m_g_setting_hud_showCvarPtr is nullptr");
 		return false;
@@ -128,7 +120,7 @@ bool fastCvarManager::getIsShowHudEnabled() {
 	return (bool)m_g_setting_hud_showCvarPtr->data->valueInteger;
 }
 
-bool fastCvarManager::getIsEquipmentInfoEnabled() {
+bool FastCvarManager::getIsEquipmentInfoEnabled() {
 	if (!m_g_setting_equipment_infoCvarPtr) {
 		logErr("getIsEquipmentInfoEnabled: m_g_setting_equipment_infoCvarPtr is nullptr");
 		return false;
@@ -136,8 +128,7 @@ bool fastCvarManager::getIsEquipmentInfoEnabled() {
 	return (bool)m_g_setting_equipment_infoCvarPtr->data->valueInteger;
 }
 
-
-int fastCvarManager::getWindowWidthInt() {
+int FastCvarManager::getWindowWidthInt() {
 	if (!m_r_windowWidthCvarPtr) {
 		logErr("getWindowWidthInt: m_r_windowWidthCvarPtr is nullptr");
 		return 0;
@@ -146,7 +137,7 @@ int fastCvarManager::getWindowWidthInt() {
 	return m_r_windowWidthCvarPtr->data->valueInteger;
 }
 
-int fastCvarManager::getWindowHeightInt() {
+int FastCvarManager::getWindowHeightInt() {
 	if (!m_r_windowHeightCvarPtr) {
 		logErr("getWindowHeightInt: m_r_windowHeightCvarPtr is nullptr");
 		return 0;
@@ -154,8 +145,7 @@ int fastCvarManager::getWindowHeightInt() {
 	return m_r_windowHeightCvarPtr->data->valueInteger;
 }
 
-
-std::string fastCvarManager::getLang() {
+std::string FastCvarManager::getLang() {
 	if (!m_sys_langCvarPtr) {
 		logErr("getLang: m_sys_langCvarPtr is nullptr");
 		return std::string();
@@ -163,8 +153,7 @@ std::string fastCvarManager::getLang() {
 	return m_sys_langCvarPtr->data->valueString;
 }
 
-
-antialiasingLevel fastCvarManager::getCurAntiAliasLevel() {
+antialiasingLevel FastCvarManager::getCurAntiAliasLevel() {
 	if (!m_r_antialiasingCvarPtr) {
 		logErr("getCurAntiAliasLevel: m_r_antialiasingCvarPtr is nullptr");
 		return antialiasingLevel::UNKNOWN;
@@ -173,23 +162,19 @@ antialiasingLevel fastCvarManager::getCurAntiAliasLevel() {
 	return (antialiasingLevel)m_r_antialiasingCvarPtr->data->valueInteger;
 }
 
+std::string FastCvarManager::getDbgStrFromImgui() {
 
-
-
-std::string fastCvarManager::getDbgStrFromImgui() {
-
-	std::string result = "fastCvarManager DBG: \n";
+	std::string result = "FastCvarManager DBG: \n";
 
 	/*result += "getScreenWidth: ";
 	result += std::to_string(idRenderModelGuiManager::getScreenWidth());
 	result += " getScreenHeight: ";
 	result += std::to_string(idRenderModelGuiManager::getScreenHeight());*/
 	result += "cvar width: ";
-	result += std::to_string(fastCvarManager::getWindowWidthInt());
+	result += std::to_string(FastCvarManager::getWindowWidthInt());
 	result += " cvar height: ";
-	result += std::to_string(fastCvarManager::getWindowHeightInt());
+	result += std::to_string(FastCvarManager::getWindowHeightInt());
 
 	return result;
 }
-
 

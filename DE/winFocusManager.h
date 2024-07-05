@@ -7,13 +7,12 @@
 /// <summary>
 /// used to get if game is focused or not. this should mainly be used to disable mod menu if player is alt tab out of the game to prevent input/visual glitches/frezzes.
 /// </summary>
-class winFocusManager
+class WinFocusManager
 {
 
 private:
 
 	static inline Win32Vars_t* m_Win32Vars_t = nullptr;
-
 
 public:
 

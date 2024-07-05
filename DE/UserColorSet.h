@@ -1,11 +1,8 @@
 #pragma once
 
 #include "CommonDE.h"
-#include "../ModSettings/modSettings.h"
+#include "../Config/ModSettings/modSettings.h"
 //#include "GameHudColorsManager.h"
-
-
-
 
 class UserColorSet
 {
@@ -27,11 +24,9 @@ private:
 
 	static swfNamedColors_t m_radsuitMeterOveride_Color;
 
-
 	static swfNamedColors_t m_dotCrosshairColorFeaturesDisabled_Color;
 
     static const bool m_AllowInvisibleColor;
-
 
     static uint64_t m_IceIconPulseFrequencyMs;
     static uint64_t m_lastIceIconPulseColorChangeMs;
@@ -39,11 +34,7 @@ private:
 
     //static const swfNamedColors_t m_invisibleFlagColor; //! this is used as a lure so that our hook will set the color of the element to invisible when it sees this colorId
 
-    
-
     static swfNamedColors_t getSwfNamedColorFromModSettings(int iniFileColorValInt);
-	
-
 
 public:
 
@@ -62,24 +53,15 @@ public:
         return getColorAsString(color).c_str();
     }*/
 
-   
-
     static std::string getSwfNamedColorString(swfNamedColors_t color);
 
-
-
 	static void Update();
-
-
 
 	static swfNamedColors_t getBloodpunch_1_Color();
 
 	static swfNamedColors_t getBloodpunch_2_Color();
 
     static swfNamedColors_t getDesperatePunchColor();
-	
-
-   
 
 	static swfNamedColors_t getIceNadeArrow_Color();
 
@@ -97,14 +79,6 @@ public:
 
     //static swfNamedColors_t getDotCrosshairBothNadesReady_Color();
 
-
-
-    
-
-
-
-
-
 	static bool isDefaultColor_Bloodpunch_1();
 
 	static bool isDefaultColor_Bloodpunch_2();
@@ -114,10 +88,8 @@ public:
 	static bool isDefaultColorIceNadeArrow();
 
     static bool isDefaultColorIceNadeCoolDownArrow();
-   
 
 	static bool isDefaultColor_Radsuit();
-
 
     //static bool isCrosshairCooldownFeatureEnabled();
 
@@ -135,5 +107,4 @@ public:
 };
 
 //const int UserColorSet::m_customNamedColorsIdOffset = 1000;
-
 

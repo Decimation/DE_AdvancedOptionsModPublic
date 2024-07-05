@@ -18,16 +18,12 @@
 #include "../DE/idMapInstanceLocalManager.h"
 #include "../DE/idCvarManager.h"
 #include "../DE/ColorManager.h"
-#include "../DE/playerPropsManager.h"
+#include "../DE/PlayerPropsManager.h"
 #include "../DE/idFxManager.h"
 #include "../DE/idEventManager.h"
 #include "../DE/idHudEventManager.h"
-#include "../DE/winFocusManager.h"
+#include "../DE/WinFocusManager.h"
 #include "../DE/EquipmentManager.h"
-
-
-
-
 
 //#include "MemHelper.h"
 //#include "Sigs.h"
@@ -56,15 +52,11 @@ class Scanner {
 
 private:
 
-
 	////? don't forget to keep adding addres to the vec when you create new ones 
 
-
 public:
-	
 
 	static bool scanForAddrs();
 
 };
-
 

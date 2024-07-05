@@ -42,10 +42,9 @@
 
   }*/
 
-
 idDeclUIColor* idDeclGlobalShellManager::getCurrentColorProfile() {
 
-	int currentProfileIndex = fastCvarManager::getColorProfileIndex();
+	int currentProfileIndex = FastCvarManager::getColorProfileIndex();
 	if (currentProfileIndex < 0) {
 		logErr("getCurrentColorProfile: currentProfileIndex < 0 can not get profile");
 		return nullptr;
@@ -54,7 +53,6 @@ idDeclUIColor* idDeclGlobalShellManager::getCurrentColorProfile() {
 	idList* colorProfilesIdList = getColorProfileColorsIdList();
 
 	//logInfo("getCurrentColorProfile: colorProfilesIdList: %p searching for profile index: %d", colorProfilesIdList, currentProfileIndex);
-
 
 	if (colorProfilesIdList) {
 
@@ -77,7 +75,6 @@ idDeclUIColor* idDeclGlobalShellManager::getCurrentColorProfile() {
 
 }
 
-
   idList* idDeclGlobalShellManager::getColorProfileColorsIdList() {
 
 	  if (!m_idDeclGlobalShellPtr) {
@@ -94,8 +91,6 @@ idDeclUIColor* idDeclGlobalShellManager::getCurrentColorProfile() {
 	  logInfo("getColorProfileColorsIdList: m_idDeclGlobalShellPtr: %p idList* %p", m_idDeclGlobalShellPtr, result);
 	  return result;
   }
-  
-
 
   void idDeclGlobalShellManager::disableNewCampaignPopUp(bool isDisabled) {
 
@@ -130,13 +125,10 @@ idDeclUIColor* idDeclGlobalShellManager::getCurrentColorProfile() {
 		  }
 	  }
 
-	  
 	 // int popUplistNum = m_idDeclGlobalShellPtr->mainCampaignDecl->newCampaignPopups.num;
 	 /* logInfo("setIsNewCampaignPopUp : debug: m_idDeclGlobalShellPtr: %p  &m_idDeclGlobalShellPtr->mainCampaignDecl->newCampaignPopups: %p popUplistNum: %d", m_idDeclGlobalShellPtr, &m_idDeclGlobalShellPtr->mainCampaignDecl->newCampaignPopups, popUplistNum);*/
 	 // logInfo("disableNewCampaignPopUp : debug: current popUplistNum is: %d setting it to 0...", popUplistNum);
 	 // m_idDeclGlobalShellPtr->mainCampaignDecl->newCampaignPopups.num = 0;
 
   }
-
-
 

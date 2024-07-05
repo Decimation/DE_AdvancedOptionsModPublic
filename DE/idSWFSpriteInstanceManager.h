@@ -1,16 +1,13 @@
 #pragma once
 #include "CommonDE.h"
 #include "MemHelper.h"
-#include "Types.h"
 #include "idLib.h"
 #include "GeneratedClasses.h"
 #include "idResourceManager.h"
 
-
 class idSWFSpriteInstanceManager {
 
 private:
-	
 
 	//! char __fastcall sub_52F670(__int64 a1, float a2, float a3)
 	typedef  char(__fastcall* pSetSpriteInstanceScale)(idSWFSpriteInstance* spriteInstancePtr_a1, float reticelScaleF_a2, float reticelScaleF_a3);
@@ -21,15 +18,9 @@ private:
 	//static pUpdateSpriteInstanceColor m_pUpdateSpriteInstanceColor;
 	static inline __int64 m_updateSpriteInstanceColorFuncAdd = 0;
 
-
 public: 
 
-
-	
-
-
 	static bool acquireUpdateSpriteInstanceColorFuncAdd(__int64 funcAddr);
-
 
 	static swfRect_t getBounds(idSWFSpriteInstance* thiz);
 
@@ -37,9 +28,7 @@ public:
 
 	static void updateSpriteInstanceColor(idSWFSpriteInstance* thiz, swfNamedColors_t swfColorId);
 
-
 	static void setHitMarkerState(idHUD_Reticle* idHUD_Reticle, HitMarkerState state);
-
 
 	//! check made in hook for idSWFSpriteInstance exists
 	static bool updateScale(idSWFSpriteInstance* idSWFSpriteInstance, float reticleScaleF);
@@ -49,16 +38,13 @@ public:
 	//! the reason why we have to do it that way is because and idList is always going to be a list of __int64* but in the this case for ex, the idList is a list of swfDisplayEntry_t and a swfDisplayEntry_t has a size of 64 bytes, so it's just easier to do it this way:
 	static std::vector<idSWFSpriteInstance*> getSpriteInstancesPtrVecFromDisplayEntry(idSWFSpriteInstance* spriteInstance);
 
-
 	static void debugPrintfullPathHashForColorId(idSWFSpriteInstance* spriteInstance, swfNamedColors_t colorId);
-
 
 	static void debugPrintSpriteInstanceMaterialOverrideNameForColorId(__int64 spriteInstanceAddr, int colorId);
 
 	static bool debugPrintSpriteInstanceMaterialName(idSWFSpriteInstance* idSWFSpriteInstance);
 
 	static void debugPrintSpriteInstanceDisplayList(idSWFSpriteInstance* idSWFSpriteInstanceObj);
-
 
 	//! still have to work on this to make it work and not crash imo:
 	/*static idSWFSpriteInstance* FindRoot(__int64 spriteInstanceAdd, int fullPathHash) {
@@ -91,9 +77,6 @@ public:
 	//! from my logs those values do not change for the nade icon whether you're in a menu or not or if the hud element is disabled in the settings or if in cinematic
 	static void debugPrintSpriteInstanceInfo(idSWFSpriteInstance* spriteInstance);
 
-
-
 };
-
 
 //idSWFSpriteInstanceManager::pUpdateSpriteInstanceColor idSWFSpriteInstanceManager::m_pUpdateSpriteInstanceColor;

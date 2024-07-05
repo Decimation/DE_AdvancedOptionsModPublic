@@ -14,7 +14,7 @@
     <ClInclude Include="DE\MemHelper.h" />
     <ClInclude Include="DE\PlayerStateChecker.h" />
     <ClInclude Include="DE\UtilsDE.h" />
-    <ClInclude Include="Voice\Voice.h" />
+    <ClInclude Include="Tools\Voice.h" />
     <ClInclude Include="DE\WeaponSettings.h" />
     <ClInclude Include="DE\WeaponSwitcher.h" />
     <ClInclude Include="Loguru\loguru.hpp" />
@@ -36,12 +36,10 @@
     <ClInclude Include="DE\idHudEventManager.h" />
     <ClInclude Include="DE\GameHudColorsManager.h" />
     <ClInclude Include="DE\Sigs.h" />
-    <ClInclude Include="Scanner\Scanner.h" />
-    <ClInclude Include="Common\Utils.h" />
+    <ClInclude Include="Tools\Scanner.h" />
     <ClInclude Include="DE\UserColorSet.h" />
-    <ClInclude Include="System\FileWatcher.h" />
+    <ClInclude Include="FileOp\FileWatcher.h" />
     <ClInclude Include="DE\idFxManager.h" />
-    <ClInclude Include="Rtti\Rtti_Helper.h" />
     <ClInclude Include="DE\ReticleColorManager.h" />
     <ClInclude Include="DE\TypeInfoManager.h" />
     <ClInclude Include="DE\idGameSystemLocalManager.h" />
@@ -49,7 +47,7 @@
     <ClInclude Include="MinHookManager\MinHookManager.h" />
     <ClInclude Include="DE\idWeaponManager.h" />
     <ClInclude Include="DE\GameVersionInfoManager.h" />
-    <ClInclude Include="Config\LogConfig.h" />
+    <ClInclude Include="DE\LogConfig.h" />
     <ClInclude Include="DE\idHudManager.h" />
     <ClInclude Include="DE\idLib.h" />
     <ClInclude Include="DE\idResourceManager.h" />
@@ -67,7 +65,6 @@
     <ClInclude Include="DE\idSWFWidget_Hud_ReticleManager.h" />
     <ClInclude Include="DE\idDeclWeaponReticleManager.h" />
     <ClInclude Include="DE\idSWFWidgetManager.h" />
-    <ClInclude Include="DE\Debug.h" />
     <ClInclude Include="DE\idDeclInfo.h" />
     <ClInclude Include="DE\idDeclGlobalShellManager.h" />
     <ClInclude Include="DE\MaterialDebug.h" />
@@ -114,10 +111,10 @@
     <ClInclude Include="DE\ImGuiManager.h" />
     <ClInclude Include="DE\idLibManager.h" />
     <ClInclude Include="K_Utils\K_Utils.h" />
-    <ClInclude Include="ModSettings\modSettings.h" />
+    <ClInclude Include="Config\ModSettings\modSettings.h" />
     <ClInclude Include="Json\nlohmann\json.hpp" />
     <ClInclude Include="Json\nlohmann\json_fwd.hpp" />
-    <ClInclude Include="MD5\HashManager.h" />
+    <ClInclude Include="Tools\HashManager.h" />
     <ClInclude Include="Tools\cvarInfoGenerator.h" />
     <ClInclude Include="Tools\cmdInfoGenerator.h" />
     <ClInclude Include="ImGui\menu\DebugGui.h" />
@@ -125,9 +122,9 @@
     <ClInclude Include="ImGui\Fonts\Robotto.h" />
     <ClInclude Include="Debug\ImGuiDebugWin.h" />
     <ClInclude Include="DE\idCvarManager.h" />
-    <ClInclude Include="DE\fastCvarManager.h" />
+    <ClInclude Include="DE\FastCvarManager.h" />
     <ClInclude Include="DE\ColorManager.h" />
-    <ClInclude Include="DE\playerPropsManager.h" />
+    <ClInclude Include="DE\PlayerPropsManager.h" />
     <ClInclude Include="ImGui\menu\KaibzCrosshair.h" />
     <ClInclude Include="ImGui\menu\guiHelpers.h" />
     <ClInclude Include="ImGui\menu\GoToSettingsGui.h" />
@@ -137,9 +134,9 @@
     <ClInclude Include="ImGui\menu\KaibzHud.h" />
     <ClInclude Include="ImGui\Fonts\icomoonDoomEternal.h" />
     <ClInclude Include="Hud\KaibzHudManager.h" />
-    <ClInclude Include="DE\winFocusManager.h" />
+    <ClInclude Include="DE\WinFocusManager.h" />
     <ClInclude Include="DE\EquipmentManager.h" />
-    <ClInclude Include="DE\playerSoundManager.h" />
+    <ClInclude Include="DE\PlayerSoundManager.h" />
     <ClInclude Include="Hud\CustomIceNadeIconUIData.h" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +144,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Config\Config.cpp" />
     <ClCompile Include="DE\MemHelper.cpp" />
-    <ClCompile Include="Voice\Voice.cpp" />
+    <ClCompile Include="Tools\Voice.cpp" />
     <ClCompile Include="Loguru\loguru.cpp" />
     <ClCompile Include="ImGui\console\console.cpp" />
     <ClCompile Include="ImGui\dependencies\imgui\imgui.cpp" />
@@ -181,8 +178,8 @@
     <ClCompile Include="DE\TypeInfoManager.cpp" />
     <ClCompile Include="DE\idLibManager.cpp" />
     <ClCompile Include="K_Utils\K_Utils.cpp" />
-    <ClCompile Include="ModSettings\modSettings.cpp" />
-    <ClCompile Include="Scanner\Scanner.cpp" />
+    <ClCompile Include="Config\ModSettings\modSettings.cpp" />
+    <ClCompile Include="Tools\Scanner.cpp" />
     <ClCompile Include="MinHookManager\MinHookManager.cpp" />
     <ClCompile Include="DE\BindLabelChanger.cpp" />
     <ClCompile Include="DE\ButtonCheck.cpp" />
@@ -225,16 +222,16 @@
     <ClCompile Include="DE\WeaponSettings.cpp" />
     <ClCompile Include="DE\WeaponSwitcher.cpp" />
     <ClCompile Include="Hud\CustomIceNadeIconManager.cpp" />
-    <ClCompile Include="MD5\HashManager.cpp" />
+    <ClCompile Include="Tools\HashManager.cpp" />
     <ClCompile Include="Tools\cvarInfoGenerator.cpp" />
     <ClCompile Include="Tools\cmdInfoGenerator.cpp" />
     <ClCompile Include="ImGui\menu\DebugGui.cpp" />
     <ClCompile Include="ImGui\Fonts\font_awesome.cpp" />
     <ClCompile Include="Debug\ImGuiDebugWin.cpp" />
     <ClCompile Include="DE\idCvarManager.cpp" />
-    <ClCompile Include="DE\fastCvarManager.cpp" />
+    <ClCompile Include="DE\FastCvarManager.cpp" />
     <ClCompile Include="DE\ColorManager.cpp" />
-    <ClCompile Include="DE\playerPropsManager.cpp" />
+    <ClCompile Include="DE\PlayerPropsManager.cpp" />
     <ClCompile Include="ImGui\menu\KaibzCrosshair.cpp" />
     <ClCompile Include="ImGui\menu\guiHelpers.cpp" />
     <ClCompile Include="ImGui\menu\GoToSettingsGui.cpp" />
@@ -245,9 +242,9 @@
     <ClCompile Include="ImGui\menu\KaibzHud.cpp" />
     <ClCompile Include="ImGui\Fonts\EternalUiRegular_BWZGd.h" />
     <ClCompile Include="Hud\KaibzHudManager.cpp" />
-    <ClCompile Include="DE\winFocusManager.cpp" />
+    <ClCompile Include="DE\WinFocusManager.cpp" />
     <ClCompile Include="DE\EquipmentManager.cpp" />
-    <ClCompile Include="DE\playerSoundManager.cpp" />
+    <ClCompile Include="DE\PlayerSoundManager.cpp" />
     <ClCompile Include="Hud\CustomIceNadeIconUIData.cpp" />
   </ItemGroup>
   <ItemGroup>

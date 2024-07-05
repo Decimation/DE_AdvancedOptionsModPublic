@@ -3,18 +3,12 @@
 #include<iostream>
 #include <vector>
 #include <string>
-#include "Common.h"
-#include "Utils.h"
-#include "Types.h"
 #include "../Config/Config.h"
 #include "PlayerInventory.h"
 #include "idMapInstanceLocalManager.h"
 #include "GeneratedClasses.h"
 #include "idResourceManager.h"
-#include "../ModSettings/modSettings.h"
-
-
-
+#include "../Config/ModSettings/modSettings.h"
 
 //? the old version of this cls has been backed and commented in the Bak folder
 class idInventoryCollectionManager
@@ -44,20 +38,14 @@ private:
     static inline std::vector<unsigned long long> m_ownedItemIdsBuffer2;
     static std::atomic<bool> m_useBuffer1;*/
 
-
 public:
 
-
     static const int inline INVENTORY_UPDATE_INTERVAL_MS = 500;
-
 
     //! func for hooks to prevent race conds.
     static void updateOwnedItemsForHooks(__int64 idInventoryCollectionAddr);   
     static bool getCriticalIsFragNadeOwned();
     static bool getCriticalIsIceNadeOwned();
-
-
-
 
     static std::string getDebugStr();
 
@@ -68,11 +56,6 @@ public:
     static bool isFragNadeOwned();
 
     static bool isIceNadeOwned();
-      
-
-
-
-
 
     static void updateCustomInventory();
 
@@ -82,17 +65,11 @@ public:
 
     static idInventoryItem* getidInventoryItemPtr(ItemRef item_ref);
 
-
     static ItemRef getItemRef(idInventoryItem* inventoryItemPtr);
 
     static ItemRef getItemRefForStr(const char* input);
 
     static const char* getStrForItemRef(ItemRef itemRef);
 
-   
-
-
 };
-
-
 

@@ -9,11 +9,10 @@
 #include <queue>
 //#include "Weapon.h"
 //#include "idInventory.h"
-#include "../ModSettings/modSettings.h"	
+#include "../Config/ModSettings/modSettings.h"	
 #include "idInventoryManager.h"
 #include "idPlayer.h"
 #include "idWeaponManager.h"
-
 
 class WeaponSwitcher
 {
@@ -25,7 +24,6 @@ private:
     uintptr_t  m_lastEquippedWeaponBaseAddr = -1;
     uintptr_t  m_lastCurrentWeaponDataAddr = 1;
     //static const uintptr_t currentlyEquippedWeaponDataOffset = 0x34;
-
 
     uint64_t m_lastIdplayerProcessInputTimeStampMs = 0;
     const UINT m_IdplayerProcessInputMaxTimeNoDataMs = 500; //! if no data from the func from half a seconds it means we're not ingame
@@ -49,7 +47,6 @@ private:
 
     std::vector<std::string>m_monitoredWeaponsBaseNamesVec = { WeaponIdStr::g_shotGunBaseNameIdStr , WeaponIdStr::g_heavyCannonNameIdStr, WeaponIdStr::g_plasmaNameIdStr, WeaponIdStr::g_rocketLauncherNameIdStr, WeaponIdStr::g_superShotGunOnNameIdStr, WeaponIdStr::g_balistaNameIdStr };
 
-
 public:
 
     /*void aquire_idHudWeaponInfoPtr(const __int64 idHud_WeaponInfoPtr)
@@ -59,10 +56,6 @@ public:
             logWarn("WeaponSwitcher::aquire_idHudWeaponInfoPtr: idHud_WeaponInfoPtr has changed and is now: %p ", (void*)idHud_WeaponInfoPtr);
         }
     }*/
-
-
-
-
 
     //Weapon GetcurrentlyEquippedWeapon()
     //{
@@ -99,8 +92,6 @@ public:
     //    //return m_currentWeaponIndexErrorVal;
     //}
 
-
-
     void updateIdplayerProcessInputTimeStamp();
 
     bool isPlayerInGame();
@@ -111,8 +102,6 @@ public:
     bool isRequestedWeaponMonitored();
 
     bool isWeaponSlotMonitored(weaponSlot_t weaponSlot);
-
-    
 
     //bool isCurrentWeaponMonitored(idWeapon* idWeaponObj) {
     //    // Check if idWeaponObj is a null pointer
@@ -326,10 +315,8 @@ public:
     //        }
     //    }
     //}
-   
 
     void setWeaponEnumToResend();
-
 
     std::string enumToString(usercmdButton button);
 
@@ -341,8 +328,6 @@ public:
     bool isWeaponBtnToResend(usercmdButton weaponBtn);
 
     void disableEnumResend(usercmdButton btn);
-
-
 
     //ItemID getCurrentWeaponItemID() {
     //    auto currentWeaponItemId = ItemID::Unknown;
@@ -429,7 +414,6 @@ public:
             break;
         }
     }*/
-
 
     /* ItemID convertToItemID(uint64_t idDeclWeaponID) {
          logDebug("convertToItemID");

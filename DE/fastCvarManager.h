@@ -4,15 +4,12 @@
 #include "idCvarManager.h"
 #include "GeneratedClasses.h"
 
-
-
 /// <summary>
 /// getting the cvar ptr to get access to its value faster, this should only be used to READ value. NOT to set them cause each cvars has flags and also callback funtions for some cvars.
 /// </summary>
-class fastCvarManager
+class FastCvarManager
 {
 private:
-
 
 	static inline idCVar* m_reticleModeCvarPtr = nullptr;
 	static inline idCVar* m_enableGameTimeScalingCvarPtr = nullptr;
@@ -25,10 +22,7 @@ private:
 	static inline idCVar* m_sys_langCvarPtr = nullptr;
 	static inline idCVar* m_r_antialiasingCvarPtr = nullptr;
 
-
 public:
-
-
 
 	static bool cacheCriticalCvars();
 

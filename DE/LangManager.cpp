@@ -35,8 +35,6 @@
 	}
 }
 
-
-
  std::string LangManager::GameLanguageToString(GameLanguage language)
  {
 	 switch (language)
@@ -55,7 +53,6 @@
 	 }
  }
 
-
 //! get current language from the game mem
  bool LangManager::acquireGameLanguage() {
 
@@ -63,7 +60,7 @@
 	 {
 		 m_gameLanguage = GameLanguage::English;
 
-		 std::string languageStr = fastCvarManager::getLang();
+		 std::string languageStr = FastCvarManager::getLang();
 		 m_gameLanguage = setGameLanguage(languageStr);
 
 		 std::string enumToStr = GameLanguageToString(m_gameLanguage);
@@ -79,8 +76,6 @@
 
 	 return true;
  }
-
-
 
  //! BAK
 // bool LangManager::acquireGameLanguage() {

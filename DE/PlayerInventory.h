@@ -26,25 +26,25 @@ private:
 
 public:
 	// Getter methods
-	int IsShotgun() const;
-	int IsHeavyCannon() const;
-	int IsPlasmaRifle() const;
-	int IsRocketLauncher() const;
-	int IsSuperShotgun() const;
-	int IsBallista() const;
-	int IsMiniGun() const;
-	int IsBfg() const;
-	int IsUnmaykr() const;
-	int IsCrucible() const;
-	int IsHammer() const;
-	int IsShellAmmo() const;
-	int IsBulletAmmo() const;
-	int IsCellAmmo() const;
-	int IsRocketAmmo() const;
-	int IsBfgAmmo() const;
-	int IsFuelAmmo() const;
-	int IsFragGrenadeEquipment() const;
-	int IsIceBombEquipment() const;
+	static int IsShotgun();
+	int        IsHeavyCannon() const;
+	int        IsPlasmaRifle() const;
+	int        IsRocketLauncher() const;
+	int        IsSuperShotgun() const;
+	int        IsBallista() const;
+	int        IsMiniGun() const;
+	int        IsBfg() const;
+	int        IsUnmaykr() const;
+	int        IsCrucible() const;
+	int        IsHammer() const;
+	int        IsShellAmmo() const;
+	int        IsBulletAmmo() const;
+	int        IsCellAmmo() const;
+	int        IsRocketAmmo() const;
+	int        IsBfgAmmo() const;
+	int        IsFuelAmmo() const;
+	int        IsFragGrenadeEquipment() const;
+	int        IsIceBombEquipment() const;
 
 	// Setter methods
 	void SetShotgun(int value);
@@ -73,7 +73,6 @@ public:
 
 	void PrintAmmoInventory() const;
 };
-
 
 //class PlayerInventory {
 //

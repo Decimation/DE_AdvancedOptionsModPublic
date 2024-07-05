@@ -1,7 +1,7 @@
 #include "GameHudColorsManager.h"
 
 #include "idPlayer.h"
-#include "../ModSettings/modSettings.h"
+#include "../Config/ModSettings/modSettings.h"
 
 //! this is trigger in convertIdDeclUIColorToidColorHook
 void GameHudColorsManager::acquireIdDeclUIColorAddr(__int64 IdDeclUIColorAddr) {

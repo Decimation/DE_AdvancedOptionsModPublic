@@ -4,11 +4,9 @@
 #include <emmintrin.h> // This should make the __m128i type available 
 #include "MemHelper.h"
 //#include "Scanner.h"
-#include "Common.h"
 #include "TypeInfoManager.h"
 #include "idCvarManager.h"
-#include "fastCvarManager.h"
-
+#include "FastCvarManager.h"
 
 //! meathook struts:
 struct idListVoid
@@ -51,13 +49,9 @@ struct idCmdSystemLocalVftbl
 	void* field_80;
 };
 
-
-
-
 class idCmd {
 
 private:
-
 
 	//! using __int64 and not *__int64 so we never make the last ptr arithmetic mistake again...
 	//! cvar and cmd system loc ptr never change.
@@ -72,7 +66,6 @@ private:
 
 	//inline static __int64 m_reapplySwfColorsFuncAdd = 0;
 
-	
 	//static __int64 m_skipHudBtnsCallOutOffset;
 	//static __int64 m_enableMenuOnMinimizeStructOffset;
 	//static __int64 m_settings_ShowHudEquipmentOffset;
@@ -81,7 +74,6 @@ private:
 
 	//static __int64 m_handsFovScale_SideNotificationOffset;
 
-	
 	//static reapplySwfColors m_preapplySwfColors;
 
 	//! _QWORD(__fastcall* _ZN16idCmdSystemLocal18ExecuteCommandTextEPKc)(idCmdSystemLocal* thiz, const char*)
@@ -90,22 +82,15 @@ private:
 
 	//typedef __int64(__fastcall* CvarFindAddrTest)(__int64* addr, const char*);
 
-
-	
-
 public:
 
-	
 	static uintptr_t executeCommandText(const char* txt);
 
 	static bool acquireIdCmdSystemLocalPtr(__int64 idCmdSystemLocalPtr);
 
 	static bool acquirreExecuteCommandTextFuncPtr();
 
-
-
 	//static uintptr_t executeCommandText_K2(const char* txt);
-
 
 	static void setGameSpeed(gameSpeed_K gameSpeed);
 
@@ -148,12 +133,7 @@ public:
 
 	static void setIsForceAiHaste(bool isForceAiHaste);
 
-
-
-
 };
-
-
 
 //idCmd::idCvar_Set idCmd::m_pIdCvar_Set = reinterpret_cast<idCvar_Set>(MemHelper::getFuncAddr(0x3721A0));
 
@@ -166,11 +146,5 @@ public:
 //__int64 idCmd::m_settings_UI_SideNotificationOffset = (__int64)MemHelper::getFuncAddr(0x6B3EF40);
 //__int64 idCmd::m_handsFovScale_SideNotificationOffset = (__int64)MemHelper::getFuncAddr(0x6BBAD90);
 
-
 //idRenderModelGui::idRenderModelGui_DrawString idRenderModelGui::m_pidRenderModelGui_DrawString = reinterpret_cast<idRenderModelGui_DrawString>(MemHelper::getFuncAddr(0x6239F0));
-
-
-
-
-
 

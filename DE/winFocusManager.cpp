@@ -1,6 +1,6 @@
-#include "winFocusManager.h"
+#include "WinFocusManager.h"
 
-bool winFocusManager::acquireWin32Vars(__int64 addr)
+bool WinFocusManager::acquireWin32Vars(__int64 addr)
 {
     if (MemHelper::isBadReadPtr((void*)addr)) {
         logErr("acquireWin32Vars: failed to get Win32Vars, bad ptr: %p", (void*)addr);
@@ -20,7 +20,7 @@ bool winFocusManager::acquireWin32Vars(__int64 addr)
 
 }
 
-bool winFocusManager::isGameFocused()
+bool WinFocusManager::isGameFocused()
 {
     if (!m_Win32Vars_t) {
         logErr("isGameFocused: m_Win32Vars_t, mod should not be running....");

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <Windows.h>
 #include <algorithm>
 #include <string>
@@ -16,8 +15,7 @@
 //#include "../Debug/Tests.h"
 #include "idResourceListManager.h"
 #include "idResourceManager.h"
-#include "../ModSettings/modSettings.h"	
-
+#include "../Config/ModSettings/modSettings.h"	
 
 /// <summary>
 /// changing fov, mouse and controller sens for specific weapons, ex disable the fov and sens change for the shogun secondaries
@@ -54,7 +52,6 @@ private:
 	//const unsigned int m_idDeclWeaponControllerSens_Offset = 0x170C;
 	//const unsigned int m_idDeclWeaponMouseSens_Offset = 0x1710;
 
-
 	static inline CustomWeapon m_shotGunStickyDefault = CustomWeapon(WeaponIdStr::g_shotGunStickiesNameIdStr, modSettingsDefault::g_defaultShotGunStickyzoomedFOV, modSettingsDefault::g_defaultShotGunStickyzoomedHandsFOV, modSettingsDefault::g_defaultShotGunStickyControllerSens, modSettingsDefault::g_defaultShotGunStickyMouseSens);
 
 	static inline CustomWeapon m_shotGunStickyOveride = CustomWeapon(WeaponIdStr::g_shotGunStickiesNameIdStr, modSettingsDefault::g_overideShotGunzoomedFOV, modSettingsDefault::g_overideShotGunzoomedHandsFov, modSettingsDefault::g_weaponMaxSensitivity, modSettingsDefault::g_weaponMaxSensitivity);
@@ -67,21 +64,15 @@ private:
 
 	static inline CustomWeapon m_ballistaArbalestOveride = CustomWeapon(WeaponIdStr::g_balistaArbalesteNameIdStr, modSettingsDefault::g_overideBalistaArbalestZoomedFOV, modSettingsDefault::g_overideBalistaArbalestZoomedHandsFov, modSettingsDefault::g_weaponMaxSensitivity, modSettingsDefault::g_weaponMaxSensitivity);
 
-	
-
 	static inline std::vector<CustomWeapon>m_customWeaponsVec{ m_shotGunStickyOveride , m_shotGunFullAutoOveride , m_ballistaArbalestDefault , m_ballistaArbalestOveride };
 
 	//__int64 m_lastIdWeaponAddr = 0;
 	//__int64 m_lastIdDeclWeaponAddr = 0;
 
-
 	/// <summary>
 	/// this are the settings that only for max fov and normal sensitivity for both shotguns mods
 	/// </summary>
 	//static inline void createDefaultCustomWeapons();
-
-	
-
 
 public:
 
@@ -92,13 +83,9 @@ public:
 	//	//createTestCustomWeapons(); //? tremove this as soon as test is done and uncomment the one above
 	//}	
 
-
-	
-
 	static void initWeapons();
 
 	static void overwriteDeclWeaponsWithUserSettings();
-
 
 	static int checkDeclWeaponForOverwrite(CustomWeapon& customWeapon, idDeclWeapon* declWeaponPtr);
 
@@ -108,7 +95,6 @@ public:
 	//	//logInfo("isDeclWeaponModifiableByUser: returning %d", result);
 	//	return result;
 	//}
-
 
 	static bool isDeclWeaponModifiableByUser(std::string declWeaponNameStr);
 
@@ -137,23 +123,12 @@ public:
 		return false;
 	}*/
 
-	
-		
-
 	//WeaponSettings(std::vector<CustomWeapon> customWeaponsVecFromIniFile)
 	//{//! this will be used everytime user changes the ini file
 	//	m_customWeaponsVec = customWeaponsVecFromIniFile;
 	//	//overwriteDeclWeapons();
 	//}
 
-
-
-
-	
-
-
-
-	
 };
 
 /*CustomWeapon m_shotGunStickyDefault = CustomWeapon(declWeaponModId::shotgunStickyBombsId, g_defaultShotGunStickyzoomedFOV, g_defaultShotGunStickyzoomedHandsFOV, g_defaultShotGunStickyControllerSens, g_defaultShotGunStickyMouseSens);
@@ -161,7 +136,6 @@ public:
 
 	CustomWeapon m_shotGunStickyOveride = CustomWeapon(declWeaponModId::shotgunStickyBombsId, overideShotGunFov1, overideShotGunFov2, g_weaponMaxSensitivity, g_weaponMaxSensitivity);
 	CustomWeapon m_shotGunFullAutoOveride = CustomWeapon(declWeaponModId::shotgunFullAutoId, overideShotGunFov1, overideShotGunFov2, g_weaponMaxSensitivity, g_weaponMaxSensitivity);*/
-
 
 	/*void createTestCustomWeapons() {
 			m_customWeaponsVec.clear();
@@ -171,8 +145,6 @@ public:
 			m_customWeaponsVec.push_back(CustomWeapon(declWeaponModId::precisionBoltId, g_defaultPrecisionBoltzoomedFOV, g_defaultPrecisionBoltzoomedHandsFOV, g_defaultPrecisionBoltControllerSens, .9f));
 			m_customWeaponsVec.push_back(CustomWeapon(declWeaponModId::balistaArbalesteId, g_defaultBallistaArbalestezoomedFOV, g_defaultBallistaArbalestezoomedHandsFOV, g_defaultBallistaArbalesteControllerSens, 1.0f));
 		}*/
-
-
 
 		//! this is what we used to do to overwrite weapons like disable the zoom on the shogun stickies:
 		//bool overwriteDeclWeapon_V2(CustomWeapon& customWeapon, std::vector<InventoryItem>& declWeponsInvItemsVec) {
@@ -229,7 +201,6 @@ public:
 		//		return true; //! we return true if bad ptr but does that really mean an overwrite is needed?....
 		//	}
 		//}
-
 
 		//bool checkDeclWeaponForOverwrite(CustomWeapon& customWeapon) {
 		//	uintptr_t idDeclWeaponAddr = get_idDeclWeaponAddr(get_idDeclWeaponStructBaseAddr(), getOffsetsVec(customWeapon.getId()));

@@ -1,6 +1,5 @@
 #include "idRenderModelGuiManager.h"
 
-
 //? we can not use this cause we can't include the .h in the debugGui.h file...still not sure why.
 std::string idRenderModelGuiManager::getDbgStrForImgui() {
 	std::string result = "idRenderModelGuiManager DBG: \n";
@@ -10,13 +9,12 @@ std::string idRenderModelGuiManager::getDbgStrForImgui() {
 	result += " getScreenHeight: ";
 	result += std::to_string(idRenderModelGuiManager::getScreenHeight());
 	result += "cvar width: ";
-	result += std::to_string(fastCvarManager::getWindowWidthInt());
+	result += std::to_string(FastCvarManager::getWindowWidthInt());
 	result += " cvar height: ";
-	result += std::to_string(fastCvarManager::getWindowHeightInt());
+	result += std::to_string(FastCvarManager::getWindowHeightInt());
 
 	return result;
 }
-
 
  /*bool idRenderModelGuiManager::acquireStaticWhiteMaterialAddr(__int64 addr) {
 
@@ -243,7 +241,6 @@ std::string idRenderModelGuiManager::getDbgStrForImgui() {
 
  float idRenderModelGuiManager::getFontScaleFromWidthV2(idVec4 rect, size_t strLettersCount) {
 
-
 	float scaleMaxFromWidth = (float)rect.w / (getSmallCharWidth() * strLettersCount);
 
 	if (scaleMaxFromWidth * getSmallCharHeight() > rect.h) {
@@ -392,10 +389,7 @@ std::string idRenderModelGuiManager::getDbgStrForImgui() {
 	float height = 30;
 	__int64 matPtr = 0;
 
-
 	setColor(idRenderModelGuiAdrr, colorGreen);
-
-
 
 	x += 40.0f;
 
@@ -605,11 +599,9 @@ std::string idRenderModelGuiManager::getDbgStrForImgui() {
 
 	//float y_string_offsetTest = 0.0f; //? test value for testing !!!!!!!!
 
-
 	//float y_string_offsetTest = (computedTextScale * getSmallCharHeight() * (arbitraryOffsetVal)) / (float)textStr.size();
 
 	float debugSupposedlyStringHeight = computedTextScale * getSmallCharHeight();
-
 
 	//! this is code inspired from ida draw string func.
 	//!  this will indeed center the text on the y axis on the debug rect
@@ -623,12 +615,9 @@ std::string idRenderModelGuiManager::getDbgStrForImgui() {
 		float x_final_offset = 0;
 		float y_final_offset = normalizedRect.y - y_fromDrawStringFunc;
 
-
-
 		//logInfo("debugDrawStringInRect: y_offset_v30: %.2f smallCharHeight_Plus_YArg_v22: %.2f y_fromDrawStringFunc: %.2f  normalizedRect.y: %.2f  y_final_offset: %.2f", y_offset_v30, smallCharHeight_Plus_YArg_v22, y_fromDrawStringFunc, normalizedRect.y, y_final_offset);
 
 		logInfo("debugDrawStringInRect:  x_final_offset before font offset adjustment:  %.2f y_final_offset before font offset adjustment: %.2f and normalizedRect: %s", x_final_offset, y_final_offset, normalizedRect.getStrData().c_str());
-
 
 		auto currentFont = idFontManager::getCurrentFont();
 		switch (currentFont)
@@ -669,16 +658,13 @@ std::string idRenderModelGuiManager::getDbgStrForImgui() {
 		//! font name:
 		debugDrawString(idRenderModelGuiAdr, colorPurple, idFontManager::getFontAsStr(currentFont).c_str(), 500, 500, 2);
 
-
 		//debugDrawColoredRect(idRenderModelGuiAdr, rect.x + 300, rect.y, normalizedRect.w, debugSupposedlyStringHeight, colorWhite);
 
 		//debugDrawColoredRect(idRenderModelGuiAdr, rect.x + 200, y_fromDrawStringFunc, normalizedRect.w, debugSupposedlyStringHeight, colorPurple);
 
 		/*logInfo("for textStr.size(): %zu computedTextScale: %.2f getSmallCharHeight(): %.2f arbitraryOffsetVal: %.2f y_string_offsetTest is: %.2f", textStr.size(), computedTextScale, getSmallCharHeight(), arbitraryOffsetVal, y_string_offsetTest);*/
 
-
 		logInfo("debugDrawStringInRect: curent font is %s x_final_offset: %.2f, y_final_offset: %.2f ", idFontManager::getFontAsStr(currentFont).c_str(), x_final_offset, y_final_offset);
-
 
 		//m_pidRenderModelGui_DrawString(idRenderModelGuiAdr, normalizedRect.x, normalizedRect.y + y_string_offsetTest, textStr.c_str(), (__int64)&color, 0, computedTextScale);
 		m_pidRenderModelGui_DrawString(idRenderModelGuiAdr, normalizedRect.x + x_final_offset, normalizedRect.y + y_final_offset, textStr.c_str(), (__int64)&color, 0, computedTextScale);

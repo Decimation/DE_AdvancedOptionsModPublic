@@ -23,4 +23,3 @@
 #include "xinput.h"
 #include <dinput.h>
 
-#include "Common.h"

@@ -3,29 +3,21 @@
 #include "TypeInfoManager.h"
 #include "GeneratedClasses.h"
 #include "idCmd.h"
-#include "fastCvarManager.h"
-
-
+#include "FastCvarManager.h"
 
 //! Also called gameLocal but using idMapInstance so there is less potential confusion with idGameSystemLocal 
 
 class idMapInstanceLocalManager {
 
-
 private:
-
-
 
 	static inline __int64 m_idGameSystemLocalAdrr = 0;
 	static inline int m_idGameSystemLocalMapInstanceOffset = 0;	
 	static inline __int64 m_idMapInstanceLocalPtr = 0;
 
-
 	static inline char* m_lastIdPlayerCharPtr = nullptr;
 	//static inline int m_getIdPlayer_1_Offset = 0;  //! hard coded value in code we get with scan
 	static inline const __int64 m_undocumentedIdGameTimeManagerLocalOffset = UndocumentedOffsets::IdGameTimeManagerLocalOffset;//ida: GetGameMs_D06DD0
-
-
 
 public:
 
@@ -33,11 +25,9 @@ public:
 
 	static __int64 getIdMapInstanceLocalPtr();
 
-
 	//! this is used to find idPlayer ptr offset in GameLocal
 	//! ida: return idPlayer::CastTo_2125F50(*(_QWORD *)(idGameLocal_a1 + 8i64 * a2 + 0x1AF8));
 	//static bool acquireIdPlayerOffsetInstructionAddr(uintptr_t OffsetAddr);
-
 
 	//static char* getIdPlayerCharPtr();
 	
@@ -72,15 +62,11 @@ public:
 		return idPlayer;
 	}*/
 
-
 	static idPlayer* getIdPlayer();
-
 
 	static void debugPrintCurrentIdMapInstanceLocal();
 
 	static long long getGameTime_t();
-
-
 
 	/*static idPlayer_t* getIdPlayerPtr() {		
 		__int64 currentidMapInstanceLocalPtr = getComputedCurrentIdMapInstanceLocalPtr();
@@ -142,14 +128,10 @@ public:
 
 	//}
 
-
 	static void* findEntity(const char* name);
 
 	//! this could potentially be slow or slower than the alternative GetPlayer method
 	static void* getIdPlayer_1_WithEntityFinder();
 
-
-
 };
-
 

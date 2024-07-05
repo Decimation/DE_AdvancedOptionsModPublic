@@ -1,7 +1,6 @@
-#include "playerSoundManager.h"
+#include "PlayerSoundManager.h"
 
-
-void playerSoundManager::playOutOfItemSound()
+void PlayerSoundManager::playOutOfItemSound()
 {
 	idPlayer* playerPtr = idMapInstanceLocalManager::getIdPlayer();
 
@@ -26,8 +25,7 @@ void playerSoundManager::playOutOfItemSound()
 
 }
 
-
-//void* playerSoundManager::getVtablePointer(idDeclPlayerProps* instance) {
+//void* PlayerSoundManager::getVtablePointer(idDeclPlayerProps* instance) {
 //    // Cast the pointer to a pointer to a class with a vtable
 //    void** vtablePtr = *(void***)instance;
 //

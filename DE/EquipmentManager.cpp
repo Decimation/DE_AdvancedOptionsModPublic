@@ -27,8 +27,6 @@ bool EquipmentManager::acquireSwitchEquipmentItemFp(__int64 fAdd)
 	return true;
 }
 
-
-
 void EquipmentManager::switchEquipment(equipmentType_t equipmentType) {
 	if (!m_SwitchEquipmentItemFp) {
 		logErr("switchEquipment: m_SwitchEquipmentItemFp is nullptr");
@@ -43,7 +41,6 @@ void EquipmentManager::switchEquipment(equipmentType_t equipmentType) {
 
 	m_SwitchEquipmentItemFp(idPlayerPtr, equipmentType);
 }
-
 
 void EquipmentManager::useEquipmentItem(equipmentType_t equipmentType)
 {
@@ -66,19 +63,19 @@ void EquipmentManager::useEquipmentItem(equipmentType_t equipmentType)
 		if (equipmentType == equipmentType_t::EQUIPMENT_FRAG_GRENADE) {
 
 			if ((int)idHUD_AbilityIndicatorsPtr->grenadeCharge < 1) {
-				playerSoundManager::playOutOfItemSound();
+				PlayerSoundManager::playOutOfItemSound();
 			}
 		}
 		else if (equipmentType == equipmentType_t::EQUIPMENT_ICE_BOMB) {
 			if ((int)idHUD_AbilityIndicatorsPtr->iceGrenadeCharge < 1) {
-				playerSoundManager::playOutOfItemSound();
+				PlayerSoundManager::playOutOfItemSound();
 			}
 		}
 	}*/
 
 	//! the 2 zeros at the end are because that's the way it's used in processInput in ida
-	if (!m_UseEquipmentItemFp(idPlayerPtr, playerPropsManager::getEquipmentDecl(equipmentType), 0, 0)) {
-		playerSoundManager::playOutOfItemSound();
+	if (!m_UseEquipmentItemFp(idPlayerPtr, PlayerPropsManager::getEquipmentDecl(equipmentType), 0, 0)) {
+		PlayerSoundManager::playOutOfItemSound();
 	}
 
 	//logInfo("useEquipmentItem: debug: m_UseEquipmentItemFp result: for equipmentType: %d : %d", equipmentType, result);

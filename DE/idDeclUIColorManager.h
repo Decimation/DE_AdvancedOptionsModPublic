@@ -1,12 +1,9 @@
 #pragma once
 #include "GeneratedClasses.h"
 #include "idDeclGlobalShellManager.h"
-#include "../ModSettings/modSettings.h"
+#include "../Config/ModSettings/modSettings.h"
 #include "idPlayer.h"
 #include "../ImGui/dependencies/imgui/imgui_internal.h"
-
-
-
 
 //! a way to restore the default colors we modify, everytime user changes profile
 struct idDeclUIColor_Custom {
@@ -147,8 +144,6 @@ public:
 	////static void updateCustomIdColors();
 
 	//static void updateHudColors();
-
-
 
 	//static void restoreOriginalColorProfile(idDeclUIColor_Custom customColor, idDeclUIColor* originalColorPtr);
 

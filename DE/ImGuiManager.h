@@ -2,7 +2,7 @@
 
 //#include <MinHook.h>
 //
-//#include "../ModSettings/ModSettings.h"
+//#include "../Config/ModSettings/modSettings.h"
 //#include "../Config/Config.h"
 //#include "../MinHookManager/MinHookManager.h"
 //#include "../ImGui/menu/menu.hpp"
@@ -13,21 +13,14 @@
 //#include "../ImGui/dependencies/minhook/MinHook.h"
 //#include "../dllmain.h"
 
-
-
 //#include "../Config/Config.h"
 //#include "MenuStateManager.h"
 //#include "idCvarManager.h"
 //#include "../ImGui/dependencies/imgui/imgui.h"
-////#include "../ModSettings/ModSettings.h"
+////#include "../Config/ModSettings/modSettings.h"
 //#include "../ModSettings/ModSettingsManager.h"
 
-
 #include "../Config/Config.h"
-
-
-
-
 
 class ImGuiManager
 {
@@ -45,9 +38,7 @@ private:
 
 	//static bool m_isShowDebugWindow;
 
-
 public:
-	
 
 	//static bool isInitialized();
 	static void setIsInitFlag(bool isInitFlag);

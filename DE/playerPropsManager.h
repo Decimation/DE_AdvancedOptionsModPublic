@@ -1,18 +1,12 @@
 #pragma once
 
-
 #include <string>
 #include "TypeInfoManager.h"
 #include "idMapInstanceLocalManager.h"
 
-
-
-
-class playerPropsManager
+class PlayerPropsManager
 {
 private:
-
-
 
 public:
 

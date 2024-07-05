@@ -2,12 +2,9 @@
 #include "GeneratedClasses.h"
 #include "MemHelper.h"
 #include "idMapInstanceLocalManager.h"
-#include "playerPropsManager.h"
+#include "PlayerPropsManager.h"
 #include "idHudManager.h"
-#include "playerSoundManager.h"
-
-
-
+#include "PlayerSoundManager.h"
 
 typedef bool(__fastcall* UseEquipmentItemFp)(
     idPlayer* idPlayer_a1,
@@ -15,7 +12,6 @@ typedef bool(__fastcall* UseEquipmentItemFp)(
     char a3,
     int forceEquipSlot_a4
     );
-
 
 typedef void(__fastcall* SwitchEquipmentItemFp)(idPlayer* idPlayer_a1, equipmentType_t equipmentType);
 
@@ -40,8 +36,6 @@ public:
 
     static void useEquipmentItem(equipmentType_t equipmentType);
     //idDeclInventory* getPlayerProps();
-
-
 
 };
 

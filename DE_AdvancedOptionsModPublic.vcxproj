@@ -115,7 +115,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;XINPUT1_3_WRAPPER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.283.0\Include;$(SolutionDir)Debug;$(SolutionDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.283.0\Include;$(SolutionDir)Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -174,27 +174,25 @@
     <ClInclude Include="DE\ColorManager.h" />
     <ClInclude Include="Debug\ImGuiDebugWin.h" />
     <ClInclude Include="DE\idCvarManager.h" />
-    <ClInclude Include="DE\fastCvarManager.h" />
+    <ClInclude Include="DE\FastCvarManager.h" />
     <ClInclude Include="DE\idEventManager.h" />
     <ClInclude Include="DE\idDeclUIColorManager.h" />
     <ClInclude Include="DE\EquipmentManager.h" />
     <ClInclude Include="ImGui\Fonts\icomoonDoomEternal.h" />
     <ClInclude Include="ImGui\menu\KaibzHud.h" />
     <ClInclude Include="Hud\KaibzHudManager.h" />
-    <ClInclude Include="DE\playerSoundManager.h" />
+    <ClInclude Include="DE\PlayerSoundManager.h" />
     <ClInclude Include="Tools\eventsInfoGenerator.h" />
     <ClInclude Include="ImGui\menu\GoToSettingsGui.h" />
     <ClInclude Include="ImGui\menu\guiHelpers.h" />
     <ClInclude Include="ImGui\Fonts\font_awesome.h" />
     <ClInclude Include="ImGui\Fonts\Robotto.h" />
     <ClInclude Include="ImGui\menu\DebugGui.h" />
-    <ClInclude Include="DE\playerPropsManager.h" />
+    <ClInclude Include="DE\PlayerPropsManager.h" />
     <ClInclude Include="ImGui\menu\KaibzCrosshair.h" />
     <ClInclude Include="Tools\cmdInfoGenerator.h" />
-    <ClInclude Include="Common\Utils.h" />
-    <ClInclude Include="Config\LogConfig.h" />
+    <ClInclude Include="DE\LogConfig.h" />
     <ClInclude Include="Tools\cvarInfoGenerator.h" />
-    <ClInclude Include="DE\Debug.h" />
     <ClInclude Include="DE\idDeclGlobalShellManager.h" />
     <ClInclude Include="DE\idDeclInfo.h" />
     <ClInclude Include="DE\idDeclWeaponReticleManager.h" />
@@ -205,7 +203,7 @@
     <ClInclude Include="DE\LoadingScreenManager.h" />
     <ClInclude Include="DE\MaterialDebug.h" />
     <ClInclude Include="FileOp\FileOp.h" />
-    <ClInclude Include="MD5\HashManager.h" />
+    <ClInclude Include="Tools\HashManager.h" />
     <ClInclude Include="Hud\CustomCrosshairManager.h" />
     <ClInclude Include="Hud\CustomIceNadeIconManager.h" />
     <ClInclude Include="DE\idLibManager.h" />
@@ -248,7 +246,7 @@
     <ClInclude Include="Json\nlohmann\json.hpp" />
     <ClInclude Include="Json\nlohmann\json_fwd.hpp" />
     <ClInclude Include="K_Utils\K_Utils.h" />
-    <ClInclude Include="ModSettings\modSettings.h" />
+    <ClInclude Include="Config\ModSettings\modSettings.h" />
     <ClInclude Include="TypeGenerator\ClassDef.h" />
     <ClInclude Include="TypeGenerator\ClassDefContainer.h" />
     <ClInclude Include="TypeGenerator\EnumsDefFileGenerator.h" />
@@ -277,7 +275,7 @@
     <ClInclude Include="DE\UserColorSet.h" />
     <ClInclude Include="DE\drawStretchPicHookArgs.h" />
     <ClInclude Include="DE\drawStringHookArgs.h" />
-    <ClInclude Include="Scanner\Scanner.h" />
+    <ClInclude Include="Tools\Scanner.h" />
     <ClInclude Include="DE\Sigs.h" />
     <ClInclude Include="DE\GameHudColorsManager.h" />
     <ClInclude Include="DE\idCmd.h" />
@@ -299,24 +297,23 @@
     <ClInclude Include="DE\PlayerStateChecker.h" />
     <ClInclude Include="DE\UtilsDE.h" />
     <ClInclude Include="MinHookManager\MinHookManager.h" />
-    <ClInclude Include="Rtti\Rtti_Helper.h" />
-    <ClInclude Include="System\FileWatcher.h" />
+    <ClInclude Include="FileOp\FileWatcher.h" />
     <ClInclude Include="TypeGenerator\ClassDefFileGenerator.h" />
-    <ClInclude Include="Voice\Voice.h" />
+    <ClInclude Include="Tools\Voice.h" />
     <ClInclude Include="DE\WeaponSettings.h" />
     <ClInclude Include="DE\WeaponSwitcher.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="Loguru\loguru.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="DE\winFocusManager.h" />
+    <ClInclude Include="DE\WinFocusManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Hud\CustomIceNadeIconUIData.cpp" />
     <ClCompile Include="DE\ColorManager.cpp" />
     <ClCompile Include="Debug\ImGuiDebugWin.cpp" />
     <ClCompile Include="DE\idCvarManager.cpp" />
-    <ClCompile Include="DE\fastCvarManager.cpp" />
+    <ClCompile Include="DE\FastCvarManager.cpp" />
     <ClCompile Include="DE\idEventManager.cpp" />
     <ClCompile Include="DE\idDeclUIColorManager.cpp" />
     <ClCompile Include="DE\EquipmentManager.cpp" />
@@ -324,13 +321,13 @@
     <ClCompile Include="ImGui\Fonts\EternalUiRegular_BWZGd.h" />
     <ClCompile Include="ImGui\menu\KaibzHud.cpp" />
     <ClCompile Include="Hud\KaibzHudManager.cpp" />
-    <ClCompile Include="DE\playerSoundManager.cpp" />
+    <ClCompile Include="DE\PlayerSoundManager.cpp" />
     <ClCompile Include="Tools\eventsInfoGenerator.cpp" />
     <ClCompile Include="ImGui\menu\GoToSettingsGui.cpp" />
     <ClCompile Include="ImGui\menu\guiHelpers.cpp" />
     <ClCompile Include="ImGui\Fonts\font_awesome.cpp" />
     <ClCompile Include="ImGui\menu\DebugGui.cpp" />
-    <ClCompile Include="DE\playerPropsManager.cpp" />
+    <ClCompile Include="DE\PlayerPropsManager.cpp" />
     <ClCompile Include="ImGui\menu\KaibzCrosshair.cpp" />
     <ClCompile Include="Tools\cmdInfoGenerator.cpp" />
     <ClCompile Include="Config\Config.cpp" />
@@ -378,7 +375,7 @@
     <ClCompile Include="DE\WeaponSettings.cpp" />
     <ClCompile Include="DE\WeaponSwitcher.cpp" />
     <ClCompile Include="FileOp\FileOp.cpp" />
-    <ClCompile Include="MD5\HashManager.cpp" />
+    <ClCompile Include="Tools\HashManager.cpp" />
     <ClCompile Include="Hud\CustomIceNadeIconManager.cpp" />
     <ClCompile Include="DE\idLibManager.cpp" />
     <ClCompile Include="ImGui\console\console.cpp" />
@@ -410,10 +407,10 @@
     <ClCompile Include="ImGui\utils\utils.cpp" />
     <ClCompile Include="K_Utils\K_Utils.cpp" />
     <ClCompile Include="MinHookManager\MinHookManager.cpp" />
-    <ClCompile Include="ModSettings\modSettings.cpp" />
-    <ClCompile Include="Scanner\Scanner.cpp" />
+    <ClCompile Include="Config\ModSettings\modSettings.cpp" />
+    <ClCompile Include="Tools\Scanner.cpp" />
     <ClCompile Include="DE\MemHelper.cpp" />
-    <ClCompile Include="Voice\Voice.cpp" />
+    <ClCompile Include="Tools\Voice.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
@@ -435,7 +432,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="DE\winFocusManager.cpp" />
+    <ClCompile Include="DE\WinFocusManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Gpt\MinHookTemplate.txt" />
