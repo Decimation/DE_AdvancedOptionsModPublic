@@ -1,0 +1,51 @@
+
+//! this is a BAK of snippet relevant code of previous pisKeyPressed that used the old method of triggering the throw of grenades:
+//! 
+//!	case usercmdButton::BUTTON_DASH:
+//break;
+////! use equipment throws frag nade
+//case usercmdButton::BUTTON_USE_EQUIPMENT:
+//	if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_USE_EQUIPMENT)) {
+//		idPlayer_K::setGrenadeType(GrenadeType::Frag);
+//		//logInfo("BUTTON_USE_EQUIPMENT (Frag) pressed");
+//		return true;
+//	}
+//
+//	//else if ((buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_SWITCH_EQUIPMENT))) {
+//	//	idPlayer_K::setGrenadeType(GrenadeType::Ice);
+//	//	//logInfo("BUTTON_SWITCH_EQUIPMENT (Ice) pressed");
+//	//	return true;
+//	//}
+//
+//	//? putting this instead of above to fix the sound issue if user gives himself ice at the start
+//	else if ((buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_SWITCH_EQUIPMENT))) {
+//		//if (idInventoryCollectionManager::isIceNadeOwned()) {
+//		if (idInventoryCollectionManager::getCriticalIsIceNadeOwned()) {
+//			idPlayer_K::setGrenadeType(GrenadeType::Ice);
+//			//logInfo("BUTTON_SWITCH_EQUIPMENT (Ice) pressed");
+//			return true;
+//		}
+//	}
+//
+//
+//	break;
+//	//! switch equipment throws ice nade
+//case usercmdButton::BUTTON_SWITCH_EQUIPMENT:
+//	//! this works to make sure that nade selection will always stay on frag. 
+//	//if (idPlayer_K::getSelectedGrenadeType() == GrenadeType::Ice && idInventoryCollectionManager::isFragNadeOwned()) {
+//	if (idPlayer_K::getSelectedGrenadeType() == GrenadeType::Ice && idInventoryCollectionManager::getCriticalIsFragNadeOwned()) {
+//		return true;
+//	}
+//
+//	//? this doesn't work to ensure selection will always stay on frag
+//	/*if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_USE_EQUIPMENT)) {
+//		idPlayer_K::setGrenadeType(GrenadeType::Frag);
+//		logInfo("BUTTON_USE_EQUIPMENT pressed");
+//		return true;
+//	}*/
+//
+//	//! this false return works to make sure spamming the ice nade key will not switch back sometimes to frag type. This is the mode where pressing a nade btn will switch to its type if it available.
+//	//return false; 
+//
+//	break;
+//case usercmdButton::BUTTON_QUICK_3:

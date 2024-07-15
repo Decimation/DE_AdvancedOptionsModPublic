@@ -101,12 +101,12 @@
 		return false;
 	}
 
-	/*if (!Patcher::patch("UnrestrictIdConsole", ((uintptr_t)MemHelper::PatternScan(doomEternalExeName.c_str(), consoleUnlockCEScriptWithSpacesSig) + 4), UnrestrictIdConsoleNewInstructionVec)) {
+	/*if (!Patcher::patch("UnrestrictIdConsole", ((uintptr_t)MemHelper::PatternScan(DE_EXE_NAME.c_str(), consoleUnlockCEScriptWithSpacesSig) + 4), UnrestrictIdConsoleNewInstructionVec)) {
 		anyScanFailed = true;
 	}*/
 
 	//? func above crashed the game since we installed DoomEternal Injector, trying this instead Update mod still crash, but might be related to something else
-	/*if (!Patcher::patchIfNeeded("UnrestrictIdConsole", ((uintptr_t)MemHelper::PatternScan(doomEternalExeName.c_str(), consoleUnlockCEScriptWithSpacesSig) + 4), UnrestrictIdConsoleNewInstructionVec)) {
+	/*if (!Patcher::patchIfNeeded("UnrestrictIdConsole", ((uintptr_t)MemHelper::PatternScan(DE_EXE_NAME.c_str(), consoleUnlockCEScriptWithSpacesSig) + 4), UnrestrictIdConsoleNewInstructionVec)) {
 		anyScanFailed = true;
 	}*/
 
@@ -126,7 +126,7 @@
 		return false;
 	}
 
-	/*if (!Patcher::patch("UnlockMaxNamedIdColors", ((uintptr_t)MemHelper::PatternScan(doomEternalExeName.c_str(), maxSwfNamedColorsSig) + 3), UnlockMaxNamedIdColorsPatchNewInstructionVec)) {
+	/*if (!Patcher::patch("UnlockMaxNamedIdColors", ((uintptr_t)MemHelper::PatternScan(DE_EXE_NAME.c_str(), maxSwfNamedColorsSig) + 3), UnlockMaxNamedIdColorsPatchNewInstructionVec)) {
 		anyScanFailed = true;
 	}*/
 
@@ -170,7 +170,7 @@
 		return false;
 	}
 
-	/*if (!idFontManager::acquirreSetMonospaceFondOffsetAddr((uintptr_t)MemHelper::PatternScan(doomEternalExeName.c_str(), fontSetInSetUpMonoSpaceFontSig), 3) {
+	/*if (!idFontManager::acquirreSetMonospaceFondOffsetAddr((uintptr_t)MemHelper::PatternScan(DE_EXE_NAME.c_str(), fontSetInSetUpMonoSpaceFontSig), 3) {
 		anyScanFailed = true;
 	}*/
 
@@ -359,7 +359,7 @@
 		return false;
 	}*/
 
-	if (!idSWFSpriteInstanceManager::acquirreSetSpriteInstanceScaleFpAdd((uintptr_t)MemHelper::PatternScan(doomEternalExeName.c_str(), SpriteInstanceSetScaleFuncSig))) {
+	if (!idSWFSpriteInstanceManager::acquirreSetSpriteInstanceScaleFpAdd((uintptr_t)MemHelper::PatternScan(DE_EXE_NAME.c_str(), SpriteInstanceSetScaleFuncSig))) {
 		logErr("scanForAddrs failed for SpriteInstanceSetScaleFuncSig");
 		return false;
 	}

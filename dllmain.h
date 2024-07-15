@@ -67,7 +67,7 @@
 #include "DE/ImGuiManager.h"
 
 #include "DE/idLibManager.h"
-#include "../Config/ModSettings/modSettings.h"
+#include "../Config/ModSettings/ModSettings.h"
 
 #include "Tools/Scanner.h"
 #include "Tools/HashManager.h"
@@ -97,46 +97,45 @@
 
 //extern "C" __int64 GetRBPValueWithRAxPreserved();
 
-bool g_debugIsReadyToRenderIceNadeIcon = false;
+inline bool g_debugIsReadyToRenderIceNadeIcon = false;
 
-PlayerState g_debug_lastPlayerState = PlayerState::undefined;
+inline PlayerState g_debug_lastPlayerState = PlayerState::undefined;
 
-float g_debugScreenWidth  = -1;
-float g_debugScreenHeight = -1;
+inline float g_debugScreenWidth  = -1;
+inline float g_debugScreenHeight = -1;
 
-idPlayer* g_debugLastIdPlayerPtr = nullptr;
+inline idPlayer* g_debugLastIdPlayerPtr = nullptr;
 
-bool g_debugIsReticleHide = false;
-bool g_debugIsInCinematic = false;
-bool g_debugIsDemonPlayer = false;
+inline bool g_debugIsReticleHide = false;
+inline bool g_debugIsInCinematic = false;
+inline bool g_debugIsDemonPlayer = false;
 
-std::string g_debugLastCurrentGameMode = "unknow Game Mode";
 //int g_debugActiveReticleStyleInt = -90;
 
 //! 10 seems fine.
 //unsigned int g_sleepTimeMainLoopMs = 10;
 
-std::string globalVariableString;
+inline std::string g_globalVariableString;
 
-bool g_isEnableHook2Triggered = false;
+inline bool g_isEnableHook2Triggered = false;
 
-bool g_isGameCrosshairHidden = false;
+inline bool g_isGameCrosshairHidden = false;
 
-bool g_isDebugHudEnabled = false;
+inline bool g_isDebugHudEnabled = false;
 
-idVec4  g_iceNadeIconDebugVec4;
-__int64 g_debugMaterialAddr = 0;
+inline idVec4  g_iceNadeIconDebugVec4;
+inline __int64 g_debugMaterialAddr = 0;
 
-bool g_isGameInitialized = false;
-bool g_isDllCalledByGame = false;
+inline bool g_isGameInitialized = false;
+inline bool g_isDllCalledByGame = false;
 
 //! key pressed
-uint64_t g_lastGetAsyncKeyPress = 0;
+inline uint64_t g_lastGetAsyncKeyPress = 0;
 
-bool g_debugReticleScale = true;
+inline bool g_debugReticleScale = true;
 
 //! matr debug:
-static std::vector<std::string> matrNamesVec;
+static std::vector<std::string> g_matrNamesVec;
 
 //unsigned int g_testIdNamedColorIndex = 94;
 
@@ -151,30 +150,21 @@ static std::vector<std::string> matrNamesVec;
 //const int normalNadeSelected = 2;
 //int nadeStatus = -1;
 
-std::string g_plusSignStr = "+";
-
 //? *****  looks like we have to be careful when instanciating those objects as, if one has a ctor that tries to writes to our console it will prevent the console from working.
-HINSTANCE DllHandle;
-HWND      g_game_hWindow = NULL;
-HMODULE   customMeatHook_hMod;
+inline HINSTANCE g_dllHandle;
+inline HWND      g_game_hWindow = nullptr;
+inline HMODULE   g_customMeatHookHMod;
 
-bool g_isDllInitOk           = true;
-bool g_isCloseModRequestFlag = false;
+inline bool g_isDllInitOk           = true;
+inline bool g_isCloseModRequestFlag = false;
 
-WNDPROC   wndproc_original = NULL;
-MemHelper mem;
-//BindHelper binderHelper;
-//EquipmentLauncher eql;
-//WeaponSettings ws;
-//idInventory inv;
-WeaponSwitcher switcher;
-PlayerState    playerState;
-ButtonCheck    buttonCheck;
-//StringChanger stringChanger;
-//IniFile iniFile;
-//IniFileData iniFileData;
-LangManager      lang;
-BindLabelChanger bindLabelChanger;
+inline WNDPROC          wndproc_original = nullptr;
+inline MemHelper        mem;
+inline WeaponSwitcher   g_switcher;
+inline PlayerState      g_playerState;
+inline ButtonCheck      g_buttonCheck;
+inline LangManager      g_lang;
+inline BindLabelChanger g_bindLabelChanger;
 //Md5Check md5Check;
 //ModStatus modStatus;
 //idResource idRes;
@@ -196,7 +186,7 @@ struct Int128
 	int64_t low;
 };
 
-WNDPROC pOriginalWndProc = nullptr;
+WNDPROC g_pOriginalWndProc = nullptr;
 
 LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -379,11 +369,11 @@ LRESULT CALLBACK HookedWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			}
 		}
 	}
-	return CallWindowProc(pOriginalWndProc, hwnd, uMsg, wParam, lParam);
+	return CallWindowProc(g_pOriginalWndProc, hwnd, uMsg, wParam, lParam);
 }
 
 //! This works great to prevent hud elements from rendering like the the equipment arrows or the right side of the hud. RenderSprite_4FEC90
-typedef char (__fastcall*RenderSprite_t)(
+using RenderSprite_t = char(__fastcall*)(
 	void*                idSwf_a1,
 	__int64              a2,
 	idSWFSpriteInstance* spriteInstance_a3,
@@ -404,7 +394,7 @@ char __fastcall RenderSprite_Hook(
 	unsigned int         a5,
 	char                 a6)
 {
-	if (!modSettings::getIsUseDedicatedNadeKeys()) {
+	if (!ModSettings::getIsUseDedicatedNadeKeys()) {
 		return p_RenderSprite_Original(idSwf_a1, a2, spriteInstance_a3, a4, a5, a6);
 	}
 
@@ -430,14 +420,14 @@ char __fastcall RenderSprite_Hook(
 }
 
 //! this lets us set the fov we want in GK, battery use..
-typedef void* (__fastcall*idPlayerFovLerp_t)(__int64 idPlayer_a1, float a2, float a3, char a4);
-idPlayerFovLerp_t         p_idPlayerFovLerp        = nullptr;
-idPlayerFovLerp_t         p_idPlayerFovLerp_Target = nullptr;
+using idPlayerFovLerp_t                    = void* (__fastcall*)(__int64 idPlayer_a1, float a2, float a3, char a4);
+idPlayerFovLerp_t p_idPlayerFovLerp        = nullptr;
+idPlayerFovLerp_t p_idPlayerFovLerp_Target = nullptr;
 
 void* __fastcall idPlayerFovLerp_Hook(__int64 idPlayer_a1, float lerpFOV_a2, float a3, char a4)
 {
-	if (modSettings::getIsOverideInteractionFOV()) {
-		lerpFOV_a2 = modSettings::getInteractionFOV();
+	if (ModSettings::getIsOverideInteractionFOV()) {
+		lerpFOV_a2 = ModSettings::getInteractionFOV();
 	}
 
 	return p_idPlayerFovLerp(idPlayer_a1, lerpFOV_a2, a3, a4);
@@ -446,7 +436,7 @@ void* __fastcall idPlayerFovLerp_Hook(__int64 idPlayer_a1, float lerpFOV_a2, flo
 //! this will trigger, once, everytime a battery in socket animation starts. so a good place to set the timsescale X2, X4...
 //? the only thing is that could trigger for other animations, so we'll have to make sure that this specific anim is what we want...
 //! void __fastcall idSyncEntity::StartSync_13CEF20(__int64 idSyncEntity_a1, __int64 idDeclAnimWeb_a2, __int64 idPlayer_a3, float a4, __int64 a5)
-typedef void (__fastcall*StartSync_t)(__int64 idSyncEntity_a1, __int64 idDeclAnimWebPTR_a2, __int64 idPlayer_a3,
+using StartSync_t = void(__fastcall*)(__int64 idSyncEntity_a1, __int64 idDeclAnimWebPTR_a2, __int64 idPlayer_a3,
 									  float   a4, __int64              a5);
 StartSync_t p_StartSync_t        = nullptr;
 StartSync_t p_StartSync_t_Target = nullptr;
@@ -454,7 +444,7 @@ StartSync_t p_StartSync_t_Target = nullptr;
 void __fastcall StartSync_t_Hook(__int64 idSyncEntity_a1, __int64 idDeclAnimWebPTR_a2, __int64 idPlayer_a3, float a4,
 								 __int64 a5)
 {
-	if (modSettings::getIsSpeedUpBatterySocketAnimation() && !MemHelper::isBadReadPtr((void*)idDeclAnimWebPTR_a2)) {
+	if (ModSettings::getIsSpeedUpBatterySocketAnimation() && !MemHelper::isBadReadPtr((void*)idDeclAnimWebPTR_a2)) {
 		idResource* res      = (idResource*)*(__int64*)idDeclAnimWebPTR_a2;
 		std::string declName = res->name.str;
 		if (declName == "animweb/interact/hub_battery_socket/hub_battery_socket_syncanimweb") {
@@ -469,13 +459,14 @@ void __fastcall StartSync_t_Hook(__int64 idSyncEntity_a1, __int64 idDeclAnimWebP
 }
 
 //! syncEnd_13D1960 this is triggered once when a sync animation endds like the battery in socket one
-typedef char (__fastcall*syncEnd_t)(__int64 a1, __int64 a2, int a3, unsigned int a4, unsigned __int8 a5);
-syncEnd_t                p_syncEnd        = nullptr;
-syncEnd_t                p_syncEnd_Target = nullptr;
 
-char __fastcall syncEnd_Hook(__int64 a1, __int64 a2, int a3, unsigned int a4, unsigned __int8 a5)
+using SyncEnd_t            = char(__fastcall*)(__int64 a1, __int64 a2, int a3, unsigned int a4, unsigned __int8 a5);
+SyncEnd_t p_syncEnd        = nullptr;
+SyncEnd_t p_syncEnd_Target = nullptr;
+
+char __fastcall SyncEnd_Hook(__int64 a1, __int64 a2, int a3, unsigned int a4, unsigned __int8 a5)
 {
-	logInfo("syncEnd_Hook: reseting timescale....");
+	logInfo("SyncEnd_Hook: reseting timescale....");
 	idCmd::setGameSpeed(gameSpeed_K::defaultSpeed);
 
 	return p_syncEnd(a1, a2, a3, a4, a5);
@@ -483,28 +474,28 @@ char __fastcall syncEnd_Hook(__int64 a1, __int64 a2, int a3, unsigned int a4, un
 
 //! returning from this will disable custom animations like secret find, battery cell find animations
 //! char __fastcall customAnimSmth_19DA8A0(__int64 idHands_a1, const char *str_a2, int a3, int a4, int a5)
-typedef char (__fastcall*customAnimSmth_t)(__int64 idHands_a1, const char* str_a2, int a3, int a4, int a5);
-customAnimSmth_t         p_customAnimSmth_t        = nullptr;
-customAnimSmth_t         p_customAnimSmth_t_Target = nullptr;
+using CustomAnimSmth_t = char(__fastcall*)(__int64 idHands_a1, const char* str_a2, int a3, int a4, int a5);
+CustomAnimSmth_t p_customAnimSmth_t = nullptr;
+CustomAnimSmth_t p_customAnimSmth_t_Target = nullptr;
 
-char __fastcall customAnimSmth_t_Hook(__int64 idHands_a1, const char* str_a2, int a3, int a4, int a5)
+char __fastcall CustomAnimSmth_t_Hook(__int64 idHands_a1, const char* str_a2, int a3, int a4, int a5)
 {
-	if (modSettings::getIsSkipCustomAnimations()) {
+	if (ModSettings::getIsSkipCustomAnimations()) {
 		return 0;
 	}
-	//logWarn("customAnimSmth_t_Hook returning 0");	
+	//logWarn("CustomAnimSmth_t_Hook returning 0");	
 
 	return p_customAnimSmth_t(idHands_a1, str_a2, a3, a4, a5);
 }
 
-typedef __int64 (__fastcall*idHUDMenu_CurrencyConfirmation_t)(__int64 idHUDMenu_CurrencyConfirmation_a1,
+using idHUDMenu_CurrencyConfirmation_t = __int64(__fastcall*)(__int64 idHUDMenu_CurrencyConfirmation_a1,
 															  __int64 struct_a2);
 idHUDMenu_CurrencyConfirmation_t p_idHUDMenu_CurrencyConfirmation_t        = nullptr;
 idHUDMenu_CurrencyConfirmation_t p_idHUDMenu_CurrencyConfirmation_t_Target = nullptr;
 
 __int64 __fastcall idHUDMenu_CurrencyConfirmation_t_Hook(__int64 idHUDMenu_CurrencyConfirmation_a1, __int64 struct_a2)
 {
-	if (modSettings::getIsDisableBatterySocketPopUp()) {
+	if (ModSettings::getIsDisableBatterySocketPopUp()) {
 		idHudEventManager::send_HUD_EVENT_CURRENCY_CONFIRM((idHUDElement*)idHUDMenu_CurrencyConfirmation_a1);
 	}
 
@@ -513,9 +504,9 @@ __int64 __fastcall idHUDMenu_CurrencyConfirmation_t_Hook(__int64 idHUDMenu_Curre
 
 //! this triggers continuously when in any menu, main menu or pause menu. 183F0A0
 //? however the idMenu ptr will be different when in main menu or pause menu ofc.
-typedef __int64 (__fastcall*idMenu_Update)(__int64 idMenu, __int64 a2);
-idMenu_Update               pidMenu_Update = nullptr;
-idMenu_Update               pidMenu_UpdateTarget;
+using idMenu_Update          = __int64(__fastcall*)(__int64 idMenu, __int64 a2);
+idMenu_Update pidMenu_Update = nullptr;
+idMenu_Update pidMenu_UpdateTarget;
 
 __int64 __fastcall idMenu_UpdateHook(__int64 idMenu, __int64 a2)
 {
@@ -528,7 +519,7 @@ __int64 __fastcall idMenu_UpdateHook(__int64 idMenu, __int64 a2)
 }
 
 //! float __fastcall getFovTargetValMB_1D2F860(_QWORD *idWeaponPtr_a1)
-typedef float (__fastcall*getFovTargetValMB)(idWeapon* idWeaponAddr_a1);
+using getFovTargetValMB = float(__fastcall*)(idWeapon* idWeaponAddr_a1);
 //typedef float(__fastcall* getFovTargetValMB)(__int64 idWeaponAddr_a1);
 getFovTargetValMB pgetFovTargetValMB = nullptr;
 getFovTargetValMB pgetFovTargetValMBTarget;
@@ -549,7 +540,7 @@ inline float __fastcall getFovTargetValMB_Hook(idWeapon* idWeaponObj_a1)
 }
 
 //! SelectWeaponForSelectionGroup Hook: char __fastcall SelectWeaponForSelectionGroupHook(__int64 gui_a1, int x_a2)
-typedef char (__fastcall*     SelectWeaponForSelectionGroup)(__int64 a1, int a2);
+using SelectWeaponForSelectionGroup                          = char(__fastcall*)(__int64 a1, int a2);
 SelectWeaponForSelectionGroup pSelectWeaponForSelectionGroup = nullptr;
 SelectWeaponForSelectionGroup pSelectWeaponForSelectionGroupTarget;
 
@@ -564,8 +555,8 @@ char __fastcall SelectWeaponForSelectionGroupHook(__int64 a1, int weaponIndex_a2
 		logWarn("SelectWeaponForSelectionGroupHook: a2 has changed to: %d", a2);
 	}*/
 
-	if (modSettings::isImprovedWeaponSwitching()) {
-		switcher.updateLastWeapKeyPress(weaponIndex_a2);
+	if (ModSettings::isImprovedWeaponSwitching()) {
+		g_switcher.updateLastWeapKeyPress(weaponIndex_a2);
 	}
 	//binderHelper.updateLastWeapKeyPress(x_a2);
 
@@ -573,13 +564,14 @@ char __fastcall SelectWeaponForSelectionGroupHook(__int64 a1, int weaponIndex_a2
 }
 
 //! bool __fastcall isKeyPressed_1AE54F0(__int64 gui_a1, __int64 x_a2)
-typedef bool (__fastcall*isKeyPressed)(__int64 a1, __int64 a2);
-isKeyPressed             pisKeyPressed = nullptr;
-isKeyPressed             pisKeyPressedTarget;
+
+using isKeyPressed         = bool(__fastcall*)(__int64 a1, __int64 a2);
+isKeyPressed pisKeyPressed = nullptr;
+isKeyPressed pisKeyPressedTarget;
 
 bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum)
 {
-	if (!modSettings::getIsUseDedicatedNadeKeys()) {
+	if (!ModSettings::getIsUseDedicatedNadeKeys()) {
 		return pisKeyPressed(ptr, btnEnum);
 	}
 
@@ -606,72 +598,72 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum)
 
 	//! experimenting with disabling force weap switch system when melee key (BUTTON_ATTACK2) pressed
 	case usercmdButton::BUTTON_ATTACK2:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_ATTACK2)) {
-			switcher.disableEnumResend(usercmdButton::BUTTON_ATTACK2);
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_ATTACK2)) {
+			g_switcher.disableEnumResend(usercmdButton::BUTTON_ATTACK2);
 		}
 		break;
 
 	//! we disable our for weap switch system if a key if change weap key press 
 	case usercmdButton::BUTTON_CHANGEWEAPON:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_CHANGEWEAPON)) {
-			switcher.disableEnumResend(usercmdButton::BUTTON_CHANGEWEAPON);
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_CHANGEWEAPON)) {
+			g_switcher.disableEnumResend(usercmdButton::BUTTON_CHANGEWEAPON);
 		}
 		break;
 	case usercmdButton::BUTTON_WEAP_NEXT:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_WEAP_NEXT)) {
-			switcher.disableEnumResend(usercmdButton::BUTTON_WEAP_NEXT);
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_WEAP_NEXT)) {
+			g_switcher.disableEnumResend(usercmdButton::BUTTON_WEAP_NEXT);
 		}
 		break;
 	case usercmdButton::BUTTON_WEAP_PREV:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_WEAP_PREV)) {
-			switcher.disableEnumResend(usercmdButton::BUTTON_WEAP_PREV);
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_WEAP_PREV)) {
+			g_switcher.disableEnumResend(usercmdButton::BUTTON_WEAP_PREV);
 		}
 		break;
 	case usercmdButton::BUTTON_SHOTGUN:
-		if (switcher.isWeaponBtnToResend(userCmdBtn)) {
+		if (g_switcher.isWeaponBtnToResend(userCmdBtn)) {
 			return true;
 		}
 		break;
 	case usercmdButton::BUTTON_ASSAULT_RIFFLE:
-		if (switcher.isWeaponBtnToResend(userCmdBtn)) {
+		if (g_switcher.isWeaponBtnToResend(userCmdBtn)) {
 			return true;
 		}
 		break;
 	case usercmdButton::BUTTON_PLASMA:
-		if (switcher.isWeaponBtnToResend(userCmdBtn)) {
+		if (g_switcher.isWeaponBtnToResend(userCmdBtn)) {
 			return true;
 		}
 		break;
 	case usercmdButton::BUTTON_RL:
-		if (switcher.isWeaponBtnToResend(userCmdBtn)) {
+		if (g_switcher.isWeaponBtnToResend(userCmdBtn)) {
 			return true;
 		}
 		break;
 	case usercmdButton::BUTTON_SUPER_SHOTGUN:
-		if (switcher.isWeaponBtnToResend(userCmdBtn)) {
+		if (g_switcher.isWeaponBtnToResend(userCmdBtn)) {
 			return true;
 		}
 		break;
 	case usercmdButton::BUTTON_BALISTA:
-		if (switcher.isWeaponBtnToResend(userCmdBtn)) {
+		if (g_switcher.isWeaponBtnToResend(userCmdBtn)) {
 			return true;
 		}
 		break;
 	case usercmdButton::BUTTON_MINIGUN:
-		if (switcher.isWeaponBtnToResend(userCmdBtn)) {
+		if (g_switcher.isWeaponBtnToResend(userCmdBtn)) {
 			return true;
 		}
 		break;
 	case usercmdButton::BUTTON_BFG_UNMAKER:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_BFG_UNMAKER)) {
-			switcher.disableEnumResend(usercmdButton::BUTTON_BFG_UNMAKER);
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_BFG_UNMAKER)) {
+			g_switcher.disableEnumResend(usercmdButton::BUTTON_BFG_UNMAKER);
 		}
 		break;
 	case usercmdButton::BUTTON_WEAP_9: //! no idea what this weapon is, don't think it exists.
 		break;
 	case usercmdButton::BUTTON_BFG:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_BFG)) {
-			switcher.disableEnumResend(usercmdButton::BUTTON_BFG);
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_BFG)) {
+			g_switcher.disableEnumResend(usercmdButton::BUTTON_BFG);
 		}
 		break;
 	case usercmdButton::BUTTON_WALK:
@@ -680,14 +672,14 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum)
 		break;
 	//! use equipment throws frag nade
 	case usercmdButton::BUTTON_USE_EQUIPMENT:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_USE_EQUIPMENT)) {
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_USE_EQUIPMENT)) {
 			EquipmentManager::useEquipmentItem(equipmentType_t::EQUIPMENT_FRAG_GRENADE);
 			return false;
 		}
 		break;
 	//! switch equipment throws ice nade
 	case usercmdButton::BUTTON_SWITCH_EQUIPMENT:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_SWITCH_EQUIPMENT)) {
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_SWITCH_EQUIPMENT)) {
 			EquipmentManager::useEquipmentItem(equipmentType_t::EQUIPMENT_ICE_BOMB);
 			return false;
 		}
@@ -699,8 +691,8 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum)
 	case usercmdButton::BUTTON_ACTIVATE_ABILITY:
 		break;
 	case usercmdButton::BUTTON_CRUCIBLE_HAMMER:
-		if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_CRUCIBLE_HAMMER)) {
-			switcher.disableEnumResend(usercmdButton::BUTTON_CRUCIBLE_HAMMER);
+		if (g_buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_CRUCIBLE_HAMMER)) {
+			g_switcher.disableEnumResend(usercmdButton::BUTTON_CRUCIBLE_HAMMER);
 		}
 		break;
 	case usercmdButton::BUTTON_OBJECTIVES:
@@ -719,76 +711,25 @@ bool __fastcall isKeyPressedHook(__int64 ptr, __int64 btnEnum)
 	return pisKeyPressed(ptr, btnEnum);
 }
 
-//! this is a BAK of snippet relevant code of previous pisKeyPressed that used the old method of triggering the throw of grenades:
-//! 
-//!	case usercmdButton::BUTTON_DASH:
-//break;
-////! use equipment throws frag nade
-//case usercmdButton::BUTTON_USE_EQUIPMENT:
-//	if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_USE_EQUIPMENT)) {
-//		idPlayer_K::setGrenadeType(GrenadeType::Frag);
-//		//logInfo("BUTTON_USE_EQUIPMENT (Frag) pressed");
-//		return true;
-//	}
-//
-//	//else if ((buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_SWITCH_EQUIPMENT))) {
-//	//	idPlayer_K::setGrenadeType(GrenadeType::Ice);
-//	//	//logInfo("BUTTON_SWITCH_EQUIPMENT (Ice) pressed");
-//	//	return true;
-//	//}
-//
-//	//? putting this instead of above to fix the sound issue if user gives himself ice at the start
-//	else if ((buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_SWITCH_EQUIPMENT))) {
-//		//if (idInventoryCollectionManager::isIceNadeOwned()) {
-//		if (idInventoryCollectionManager::getCriticalIsIceNadeOwned()) {
-//			idPlayer_K::setGrenadeType(GrenadeType::Ice);
-//			//logInfo("BUTTON_SWITCH_EQUIPMENT (Ice) pressed");
-//			return true;
-//		}
-//	}
-//
-//
-//	break;
-//	//! switch equipment throws ice nade
-//case usercmdButton::BUTTON_SWITCH_EQUIPMENT:
-//	//! this works to make sure that nade selection will always stay on frag. 
-//	//if (idPlayer_K::getSelectedGrenadeType() == GrenadeType::Ice && idInventoryCollectionManager::isFragNadeOwned()) {
-//	if (idPlayer_K::getSelectedGrenadeType() == GrenadeType::Ice && idInventoryCollectionManager::getCriticalIsFragNadeOwned()) {
-//		return true;
-//	}
-//
-//	//? this doesn't work to ensure selection will always stay on frag
-//	/*if (buttonCheck.isKeyPressedCustom(ptr, (__int64)usercmdButton::BUTTON_USE_EQUIPMENT)) {
-//		idPlayer_K::setGrenadeType(GrenadeType::Frag);
-//		logInfo("BUTTON_USE_EQUIPMENT pressed");
-//		return true;
-//	}*/
-//
-//	//! this false return works to make sure spamming the ice nade key will not switch back sometimes to frag type. This is the mode where pressing a nade btn will switch to its type if it available.
-//	//return false; 
-//
-//	break;
-//case usercmdButton::BUTTON_QUICK_3:
-
 //! __int64 __fastcall BindsStrSet_35CEC0(__int64 *gui_a1, unsigned __int8 *x_a2)
-typedef __int64 (__fastcall*BindsStrSet)(__int64* a1, unsigned char* a2);
-BindsStrSet                 pBindsStrSet = nullptr;
-BindsStrSet                 pBindsStrSetTarget;
+using BindsStrSet        = __int64(__fastcall*)(__int64* a1, unsigned char* a2);
+BindsStrSet pBindsStrSet = nullptr;
+BindsStrSet pBindsStrSetTarget;
 
 __int64 __fastcall BindsStrSetHook(__int64* a1, unsigned char* a2)
 {
-	if (!modSettings::getIsUseDedicatedNadeKeys()) {
+	if (!ModSettings::getIsUseDedicatedNadeKeys()) {
 		return pBindsStrSet(a1, a2);
 	}
 
 	if (PlayerStateChecker::isInMenus()) {
-		bindLabelChanger.overwriteDynamicBindLabels(a2, lang.getLocalizedBindStringData());
+		g_bindLabelChanger.overwriteDynamicBindLabels(a2, g_lang.getLocalizedBindStringData());
 	}
 	return pBindsStrSet(a1, a2);
 }
 
 //! char __fastcall idHUD_Reticle::SetActiveReticle_1576DD0(__int64 idHUD_Reticle_a1, unsigned int eticleIndex_a2,__int64 idDeclWeaponReticle_a3,unsigned __int8 a4) This is triggered many times per second and even if the hud crosshair is disabled in the game options.
-typedef void (__fastcall*idHUD_Reticle_SetActiveReticle)(idHUD_Reticle*  a1, unsigned int a2, idDeclWeaponReticle* a3,
+using idHUD_Reticle_SetActiveReticle = void(__fastcall*)(idHUD_Reticle*  a1, unsigned int a2, idDeclWeaponReticle* a3,
 														 unsigned __int8 a4);
 idHUD_Reticle_SetActiveReticle pidHUD_Reticle_SetActiveReticle = nullptr;
 idHUD_Reticle_SetActiveReticle pidHUD_Reticle_SetActiveReticleTarget;
@@ -830,7 +771,7 @@ void __fastcall idHUD_Reticle_SetActiveReticleHook(idHUD_Reticle*       idHUD_Re
 
 		//! looks this work now:
 		idSWFSpriteInstanceManager::setHitMarkerState((idHUD_Reticle*)idHUD_Reticle_a1,
-													  modSettings::getIsDisableHitMarker());
+													  ModSettings::getIsDisableHitMarker());
 
 		//logInfo("idHUD_Reticle_SetActiveReticleHook: debug 6");
 
@@ -848,7 +789,7 @@ void __fastcall idHUD_Reticle_SetActiveReticleHook(idHUD_Reticle*       idHUD_Re
 
 			//! if game dot:
 			if (activeReticleStyle == idDeclWeaponReticle_reticleStyle_t::RETICLE_STYLE_DOT) {
-				if (modSettings::getIsUseImguiDotCrosshair()) {
+				if (ModSettings::getIsUseImguiDotCrosshair()) {
 					idSWFWidget_Hud_Reticle_v8->reticleSprite->namedColorId =
 						swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_INVISIBLE;
 				} else {
@@ -874,8 +815,8 @@ void __fastcall idHUD_Reticle_SetActiveReticleHook(idHUD_Reticle*       idHUD_Re
 
 //! this will hopefully let us change the color of ui elements at will
 //! __int64 __fastcall convertIdDeclUIColorToidColor_Mb_4D5630(__int64 idDeclUIColor_a1, __int64 idColor_a2, int y_a3)
-typedef idColor* (__fastcall*convertIdDeclUIColorToidColor)(__int64 idDeclUIColor_a1, idColor* idColor_a2,
-															int     colorId_a3);
+using convertIdDeclUIColorToidColor = idColor* (__fastcall*)(__int64 idDeclUIColor_a1, idColor* idColor_a2,
+															 int     colorId_a3);
 convertIdDeclUIColorToidColor pconvertIdDeclUIColorToidColor = nullptr;
 convertIdDeclUIColorToidColor pconvertIdDeclUIColorToidColorTarget;
 
@@ -896,7 +837,7 @@ idColor* __fastcall convertIdDeclUIColorToidColorHook(__int64 idDeclUIColor_a1, 
 	//? would still need a check for the color above old make namedColor and SWF_CUSTOM_NAMED_COLOR_DEFAULT
 
 	//! here in we check if colorId_a3> is not default  and if it's in bound:
-	if ((colorId_a3 > swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT) && (colorId_a3 <=
+	if ((colorId_a3 > SWF_CUSTOM_NAMED_COLOR_DEFAULT) && (colorId_a3 <=
 		swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_INVISIBLE)) {
 		//logInfo("convertIdDeclUIColorToidColorHook: colorId_a3: %d", colorId_a3);
 
@@ -909,9 +850,9 @@ idColor* __fastcall convertIdDeclUIColorToidColorHook(__int64 idDeclUIColor_a1, 
 }
 
 //! void __fastcall setSpriteInstanceColor_Smth_52F290(idSWFSpriteInstance* idSWFSpriteInstance_a1,unsigned int namedColorId_a2) 
-typedef void (__fastcall*setSpriteInstanceColor)(__int64 idSWFSpriteInstance_a1, unsigned int namedColorId_a2);
-setSpriteInstanceColor   psetSpriteInstanceColor       = nullptr;
-setSpriteInstanceColor   psetSpriteInstanceColorTarget = nullptr;
+using setSpriteInstanceColor = void(__fastcall*)(__int64 idSWFSpriteInstance_a1, unsigned int namedColorId_a2);
+setSpriteInstanceColor psetSpriteInstanceColor = nullptr;
+setSpriteInstanceColor psetSpriteInstanceColorTarget = nullptr;
 
 void __fastcall setSpriteInstanceColorHook(__int64 idSWFSpriteInstance_a1, unsigned int namedColorId_a2)
 {
@@ -1016,7 +957,7 @@ void __fastcall setSpriteInstanceColorHook(__int64 idSWFSpriteInstance_a1, unsig
 //! this func, 4CAD00 is triggered 4 times per image rendered and will call hud_string_Print_Smth_4CB340 twice each call in theory we can print 2 strings each call or 1 string and many icons.
 //! However i managed to make it render 8 strings in one call with no apparent perf loss but let's be conservative. 
 //! So far it's working great to show text and strings with not apparent perf loss. Also it fades in and out automatically with menus which is nice. it needs debug_hud_string cmd to be active for it to work though.
-typedef __int64 (__fastcall*printOutlinedStringMB_func)(
+using printOutlinedStringMB_func = __int64(__fastcall*)(
 	__int64 idRenderModelGui_a1PtrToPtr,
 	int     a2,
 	__int64 a3,
@@ -1149,9 +1090,9 @@ __int64 __fastcall printOutlinedStringMB_hook(
 }
 
 //! __int64 idLib::Printf_35F240(const char *a1, ...)
-typedef void (__cdecl*IdLib_Printf)(const char* a1, ...);
-IdLib_Printf          pIdLib_Printf = nullptr;
-IdLib_Printf          pIdLib_PrintfTarget;
+using IdLib_Printf         = void(__cdecl*)(const char* a1, ...);
+IdLib_Printf pIdLib_Printf = nullptr;
+IdLib_Printf pIdLib_PrintfTarget;
 
 void __cdecl IdLib_PrintfHook(const char* format, ...)
 {
@@ -1163,8 +1104,8 @@ void __cdecl IdLib_PrintfHook(const char* format, ...)
 
 	va_end(args); // Call va_end after using va_list
 
-	globalVariableString = std::string(buffer);
-	logInfo("id console: %s", globalVariableString.c_str());
+	g_globalVariableString = std::string(buffer);
+	logInfo("id console: %s", g_globalVariableString.c_str());
 
 	return pIdLib_Printf(buffer);
 	// Call the original function
@@ -1172,9 +1113,9 @@ void __cdecl IdLib_PrintfHook(const char* format, ...)
 }
 
 //! __int64 __fastcall idHud_PerspectiveSmth_1549D80(__int64 idHud_X_a1)
-typedef __int64 (__fastcall*idHud_PerspectiveSmth_t)(idHUDElement* idHUDElementPtr_a1);
-idHud_PerspectiveSmth_t     p_idHud_PerspectiveSmth_t        = nullptr;
-idHud_PerspectiveSmth_t     p_idHud_PerspectiveSmth_t_Target = nullptr;
+using idHud_PerspectiveSmth_t                            = __int64(__fastcall*)(idHUDElement* idHUDElementPtr_a1);
+idHud_PerspectiveSmth_t p_idHud_PerspectiveSmth_t        = nullptr;
+idHud_PerspectiveSmth_t p_idHud_PerspectiveSmth_t_Target = nullptr;
 
 __int64 __fastcall idHud_PerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_a1)
 {
@@ -1245,7 +1186,7 @@ __int64 __fastcall idHud_PerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_a1
 }
 
 //! __int64 __fastcall hud_drawPerspectiveSmth_1549A70(__int64 idHUDElementPtr_a1, __int64 a2, __int64 a3, __int64 a4)
-typedef __int64 (__fastcall*hud_drawPerspectiveSmth_t)(idHUDElement* idHUDElementPtr_a1, __int64 a2, __int64 a3,
+using hud_drawPerspectiveSmth_t = __int64(__fastcall*)(idHUDElement* idHUDElementPtr_a1, __int64 a2, __int64 a3,
 													   __int64       a4);
 hud_drawPerspectiveSmth_t p_hud_drawPerspectiveSmth_t        = nullptr;
 hud_drawPerspectiveSmth_t p_hud_drawPerspectiveSmth_t_Target = nullptr;
@@ -2421,9 +2362,9 @@ __int64 __fastcall hud_drawPerspectiveSmth_t_Hook(idHUDElement* idHUDElementPtr_
 //? not using this anymore cause it's not trigger if user does not use perf metrics.
 //! this func is triggered when game is about to print performance metrics is it's enabled.
 //! char __fastcall GetPerfMetricsStr_Smth_48FE40(__int64 idConsoleLocal, __int64 x_a2, float *y_a3)
-typedef char (__fastcall*GetPerfMetricsStr)(__int64 idConsoleLocal, __int64 a2, float* a3);
-GetPerfMetricsStr        pGetPerfMetricsStr = nullptr;
-GetPerfMetricsStr        pGetPerfMetricsStrTarget;
+using GetPerfMetricsStr              = char(__fastcall*)(__int64 idConsoleLocal, __int64 a2, float* a3);
+GetPerfMetricsStr pGetPerfMetricsStr = nullptr;
+GetPerfMetricsStr pGetPerfMetricsStrTarget;
 
 char __fastcall GetPerfMetricsStrHook(__int64 idConsoleLocal, __int64 a2, float* a3)
 {

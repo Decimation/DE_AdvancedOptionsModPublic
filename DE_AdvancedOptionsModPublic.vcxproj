@@ -246,7 +246,7 @@
     <ClInclude Include="Json\nlohmann\json.hpp" />
     <ClInclude Include="Json\nlohmann\json_fwd.hpp" />
     <ClInclude Include="K_Utils\K_Utils.h" />
-    <ClInclude Include="Config\ModSettings\modSettings.h" />
+    <ClInclude Include="Config\ModSettings\ModSettings.h" />
     <ClInclude Include="TypeGenerator\ClassDef.h" />
     <ClInclude Include="TypeGenerator\ClassDefContainer.h" />
     <ClInclude Include="TypeGenerator\EnumsDefFileGenerator.h" />
@@ -407,7 +407,7 @@
     <ClCompile Include="ImGui\utils\utils.cpp" />
     <ClCompile Include="K_Utils\K_Utils.cpp" />
     <ClCompile Include="MinHookManager\MinHookManager.cpp" />
-    <ClCompile Include="Config\ModSettings\modSettings.cpp" />
+    <ClCompile Include="Config\ModSettings\ModSettings.cpp" />
     <ClCompile Include="Tools\Scanner.cpp" />
     <ClCompile Include="DE\MemHelper.cpp" />
     <ClCompile Include="Tools\Voice.cpp" />
@@ -435,6 +435,7 @@
     <ClCompile Include="DE\WinFocusManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Comments.txt" />
     <Text Include="Gpt\MinHookTemplate.txt" />
   </ItemGroup>
   <ItemGroup>

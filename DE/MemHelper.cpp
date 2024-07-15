@@ -1,14 +1,11 @@
 #include "MemHelper.h"
 //#include "Config.h"
 
-
-
-
 bool MemHelper::isGameFileNameValid()
 {
 	std::string exeName = GetGameExeNameToLower();
-	if (exeName != doomEternalExeNameToLower) {
-		logErr("MemHelper::isGameFileNameValid(): wrong module name, was expecting %s got: %s.", doomEternalExeNameToLower.c_str(), exeName.c_str());
+	if (exeName != DE_EXE_NAME_LOWER) {
+		logErr("MemHelper::isGameFileNameValid(): wrong module name, was expecting %s got: %s.", DE_EXE_NAME_LOWER.c_str(), exeName.c_str());
 		return false;
 	}
 	
@@ -34,9 +31,6 @@ std::string MemHelper::GetGameExeNameToLower()
 	std::transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
 	return fileName;	
 }
-
-
-
 
 /// <summary>
 /// this is a custom version of isBadReadPtr which "should" be accurate even though this method is intrasectly not perfect.
@@ -89,7 +83,6 @@ uintptr_t MemHelper::getAddr(uintptr_t offset)
 
 	return (getModuleBaseAddr() + offset);
 }
-
 
 bool MemHelper::overwriteInstruction(std::string refStr, const uintptr_t instructionAddr, std::vector<unsigned char> newInstructionVec)
 {
@@ -162,20 +155,13 @@ bool MemHelper::overwriteInstruction(std::string refStr, const uintptr_t instruc
 	return false;
 }
 
-
-
 bool MemHelper::isSameByteArrays(const BYTE* array1, const BYTE* array2, size_t length)
 {
 	logDebug("isSameByteArrays called ");
 	return std::memcmp(array1, array2, length) == 0;
 }
 
-
-
 //! 6/9/23 adding this to figure out addresses in memory which hopefully will not break if an update is released for Doom Eternal in the future. We had to add this after idSoftware removed Denuvo.
-
-
-
 
 uintptr_t MemHelper::FindPtrAddress(uintptr_t addr, std::vector<unsigned int>& offsets)
 {
@@ -258,8 +244,6 @@ int MemHelper::FindHardcodedOffset(uintptr_t instructionStartAddress, const int 
 
 }
 
-
-
 // Define the pattern_to_byte lambda outside of PatternScan
 static auto pattern_to_byte = [](const char* pattern)
 	{
@@ -331,11 +315,11 @@ DWORD64 MemHelper::ModulePatternScan(std::string scanFriendlyName, const char* s
 	logDebug("ModulePatternScan");
 
 	MODULEINFO mInfo;
-	HMODULE hModule = GetModuleHandleA(doomEternalExeName.c_str());
+	HMODULE hModule = GetModuleHandleA(DE_EXE_NAME.c_str());
 
 	if (hModule == nullptr)
 	{
-		logErr("GetModuleHandleA failed to find the module: %s returning", doomEternalExeName.c_str());
+		logErr("GetModuleHandleA failed to find the module: %s returning", DE_EXE_NAME.c_str());
 		return 0; // Module not found, return an appropriate value (0 in this case).
 	}
 
@@ -425,9 +409,4 @@ DWORD64 MemHelper::ModulePatternScan(std::string scanFriendlyName, const char* s
 //	logErr("!!! PatternScan failed !!!");
 //	return 0;
 //}
-
-
-
-
-
 

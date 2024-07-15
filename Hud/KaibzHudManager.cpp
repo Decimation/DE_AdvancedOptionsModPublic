@@ -1,6 +1,5 @@
 #include "KaibzHudManager.h"
 
-
 //? i don't get it this func used to crash as soon as we went from menu to the game and now it doesn't crash wtf??!!!
 std::string KaibzHudManager::getHudValueAsStr(float valueF, float maxValue) {
 	int resultInt = 0;	
@@ -28,7 +27,6 @@ int KaibzHudManager::getIntVal(float valueF, float maxValue){
 	return resultInt;
 }
 
-
 //std::string KaibzHudManager::getHudValueAsStr(float valueF, float maxValue) {
 //	int resultInt = 0;
 //
@@ -46,46 +44,43 @@ int KaibzHudManager::getIntVal(float valueF, float maxValue){
 //	//return resultStr;
 //}
 
-
 ImU32 KaibzHudManager::getCustomCrosshairHealthAsImU32Color(float currentHealthValue, float MaxHealthValue, float currentArmorValue, float MaxArmorValue) {
 
 	if (MaxArmorValue <= 0 || MaxHealthValue <= 0) {
 		// Handle error or return a default color
-		return modSettings::getKaibzHudDisabledColorImU32();
+		return ModSettings::getKaibzHudDisabledColorImU32();
 	}
 
 	float armorPercentage = (currentArmorValue) / MaxArmorValue * 100.0f;
 	float healthPercentage = (currentHealthValue) / MaxHealthValue * 100.0f;
 
 	if (armorPercentage == 100.0f) {
-		return modSettings::getKaibzHudArmorMaxColorImU32();
+		return ModSettings::getKaibzHudArmorMaxColorImU32();
 	}
 	else if (armorPercentage > 0.0f) {
-		return modSettings::getKaibzHudArmorColorImU32();
+		return ModSettings::getKaibzHudArmorColorImU32();
 	}
 
 	else if (healthPercentage <= 0.0f) {
-		return modSettings::getKaibzHudCriticalColorImU32();
+		return ModSettings::getKaibzHudCriticalColorImU32();
 	}
 
 	else if (healthPercentage <= 25.0f) {
-		return modSettings::getKaibzHudWarningColorImU32();
+		return ModSettings::getKaibzHudWarningColorImU32();
 	}
 	else if (healthPercentage <= 50.0f) {
-		return modSettings::getKaibzHudCautionColorImU32();
+		return ModSettings::getKaibzHudCautionColorImU32();
 	}
 
 	else if (healthPercentage <= 100.0f) {
-		return modSettings::getKaibzHudHealthColorImU32();
+		return ModSettings::getKaibzHudHealthColorImU32();
 	}
 
 	else  {
-		return modSettings::getKaibzHudHealthMaxColorImU32();
+		return ModSettings::getKaibzHudHealthMaxColorImU32();
 	}
 
 }
-
-
 
 KaibzHudColor_t KaibzHudManager::get3StagesCorlor(float currentValue, float MaxValue, KaibzHudColor_t normalColor) {
 	if (MaxValue <= 0) {
@@ -105,8 +100,6 @@ KaibzHudColor_t KaibzHudManager::get3StagesCorlor(float currentValue, float MaxV
 		return normalColor;
 	}
 }
-
-
 
 //! goes from 0 to 0.999999 when on cooldown and 1.0 when not on cooldown
 float KaibzHudManager::getIceNadeCooldownProgress() {
@@ -131,7 +124,6 @@ float KaibzHudManager::getIceNadeCooldownProgress() {
 	return cooldownProgress;
 }
 
-
 //float KaibzHudManager::getIceNadeCooldownProgress() {
 //	bool isIceOnCooldown = (idPlayer_K::getIceNadeCount() == 0);
 //	if (isIceOnCooldown) return 1.0f; // Return 1 when on cooldown
@@ -153,9 +145,7 @@ float KaibzHudManager::getIceNadeCooldownProgress() {
 //	return cooldownProgress;
 //}
 
-
 KaibzHudData KaibzHudManager::getData() {
-
 
 	static idPlayer* lastIdPlayerPtr = nullptr;
 	static int lastBloodPunchCount = 0;
@@ -174,7 +164,6 @@ KaibzHudData KaibzHudManager::getData() {
 	idHUD_HealthInfo* idHUD_HealthInfoPtr = (idHUD_HealthInfo*)idHudManager::getIdHud_Element(HudElementName::HealthInfo);
 	idHUD_BloodPunch* idHUD_BloodPunchPtr = (idHUD_BloodPunch*)idHudManager::getIdHud_Element(HudElementName::BloodPunch);
 
-
 	if (idHUD_ExtraLivesPtr) {
 
 		if (idHUD_ExtraLivesPtr->currentExtraLives || idHUD_ExtraLivesPtr->infiniteExtraLives) {
@@ -182,7 +171,6 @@ KaibzHudData KaibzHudManager::getData() {
 		}	
 		//! it's initialized as disabled.
 	}
-
 
 	if (idHUD_HealthInfoPtr) {
 
@@ -195,7 +183,6 @@ KaibzHudData KaibzHudManager::getData() {
 		/*std::string bpInfoStr = "bpInfoStr: is Visble: ";
 		bpInfoStr += K_Utils::getBoolAsStr(idHUD_HealthInfoPtr->bloodPunchUnlockedAndVisible);*/	
 	}
-
 
 	if (idHUD_LowWarningPtr) {
 
@@ -215,8 +202,6 @@ KaibzHudData KaibzHudManager::getData() {
 		data.health = KaibzHudManager::getIntVal(idHUD_LowWarningPtr->healthCurrent, idHUD_LowWarningPtr->healthMax);
 		data.healthStr = std::to_string(data.health);
 
-
-
 		if (idHUD_LowWarningPtr->armorCurrent >= idHUD_LowWarningPtr->armorMax) {
 			data.armorColor = KaibzHudColor_t::armorMaxColor;
 		}
@@ -227,9 +212,6 @@ KaibzHudData KaibzHudManager::getData() {
 		data.armor = KaibzHudManager::getIntVal(idHUD_LowWarningPtr->armorCurrent, idHUD_LowWarningPtr->armorMax);
 		data.armorStr = std::to_string(data.armor);
 
-
-
-		
 		if (idHUD_LowWarningPtr->currentAmmoCount > idHUD_LowWarningPtr->lowAmmoThreshold || idHUD_LowWarningPtr->infinite) {
 			data.ammoColor = KaibzHudColor_t::ammoColor;
 		}		
@@ -249,7 +231,6 @@ KaibzHudData KaibzHudManager::getData() {
 		data.crosshairHealthColorImU32 = getCustomCrosshairHealthAsImU32Color(idHUD_LowWarningPtr->healthCurrent, idHUD_LowWarningPtr->healthMax, idHUD_LowWarningPtr->armorCurrent, idHUD_LowWarningPtr->armorMax);
 	}
 
-
 	if (idHud_WeaponInfoPtr) {
 
 		data.isCrucibleShownOnHud = idHud_WeaponInfoPtr->crucibleShown;
@@ -264,7 +245,6 @@ KaibzHudData KaibzHudManager::getData() {
 			data.hammerColor = KaibzHudColor_t::hammerCrucibleColor;
 		}		
 	}
-
 
 	if (idHUD_AbilityIndicatorsPtr) {
 
@@ -281,12 +261,10 @@ KaibzHudData KaibzHudManager::getData() {
 			data.bloodPunchColor = KaibzHudColor_t::bloodPunch1Color;
 		}
 
-
 		if ((int)idHUD_AbilityIndicatorsPtr->flameBelchCharge >= 1) {
 			data.flamebelchColor = KaibzHudColor_t::flameBelchColor;
 		}
 
-		
 		if ((int)idHUD_AbilityIndicatorsPtr->chainsawCharge >= 3) {
 			data.fuelColor = KaibzHudColor_t::fuel3Color;
 		}
@@ -297,7 +275,6 @@ KaibzHudData KaibzHudManager::getData() {
 			data.fuelColor = KaibzHudColor_t::fuel1Color;
 		}
 
-
 		data.fragCharges = (int)idHUD_AbilityIndicatorsPtr->grenadeCharge;
 
 		if (data.fragCharges >= 2) {
@@ -307,7 +284,6 @@ KaibzHudData KaibzHudManager::getData() {
 			data.fragColor = KaibzHudColor_t::frag1Color;
 		}
 
-		
 		data.iceNadeCooldownProgress = KaibzHudManager::getIceNadeCooldownProgress();
 
 		data.iceCharges = (int)idHUD_AbilityIndicatorsPtr->iceGrenadeCharge;
@@ -318,7 +294,6 @@ KaibzHudData KaibzHudManager::getData() {
 		else if (data.iceCharges >= 1) {
 			data.iceColor = KaibzHudColor_t::iceColor;
 		}
-
 
 		//! if player ptr has changed we should reset items/abilities count
 		idPlayer* idPlayerPtr = idMapInstanceLocalManager::getIdPlayer();
@@ -335,27 +310,25 @@ KaibzHudData KaibzHudManager::getData() {
 
 		//! prioritization based on what could be the most important for user:
 
-		
 		if (data.hammerCharges != lastHammerChargeCount) {			
 
-			if (data.hammerCharges > lastHammerChargeCount && modSettings::getFlag(KaibzHudFlag::FlashHudForHammerCount)) {
+			if (data.hammerCharges > lastHammerChargeCount && ModSettings::getFlag(KaibzHudFlag::FlashHudForHammerCount)) {
 				data.isHudFlash = true;
-				data.hudFlashColor = modSettings::getKaibzHudHammerCrucibleColorImU32();
+				data.hudFlashColor = ModSettings::getKaibzHudHammerCrucibleColorImU32();
 			}	
 
 			lastHammerChargeCount = data.hammerCharges;
 		}
 
 		else if (data.iceCharges != lastIceCount) {			
-			
 
-			if (data.iceCharges > lastIceCount && modSettings::getFlag(KaibzHudFlag::FlashHudForIceCount)) {
+			if (data.iceCharges > lastIceCount && ModSettings::getFlag(KaibzHudFlag::FlashHudForIceCount)) {
 				if(isFirtTimeIceFlash) { //! will prevent the flash when player spawns
 					isFirtTimeIceFlash = false;
 				}
 				else {
 					data.isHudFlash = true;
-					data.hudFlashColor = modSettings::getKaibzHudIceColorImU32();
+					data.hudFlashColor = ModSettings::getKaibzHudIceColorImU32();
 				}				
 			}
 
@@ -364,9 +337,9 @@ KaibzHudData KaibzHudManager::getData() {
 
 		else if (data.fragCharges != lastFragCount) {
 
-			if (data.fragCharges > lastFragCount && modSettings::getFlag(KaibzHudFlag::FlashHudForFragCount)) {
+			if (data.fragCharges > lastFragCount && ModSettings::getFlag(KaibzHudFlag::FlashHudForFragCount)) {
 				data.isHudFlash = true;
-				data.hudFlashColor = modSettings::getKaibzHudFrag1ColorImU32();
+				data.hudFlashColor = ModSettings::getKaibzHudFrag1ColorImU32();
 			}		
 
 			lastFragCount = data.fragCharges;
@@ -374,9 +347,9 @@ KaibzHudData KaibzHudManager::getData() {
 
 		else if (data.bloodPunchCount != lastBloodPunchCount) {
 
-			if (data.bloodPunchCount > lastBloodPunchCount && modSettings::getFlag(KaibzHudFlag::FlashHudForBloodPunchCount)) {
+			if (data.bloodPunchCount > lastBloodPunchCount && ModSettings::getFlag(KaibzHudFlag::FlashHudForBloodPunchCount)) {
 				data.isHudFlash = true;
-				data.hudFlashColor = modSettings::getKaibzHudBloodPunch1ColorImU32();
+				data.hudFlashColor = ModSettings::getKaibzHudBloodPunch1ColorImU32();
 			}		
 
 			lastBloodPunchCount = data.bloodPunchCount;
@@ -384,11 +357,9 @@ KaibzHudData KaibzHudManager::getData() {
 
 	}
 
-
 	return data;
 
 }
-
 
 std::string KaibzHudManager::getDdgStrForImgui()
 {
@@ -401,7 +372,6 @@ std::string KaibzHudManager::getDdgStrForImgui()
 	idHUD_HealthInfo* idHUD_HealthInfoPtr = (idHUD_HealthInfo*)idHudManager::getIdHud_Element(HudElementName::HealthInfo);
 	idHUD_BloodPunch* idHUD_BloodPunchPtr = (idHUD_BloodPunch*)idHudManager::getIdHud_Element(HudElementName::BloodPunch);
 
-
 	std::string ptrsInfoStr;
 	char buffer[512]; // Adjust the size as needed
 	// Format the string using std::sprintf
@@ -412,7 +382,6 @@ std::string KaibzHudManager::getDdgStrForImgui()
 	
 	resultStr += "\t" + ptrsInfoStr + "\n";
 
-
 	if (idHUD_BloodPunchPtr) {
 		std::string idHudbloodPunchInfoStr = "idHudbloodPunchInfoStr: Max: ";
 		idHudbloodPunchInfoStr += std::to_string(idHUD_BloodPunchPtr->maxCharge);
@@ -421,7 +390,6 @@ std::string KaibzHudManager::getDdgStrForImgui()
 
 		resultStr += "\t" + idHudbloodPunchInfoStr + "\n";
 	}
-
 
 	if (idHUD_LowWarningPtr) {
 		
@@ -452,7 +420,6 @@ std::string KaibzHudManager::getDdgStrForImgui()
 
 		std::string otherStr = "other data: is Demon: ";
 		otherStr += std::to_string(idHUD_LowWarningPtr->isDemonPlayer);
-
 
 		resultStr += "\t" + healthInfoStr + "\n";
 		resultStr += "\t" + armorInfoStr + "\n";
@@ -530,7 +497,6 @@ std::string KaibzHudManager::getDdgStrForImgui()
 		chainsawInfoStr += " charge: ";
 		chainsawInfoStr += std::to_string(idHUD_AbilityIndicatorsPtr->chainsawCharge);
 
-
 		std::string fragNadeInfoStr = "frag: showing: ";
 		fragNadeInfoStr += K_Utils::getBoolAsStr(idHUD_AbilityIndicatorsPtr->grenadeShowing);
 		fragNadeInfoStr += " H_PipShow: ";
@@ -544,7 +510,6 @@ std::string KaibzHudManager::getDdgStrForImgui()
 		fragNadeInfoStr += " charge: ";
 		fragNadeInfoStr += std::to_string(idHUD_AbilityIndicatorsPtr->grenadeCharge);
 
-
 		std::string iceNadeInfoStr = "Ice: Showing:";
 		iceNadeInfoStr += K_Utils::getBoolAsStr(idHUD_AbilityIndicatorsPtr->iceGrenadeShowing);
 		iceNadeInfoStr += " PipShow: ";
@@ -553,7 +518,6 @@ std::string KaibzHudManager::getDdgStrForImgui()
 		iceNadeInfoStr += K_Utils::getBoolAsStr(idHUD_AbilityIndicatorsPtr->icegrenadeHollowPipShowing);
 		iceNadeInfoStr += " charge: ";
 		iceNadeInfoStr += std::to_string(idHUD_AbilityIndicatorsPtr->iceGrenadeCharge);
-
 
 		resultStr += "\t" + bloodPunchInfoStr + "\n";
 		resultStr += "\t" + hammerInfoStr + "\n";
@@ -577,13 +541,11 @@ std::string KaibzHudManager::getDdgStrForImgui()
 
 }
 
-
 KaibzHudData KaibzHudManager::getTestData()
 {
 	static uint64_t lastDataChangeMs = 0;
 	static int dummyValue = 0;
 	static KaibzHudData data;	
-
 
 	if (K_Utils::EpochMillis() - lastDataChangeMs > 100) {
 		dummyValue++;		
@@ -597,7 +559,6 @@ KaibzHudData KaibzHudManager::getTestData()
 
 		lastDataChangeMs = K_Utils::EpochMillis();
 	}
-
 
 	return data;
 }

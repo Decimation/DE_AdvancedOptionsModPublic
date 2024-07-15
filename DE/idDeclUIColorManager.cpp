@@ -44,9 +44,9 @@ void idDeclUIColorManager::setKaibzHudColorsToGameColorProfile() {
         return;
     }
 
-    modSettings::setKaibzHudCautionColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiCaution.color));
+    ModSettings::setKaibzHudCautionColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiCaution.color));
 
-    modSettings::setKaibzHudWarningColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiWarning.color));    
+    ModSettings::setKaibzHudWarningColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiWarning.color));    
     //! uiCaution will be yellow for the default profile so not good
     //modSettings::setKaibzHudCriticalColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiCaution.color));    
     //! uiFailure will also be a different tint of orange in default profile so this is not good
@@ -60,40 +60,40 @@ void idDeclUIColorManager::setKaibzHudColorsToGameColorProfile() {
     //! pinkish
     //modSettings::setKaibzHudCriticalColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->weaponHammerFull.color));
     //! this seems to work fine
-    modSettings::setKaibzHudCriticalColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudBossHealthBase.color));
+    ModSettings::setKaibzHudCriticalColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudBossHealthBase.color));
 
     //? none of the extralives field do have a color corresponding to the game icon, weird. hudText seems to work well though.
-    modSettings::setKaibzHudExtraLivesColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudText.color));
+    ModSettings::setKaibzHudExtraLivesColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudText.color));
 
-    modSettings::setKaibzHudBloodPunch1ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiWarning.color));
+    ModSettings::setKaibzHudBloodPunch1ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiWarning.color));
     //modSettings::setKaibzHudBloodPunch2ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiCaution.color));
-    modSettings::setKaibzHudBloodPunch2ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudBossHealthBase.color));
-    modSettings::setKaibzHudBloodPunchDesperateColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->supportRuneGlow.color));
+    ModSettings::setKaibzHudBloodPunch2ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudBossHealthBase.color));
+    ModSettings::setKaibzHudBloodPunchDesperateColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->supportRuneGlow.color));
 
-    modSettings::modSettings::setKaibzHudHealthMaxColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiHealth.color));
-    modSettings::setKaibzHudHealthColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiHealth.color));
+    ModSettings::ModSettings::setKaibzHudHealthMaxColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiHealth.color));
+    ModSettings::setKaibzHudHealthColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiHealth.color));
 
-    modSettings::setKaibzHudArmorMaxColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiArmor.color));
-    modSettings::setKaibzHudArmorColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiArmor.color));
+    ModSettings::setKaibzHudArmorMaxColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiArmor.color));
+    ModSettings::setKaibzHudArmorColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiArmor.color));
 
-    modSettings::setKaibzHudRadsuitColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiRadiation.color));
-    modSettings::setKaibzHudOxygenColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiOxygen.color));
+    ModSettings::setKaibzHudRadsuitColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiRadiation.color));
+    ModSettings::setKaibzHudOxygenColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiOxygen.color));
 
-    modSettings::setKaibzHudAmmoColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudHeader.color));
+    ModSettings::setKaibzHudAmmoColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudHeader.color));
 
-    modSettings::setKaibzHudHammerCrucibleColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentHammer.color));
+    ModSettings::setKaibzHudHammerCrucibleColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentHammer.color));
 
-    modSettings::setKaibzHudFlameBelchColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentFlameBelch.color));
+    ModSettings::setKaibzHudFlameBelchColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentFlameBelch.color));
 
-    modSettings::setKaibzHudFuel1ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentChainsaw.color));
+    ModSettings::setKaibzHudFuel1ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentChainsaw.color));
     //modSettings::setKaibzHudFuel2ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiWarning.color));
-    modSettings::setKaibzHudFuel2ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiWarning.color));
-    modSettings::setKaibzHudFuel3ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudBossHealthBase.color));
+    ModSettings::setKaibzHudFuel2ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->uiWarning.color));
+    ModSettings::setKaibzHudFuel3ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudBossHealthBase.color));
 
-    modSettings::setKaibzHudFrag1ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentFragIcon.color));
-    modSettings::setKaibzHudFrag2ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentFrag.color));
+    ModSettings::setKaibzHudFrag1ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentFragIcon.color));
+    ModSettings::setKaibzHudFrag2ColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentFrag.color));
 
-    modSettings::setKaibzHudIceColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentCyro.color));
+    ModSettings::setKaibzHudIceColorImU32(ConvertIdColorToU32(currentIdDeclUIColorPtr->hudEquipmentCyro.color));
 }
 
 ImU32 idDeclUIColorManager::getCurGameProfileColorElemImU32(KaibzHudColor_t color_k) {

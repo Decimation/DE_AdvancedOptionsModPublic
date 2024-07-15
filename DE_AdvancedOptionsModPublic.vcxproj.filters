@@ -111,7 +111,7 @@
     <ClInclude Include="DE\ImGuiManager.h" />
     <ClInclude Include="DE\idLibManager.h" />
     <ClInclude Include="K_Utils\K_Utils.h" />
-    <ClInclude Include="Config\ModSettings\modSettings.h" />
+    <ClInclude Include="Config\ModSettings\ModSettings.h" />
     <ClInclude Include="Json\nlohmann\json.hpp" />
     <ClInclude Include="Json\nlohmann\json_fwd.hpp" />
     <ClInclude Include="Tools\HashManager.h" />
@@ -178,7 +178,7 @@
     <ClCompile Include="DE\TypeInfoManager.cpp" />
     <ClCompile Include="DE\idLibManager.cpp" />
     <ClCompile Include="K_Utils\K_Utils.cpp" />
-    <ClCompile Include="Config\ModSettings\modSettings.cpp" />
+    <ClCompile Include="Config\ModSettings\ModSettings.cpp" />
     <ClCompile Include="Tools\Scanner.cpp" />
     <ClCompile Include="MinHookManager\MinHookManager.cpp" />
     <ClCompile Include="DE\BindLabelChanger.cpp" />
@@ -249,6 +249,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Gpt\MinHookTemplate.txt" />
+    <Text Include="Comments.txt" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="MinHookLibX64\libMinHook.x64.lib" />

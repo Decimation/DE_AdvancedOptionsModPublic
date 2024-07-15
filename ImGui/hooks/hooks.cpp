@@ -51,9 +51,8 @@ static WNDPROC oWndProc;
 static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (uMsg == WM_KEYDOWN ) {                    
 
-
         //! atm we only allow acces to mod settings if user is in main menu or the pause menu 'pause' and only escape key can get user out of mod menu.
-        if (wParam == modSettings::getToggleModSettingsVkCode()) {
+        if (wParam == ModSettings::getToggleModSettingsVkCode()) {
             if (PlayerStateChecker::isInMainMenu() && !Menu::bShowMenu) {
                 Menu::bShowMenu = true;
                 return 0;
@@ -69,7 +68,6 @@ static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                 return 0;
             }
         }      
-      
 
         else if (wParam == VK_ESCAPE) {
             if (Menu::bShowMenu) {
@@ -79,10 +77,9 @@ static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
             }
         }  
 
-
         else if (Config::get() != ModConfig::nexusRelease) {
 
-            if (wParam == modSettings::getReloadImguiHooksVk_Key()) {
+            if (wParam == ModSettings::getReloadImguiHooksVk_Key()) {
                 logWarn("WndProc: ReinitializeGraphicalHooks called ");
                 HANDLE hHandle = CreateThread(NULL, 0, ReinitializeGraphicalHooks, NULL, 0, NULL);
                 TTS::addToQueue(L"U.I Hook Restart");
@@ -91,9 +88,7 @@ static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                 return 0;
             }
         }
-       
 
-       
         /*else if (wParam == VK_END) {
             H::bShuttingDown = true;
             U::UnloadDLL( );
@@ -115,8 +110,6 @@ static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
     ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
-   
-
 
     if (Menu::bShowMenu)
     {      
@@ -130,7 +123,6 @@ static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         io.MouseDrawCursor = false;
     }
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
-   
 
     //LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     //if (Menu::bShowMenu) {
@@ -140,7 +132,6 @@ static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     //    // Window may not maximize from taskbar because 'H::bShowDemoWindow' is set to true by default. ('hooks.hpp')
     //    //
     //    // return ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam) == 0;
-
 
     //   
     //    
@@ -154,7 +145,6 @@ static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 
     //    }
     //    return isInWindow;*/
-
 
     //   /* ImGuiIO& io = ImGui::GetIO();
     //    io.MouseDrawCursor = true;*/
@@ -175,28 +165,20 @@ static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     //    //    io.MouseDrawCursor = false;
     //    //}
 
-
-
     //    //ver 1:
     //    ImGuiIO& io = ImGui::GetIO();
     //    ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam); //block input to game while menu is visible
     //    io.MouseDrawCursor = true; //Draw Mouse Cursor
 
-
     //    //? this will make the game crash because g.CurrentWindow will be nullptr
     //    //ImGuiDebug::IsMouseWithinImGuiWindow();
 
-
-
     //    return true;
-
 
     //}
 
     //return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
-
-
 
 //? this is WndProc without with (or without) our keybinds tweaks
 //static LRESULT WINAPI WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {

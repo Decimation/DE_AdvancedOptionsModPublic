@@ -14,7 +14,7 @@
 }
 
  bool Patcher::patchIfNeeded(std::string patchNameStr, uintptr_t addr, const std::vector<unsigned char>& newInstructionVec) {
-	std::string vecString = "";
+	std::string vecString;
 
 	if (MemHelper::isBadReadPtr((void*)addr)) {
 		logErr("patchIfNeeded: can not patch %s cause addr is bad ptr: %p", patchNameStr.c_str(), (void*)addr);

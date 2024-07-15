@@ -1,8 +1,5 @@
 #include "idInventoryManager.h"
 
-
-
-
 std::string idInventoryCollectionManager::getDebugStr()
 {
     std::string resultStr = "idInventoryCollectionManager: Debug:\n";
@@ -16,11 +13,9 @@ std::string idInventoryCollectionManager::getDebugStr()
         resultStr += "\t Is GameHook Frag Nade Owned:" + std::to_string(m_isFragNadeOwned_GameHook) + "\n";
         resultStr += "\t Is GameHook Ice Nade Owned:" + std::to_string(m_isIceNadeOwned_GameHook) + "\n";
 
-
         resultStr += "\t Is Frag Nade Owned:" + std::to_string(isFragNadeOwned()) + "\n";
         resultStr += "\t Is Ice Nade Owned:" + std::to_string(isIceNadeOwned()) + "\n";
-        resultStr += "\t IsDashAbilityOwned:" + std::to_string(isDashAbilityOwned()) +  " IsDisabledDashBlur from settings: "  + std::to_string(modSettings::getIsDisabledDashBlurEffect()) + "\n";
-
+        resultStr += "\t IsDashAbilityOwned:" + std::to_string(isDashAbilityOwned()) +  " IsDisabledDashBlur from settings: "  + std::to_string(ModSettings::getIsDisabledDashBlurEffect()) + "\n";
 
         resultStr += getCustomInventoryStr();
 
@@ -32,7 +27,6 @@ std::string idInventoryCollectionManager::getDebugStr()
     return resultStr;
 }
 
-
 //bool idInventoryCollectionManager::acquirreGetInventoryItemFuncAddr(__int64 getInventoryItemFuncAddr) {
 //    logDebug("acquirreGetInventoryItemFuncAddr");
 //    if (MemHelper::isBadReadPtr((void*)getInventoryItemFuncAddr)) {
@@ -43,9 +37,6 @@ std::string idInventoryCollectionManager::getDebugStr()
 //    return true;
 //
 //}
-
-
-
 
  //! This is basically current inventory but only for code in the hooks. our mod loop will manage its own inventory data to prevent race conditions. atm call from idInventoryCollection_Smth_1CFBB90(__int64 idInventoryCollection_a1, __int64 a2))
  //! to make sure you have nades you want to make sure you have Item_ResourceID::THROWABLE_PLAYER_ICE_BOMB and THROWABLE_PLAYER_FRAG_GRENADE
@@ -93,7 +84,6 @@ std::string idInventoryCollectionManager::getDebugStr()
  {
      return m_isIceNadeOwned_GameHook;
  }
-
 
  ItemRef idInventoryCollectionManager::getItemRef(idInventoryItem* inventoryItemPtr) {
 
@@ -160,7 +150,6 @@ std::string idInventoryCollectionManager::getDebugStr()
      return ItemRef::UNKNOWN; // Return UNKNOWN if no match is found
  }
 
-
  //? this will not handle ALL the items the slayer has and not all the ItemRef !!!
  const char* idInventoryCollectionManager::getStrForItemRef(ItemRef itemRef) {
      switch (itemRef) {
@@ -197,10 +186,6 @@ std::string idInventoryCollectionManager::getDebugStr()
      }
  }
 
-
-
-
-
   //? !!!!!!!!  this will handle A VERY SMALL SUBSET OF THE ITEMS DONT FORGET THAT !!!!!!!!!!!!!!!!!
  void idInventoryCollectionManager::updateCustomInventory() {      //! this is used by our mod code only
     
@@ -234,7 +219,6 @@ std::string idInventoryCollectionManager::getDebugStr()
      }
  }
 
-
  bool idInventoryCollectionManager::isDashAbilityOwned() {
      
      for (ItemRef itemref : m_customInventoryVec) {
@@ -264,7 +248,6 @@ std::string idInventoryCollectionManager::getDebugStr()
      return false;
  }
 
-
  //! WEAPONS
 bool idInventoryCollectionManager::isWeaponOwned(weaponSlot_t weaponIndex) {
 
@@ -293,7 +276,6 @@ bool idInventoryCollectionManager::isWeaponOwned(weaponSlot_t weaponIndex) {
     return false;
 }
 
-
 //! custom inventory cause we only list the items we're interested in for the mod
 std::string idInventoryCollectionManager::getCustomInventoryStr() {
     
@@ -310,10 +292,6 @@ std::string idInventoryCollectionManager::getCustomInventoryStr() {
 
 }
 
-
-
-
- 
 idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef item_ref) {
 
     idActor* pIdActor = (idActor*)idMapInstanceLocalManager::getIdPlayer();
@@ -342,12 +320,6 @@ idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef ite
     return nullptr;   
 }
 
-
-
-
-
-
-
 //idActor* pIdActor = (idActor*)idMapInstanceLocalManager::getIdPlayer();
 
    //if (pIdActor) {
@@ -375,7 +347,6 @@ idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef ite
    //    logWarn("getItemAddress: failed because idPlayerAdrr is bad ptr");
    //}
    //return 0;
-
 
 //
 ////? got many crashes because of this, because it had the wrong order in the log so the id and the str were switched and it just crashed. Keeping this comment for documentation.
@@ -454,7 +425,6 @@ idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef ite
 //
 //}
 
-
  // bool idInventoryCollectionManager::isItemOwned(Item_ResourceID itemId) {
 //    logDebug("isItemOwned");
 //
@@ -473,13 +443,6 @@ idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef ite
 //    }
 //    return false;
 //}
-
-
-
-
-
-
-
 
 //! this is atm call on a timer every 200ms. This method compared to our previous version (commented) makes it less likely for the other thread (game) to acces the m_ownedItemIds when it's been cleared as here, we don't empty it we just swap it with the local one. It's not perfect though but should be good enough for our needs. The next step would be to use events so we know for sure that the inventory has been updated.
 // void idInventoryCollectionManager::updateOwnedItemsIds() {
@@ -543,10 +506,6 @@ idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef ite
 //    }
 //    return 0;
 //}
-
-
-
-
 
 // bool idInventoryCollectionManager::debug_isWeaponOwned(weaponSlot_t weaponIndex) {
 //    logDebug("debug_isWeaponOwned");
@@ -620,10 +579,7 @@ idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef ite
 //    //return false;
 //}
 
-
-
 /*bool idInventoryCollectionManager::isWeaponOwned(weaponSlot_t weaponIndex) {
-
 
     for (size_t i = 0; i < m_ownedItemsResourceIdsVec.size(); i++)
     {
@@ -661,16 +617,9 @@ idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef ite
             return true;
         }
 
-
     }
     return false;
 }*/
-
-
-
-
-
-
 
 /*
 
@@ -747,9 +696,7 @@ idInventoryItem* idInventoryCollectionManager::getidInventoryItemPtr(ItemRef ite
  resource->resourceID: a90b43917c2d2571 name: weapon/player/rocket_launcher
  resource->resourceID: 68d1ca125710f5c1 name: ammo/sharedammopool/rockets
 
-
 */
-
 
 /*
 
@@ -784,6 +731,5 @@ namespace WeaponIdStr {
     static std::string g_crucibleNameIdStr = "weapon/player/crucible";
     static std::string g_hammerNameIdStr = "weapon/player/hammer";
 }
-
 
 */

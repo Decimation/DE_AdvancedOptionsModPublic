@@ -241,11 +241,11 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 		logInfo("getColor: debug: found equipmentBackerSpriteId, namedColorId: 0x%X spriteInstanceAddr: %p", namedColorId, (void*)spriteInstanceAddr);
 	}*/
 
-	if (modSettings::getOverrideFuel3PipsColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && isHudElementFuelIcon(fullPathHash)) {
+	if (ModSettings::getOverrideFuel3PipsColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && isHudElementFuelIcon(fullPathHash)) {
 		
 		int chainsawAmmo = idPlayer_K::getChainsawAmmo();
 		if (chainsawAmmo >= 3) {
-			return modSettings::getOverrideFuel3PipsColor();
+			return ModSettings::getOverrideFuel3PipsColor();
 		}
 		else if (chainsawAmmo < 1) {
 			return swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_LIGHTGREY;
@@ -253,7 +253,7 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 		return namedColorId;
 	}
 
-	if (!modSettings::getIsWeaponBarColored() && isHudElementWeaponRelated(fullPathHash)) {
+	if (!ModSettings::getIsWeaponBarColored() && isHudElementWeaponRelated(fullPathHash)) {
 		if (isHudElementWeaponColor(namedColorId)) {
 			//return UserColorSet::getIceNadeArrow_Color();
 			return swfNamedColors_t::SWF_NAMED_COLOR_WHITE;
@@ -264,21 +264,21 @@ idColor GameHudColorsManager::getCurrentProfileFragNadeBackgroundColor() {
 	//! indeed this works much better than the method below
 	if (isHudElementFragNadeBackGround(fullPathHash)) {
 
-		if (modSettings::getOverrideFragGrenadeColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && idPlayer_K::getFragNadeCount() > 0) {
-			return modSettings::getOverrideFragGrenadeColor();
+		if (ModSettings::getOverrideFragGrenadeColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && idPlayer_K::getFragNadeCount() > 0) {
+			return ModSettings::getOverrideFragGrenadeColor();
 		}
-		else if (modSettings::getOverrideFragGrenadeCooldownColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && idPlayer_K::getFragNadeCount() == 0) {
-			return modSettings::getOverrideFragGrenadeCooldownColor();
+		else if (ModSettings::getOverrideFragGrenadeCooldownColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && idPlayer_K::getFragNadeCount() == 0) {
+			return ModSettings::getOverrideFragGrenadeCooldownColor();
 		}
 		return namedColorId;
 	}
 
 	if (isHudElementFragNadeIcon(fullPathHash)) {
-		if (modSettings::getOverrideFragGrenadeColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && idPlayer_K::getFragNadeCount() > 0) {
-			return modSettings::getOverrideFragGrenadeColor();
+		if (ModSettings::getOverrideFragGrenadeColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && idPlayer_K::getFragNadeCount() > 0) {
+			return ModSettings::getOverrideFragGrenadeColor();
 		}
-		else if (modSettings::getOverrideFragGrenadeCooldownColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && idPlayer_K::getFragNadeCount() == 0) {
-			return modSettings::getOverrideFragGrenadeCooldownColor();
+		else if (ModSettings::getOverrideFragGrenadeCooldownColor() != swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT && idPlayer_K::getFragNadeCount() == 0) {
+			return ModSettings::getOverrideFragGrenadeCooldownColor();
 		}
 		return namedColorId;
 	}

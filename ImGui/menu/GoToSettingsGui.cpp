@@ -1,9 +1,5 @@
 #include "GoToSettingsGui.h"
 
-
-
-
-
 void GoToSettingsGui::showModKeyShortcutText(bool* p_open)
 { 
 
@@ -19,10 +15,8 @@ void GoToSettingsGui::showModKeyShortcutText(bool* p_open)
         return;
     }
 
-
     static std::string ToggleModTextStr = "KAIBZ MOD [???]";
-    ToggleModTextStr = "KAIBZ MOD [" + std::string(guiHelper::getAllowedKeyName(modSettings::getToggleModSettingsVkCode())) + "]";   
-
+    ToggleModTextStr = "KAIBZ MOD [" + std::string(guiHelper::getAllowedKeyName(ModSettings::getToggleModSettingsVkCode())) + "]";   
 
     ImVec2 textSize = ImGui::CalcTextSize(ToggleModTextStr.c_str(), nullptr, true);
     float textPaddingX = 1.05f; //! manually adjusted
@@ -50,7 +44,6 @@ void GoToSettingsGui::showModKeyShortcutText(bool* p_open)
 
     //logInfo("showModKeyShortcutText: textPos.x %.3f textPos.y %.3f", textPos.x, textPos.y);
 
-
    /* if (modSettings::getModSettingsShortcutTextColorInt() != lastModSettingsColorInt) {
 
         textColor = modSettings::ConvertIntToImVec4Color(modSettings::getModSettingsShortcutTextColorInt());
@@ -60,7 +53,7 @@ void GoToSettingsGui::showModKeyShortcutText(bool* p_open)
     ImGui::PushFont(Menu::customHud_Eternal1font); // Set the custom font
     //ImGui::PushStyleColor(ImGuiCol_Text, textColor);
    //ImGui::PushStyleColor(ImGuiCol_Text, Menu::shortcutTextColorImVec4);
-    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::ColorConvertU32ToFloat4(modSettings::getModSettingsShortcutTextColorImU32()));
+    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::ColorConvertU32ToFloat4(ModSettings::getModSettingsShortcutTextColorImU32()));
 
     ImGui::Text(ToggleModTextStr.c_str());
 
@@ -71,15 +64,10 @@ void GoToSettingsGui::showModKeyShortcutText(bool* p_open)
 
 }
 
-
-
-
-
 //bool GoToSettingsGui::isInsideRect(const ImVec2& point, const ImVec2& topLeft, const ImVec2& bottomRight) {
 //    return point.x >= topLeft.x && point.x <= bottomRight.x &&
 //        point.y >= topLeft.y && point.y <= bottomRight.y;
 //}
-
 
 //void GoToSettingsGui::showGoToSettingsButtonGui(bool* p_open)
 //{
@@ -129,10 +117,6 @@ void GoToSettingsGui::showModKeyShortcutText(bool* p_open)
 //    ImGui::PopStyleColor();
 //    ImGui::End();
 //}
-
-
-
-
 
 //void GoToSettingsGui::showGoToSettingsButtonGui(bool* p_open)
 //{
@@ -205,6 +189,4 @@ void GoToSettingsGui::showModKeyShortcutText(bool* p_open)
 //    // End the window
 //    ImGui::End();
 //}
-
-
 

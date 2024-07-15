@@ -8,37 +8,26 @@
 #include "../ImGui/dependencies/imgui/imgui.h"
 #include "GeneratedEnums.h"
 
-
-//#include <string>
-//class Common
-//{
-//};
-
 //bool isWeaponIndexWarning(int weaponIndex);
 
 //! General:
-static const int intMinusOne = -1;
-
+static const int NEGATIVE_ONE = -1;
 
 //! Exe
 
-static const std::string doomEternalExeName = "DOOMEternalx64vk.exe";
-static const std::string doomEternalExeNameToLower = "doometernalx64vk.exe";
-
-
+static const std::string DE_EXE_NAME       = "DOOMEternalx64vk.exe";
+static const std::string DE_EXE_NAME_LOWER = "doometernalx64vk.exe";
 
 //! Offsets (8/9/23: we still need to use this cause it's very hard to find certain values only with scan pattern, at least at the moment cause we don't understand how meathook mod works well enough, but later we could find a way to only use advanced scanning and some of the game functions like written in our log (libre office) for this day)
 
 //! to find languageStrOffset set the game to french for example and in CE search for french string you will about 2000 results but only 3 should be static offset to doom exe, the higher address one should be the one you want. Good thing is that it doesn't require IDA to be found.
 //static const uintptr_t  languageStrOffset = 0x5170248;
 
-
 //! to find idStringListBaseOffset, (also documented in libreoffice file) search the idb for %s - unable to allocate new index for keyBindingInfo At this point you will have to compare with previous db where that number is and identify where it is, there is also i screenshot i made you can use, hopefully that will be enough.
 //!? could we actually get this value with pattern scan as it's hard coded in the func. update we did. we're leaving this here because i think we have a circular depedency issue betwwen Scanner.h and ObjectLocator.h
 
 //static const int  idStringListBaseOffset = 0x6B68570; // old value:  0x6B94670;
 //static const uintptr_t  idStringListBaseOffset = 0x6B68570; // old value:  0x6B94670;
-
 
 //? 8/9/23 this is the offset we used before to find functions and structs
 //static const uintptr_t bindInputStrPtrOffset = 0x18;
@@ -89,33 +78,19 @@ static const std::string doomEternalExeNameToLower = "doometernalx64vk.exe";
 //static const uintptr_t setSpriteInstancetOffset = 0x52F750;
 //static const uintptr_t showPerfMetricsSmthOffset =  0x48E580;
 
-
-
-const bool improvedWeaponSwitchingEnabled = true;
-const bool improvedWeaponSwitchingDisabled = false;
-
-
 const std::string unknownWeaponStr = "unknow weapon name";
-const int notMonitoredWeapon = -1;
-const int unvalidWeapon = 0;
-
 
 //const std::wstring sayBindError = L"Bindings missing, DGB mod disabled";
-const std::wstring sayWrongGameNameError = L"wrong game file name, mod disabled";
-const std::wstring sayHookingError = L"Hooking Error, mod disabled";
-const std::wstring sayScanPatternError = L"Pattern Scanning Error, mod disabled";
-const std::wstring saySuccesLoadingMod = L"mod levelLoaded";
-const std::wstring saySIniFileReLoaded = L"Ini File Reloaded";
-const std::wstring sayIniFileParsingError = L"file parsing error, regenerating ini File";
+const std::wstring sayWrongGameNameError   = L"wrong game file name, mod disabled";
+const std::wstring sayHookingError         = L"Hooking Error, mod disabled";
+const std::wstring sayScanPatternError     = L"Pattern Scanning Error, mod disabled";
+const std::wstring saySuccesLoadingMod     = L"mod levelLoaded";
+const std::wstring saySIniFileReLoaded     = L"Ini File Reloaded";
+const std::wstring sayIniFileParsingError  = L"file parsing error, regenerating ini File";
 const std::wstring sayIniFileSavingDefault = L"Saving default ini File";
 const std::wstring sayConfigExceptionError = L"Config Exception Error";
-const std::wstring sayGeneratingTypes = L"Creating Types Files";
+const std::wstring sayGeneratingTypes      = L"Creating Types Files";
 //const std::wstring sayGeneratingEnums = L"Generating i.d Enums";
-
-//const std::wstring sayPreviousModVersionXinput1_3FoundError = L"Error: previous version of the mod found, please check the mod log file in the game folder";
-const std::wstring sayPreviousModVersionXInput9_1_0FoundError = L"Error: previous version of the mod found, please check the mod log file in the game folder";
-const std::wstring sayPreviousModVersionDinput8FoundError = L"Error: previous version of the mod found, please check the mod log file in the game folder";
-
 
 //static unsigned char FragGrenadeCharArr[] = "Frag Grenade";
 //static unsigned char IceGrenadeCharArr[] = "Ice Grenade";
@@ -126,9 +101,6 @@ const std::wstring sayPreviousModVersionDinput8FoundError = L"Error: previous ve
 //static std::string FragGrenadeStr = "Frag Grenade";
 //static std::string IceGrenadeStr = "Ice Grenade";
 
-
-
-
 //const int shotgunWeaponIndex = 1;
 //const int assaultRifleWeaponIndex = 2;
 //const int plasmaWeaponIndex = 3;
@@ -136,7 +108,6 @@ const std::wstring sayPreviousModVersionDinput8FoundError = L"Error: previous ve
 //const int superShotgunWeaponIndex = 5;
 //const int ballistaWeaponIndex = 6;
 //const int miniGunWeaponIndex = 7;
-
 
 //? these are not reliable, they can break if another mod is installed
 //const unsigned int unknownItemId = 0;
@@ -154,127 +125,120 @@ const std::wstring sayPreviousModVersionDinput8FoundError = L"Error: previous ve
 //const unsigned int fragGrenadeItemId = 9843;
 //const unsigned int iceGrenadeItemId = 0x276A;
 
-
 //namespace ConfigData {
 //	static int g_
 //}
 
-
-namespace Hashes {
-	static std::vector<std::string> PreviousModVersionsHashes = { 
-	"606a4a5a2ecaacf5f966d9efbf266260",
-	"809025e42bbd7ed9bf196a54ed4b5f41",
-	"7e37fd28b4689fcdafbe72e733f6e088",
-	"03fad47126553f49e5dcebb42d9670d7",
-	"10e520987a04ee27919543c604a1d598",
-	"b3d4154f847eecb64f4f03a3ea588d99",
-	"ce156454907cf509804010fc5ac72322",
-	"17fe2c243bba604f554f7bb69b28c0fe",
-	"4407aad8ec9e1415e574866ae0666c8e",
-	"1b7fa52a5025191745b5be099626f072"
+namespace Hashes
+{
+	static std::vector<std::string> PreviousModVersionsHashes = {
+		"606a4a5a2ecaacf5f966d9efbf266260",
+		"809025e42bbd7ed9bf196a54ed4b5f41",
+		"7e37fd28b4689fcdafbe72e733f6e088",
+		"03fad47126553f49e5dcebb42d9670d7",
+		"10e520987a04ee27919543c604a1d598",
+		"b3d4154f847eecb64f4f03a3ea588d99",
+		"ce156454907cf509804010fc5ac72322",
+		"17fe2c243bba604f554f7bb69b28c0fe",
+		"4407aad8ec9e1415e574866ae0666c8e",
+		"1b7fa52a5025191745b5be099626f072"
 	};
 
-	static std::string PreviousModsVesionsFileExtension = {
-	".dll"
+	static std::string PreviousModsVersionsFileExtension = {
+		".dll"
 	};
 
 	static std::vector<std::string> MeathookModHashes = {
-	"786527af140cb8fea0af7cbc0793fa5a"
-	};	
-
-	static std::string MeathookModFileExtension = {
-	".dll"
+		"786527af140cb8fea0af7cbc0793fa5a"
 	};
 
+	static std::string MeathookModFileExtension = {
+		".dll"
+	};
 }
 
-namespace ConflictingApps {
+namespace ConflictingApps
+{
 	const std::string MsiAfterBurnerProcessName = "MSIAfterburner.exe";
 }
 
-
 //! offset we could not find through typeInfo or otherwise. is game is updated and crashes for unknow reason, recheck  those:
-namespace UndocumentedOffsets {
-
-	const int IdPlayer_1_Offset = 0x1AF8;
-	const __int64 IdGameTimeManagerLocalOffset = 0x125A60;
-	const __int64 CurrentGameModeOffset = 0x6B07DB5;
-	const int CvarFindInternalVtbFuncOffset = 0x20;
-	const int CmdExecuteFuncAddrOffset = 0x40;
-	const int idPlayerPlaySoundVtbOffset = 0x118;
+namespace UndocumentedOffsets
+{
+	const int     IdPlayer_1_Offset             = 0x1AF8;
+	const __int64 IdGameTimeManagerLocalOffset  = 0x125A60;
+	const __int64 CurrentGameModeOffset         = 0x6B07DB5;
+	const int     CvarFindInternalVtbFuncOffset = 0x20;
+	const int     CmdExecuteFuncAddrOffset      = 0x40;
+	const int     idPlayerPlaySoundVtbOffset    = 0x118;
 }
 
-namespace WeaponIdStr {
+namespace WeaponIdStr
+{
 	//! using strings for id is not great but at least i'll be sure:
-	static std::string g_shotGunBaseNameIdStr = "weapon/player/shotgun";
-	static std::string g_shotGunStickiesNameIdStr = "weapon/player/shotgun_secondary_pop_rockets";
-	static std::string g_shotGunFullAutoNameIdStr = "weapon/player/shotgun_secondary_full_auto";
-	static std::string g_heavyCannonNameIdStr = "weapon/player/heavy_cannon";
-	static std::string g_heavyCannonBoltNameIdStr = "weapon/player/heavy_cannon_bolt_action";
-	static std::string g_heavyCannonDetonateNameIdStr = "weapon/player/heavy_cannon_burst_detonate_mastery";
-	static std::string g_plasmaNameIdStr = "weapon/player/plasma_rifle";
-	static std::string g_plasmaAoeNameIdStr = "weapon/player/plasma_rifle_secondary_aoe";
-	static std::string g_plasmaMicroWaveNameIdStr = "weapon/player/plasma_rifle_secondary_microwave";
-	static std::string g_rocketLauncherNameIdStr = "weapon/player/rocket_launcher";
-	static std::string g_rocketLauncherDetonateNameIdStr = "weapon/player/rocket_launcher_detonate";
-	static std::string g_rocketLauncherLockOnNameIdStr = "weapon/player/rocket_launcher_lock_mod_mastery";
-	static std::string g_superShotGunOnNameIdStr = "weapon/player/double_barrel";
-	static std::string g_superShotGunPrimaryOnNameIdStr = "weapon/player/double_barrel_primary_lockon";
-	static std::string g_superShotGunMeathookNameIdStr = "weapon/player/double_barrel_meat_hook";
-	static std::string g_balistaNameIdStr = "weapon/player/gauss_rifle";
-	static std::string g_balistaArbalesteNameIdStr = "weapon/player/gauss_rifle_ballista";
-	static std::string g_balistaDestroyerBladeNameIdStr = "weapon/player/gauss_rifle_destroyer";
-	static std::string g_chaingunNameIdStr = "weapon/player/chaingun";
-	static std::string g_chaingunShielNameIdStr = "weapon/player/chaingun_energy_shell";
-	static std::string g_chaingunShielPrimaryNameIdStr = "weapon/player/chaingun_energy_shell_primary";
-	static std::string g_chaingunTurretPrimaryNameIdStr = "weapon/player/chaingun_turret_primary";
+	static std::string g_shotGunBaseNameIdStr             = "weapon/player/shotgun";
+	static std::string g_shotGunStickiesNameIdStr         = "weapon/player/shotgun_secondary_pop_rockets";
+	static std::string g_shotGunFullAutoNameIdStr         = "weapon/player/shotgun_secondary_full_auto";
+	static std::string g_heavyCannonNameIdStr             = "weapon/player/heavy_cannon";
+	static std::string g_heavyCannonBoltNameIdStr         = "weapon/player/heavy_cannon_bolt_action";
+	static std::string g_heavyCannonDetonateNameIdStr     = "weapon/player/heavy_cannon_burst_detonate_mastery";
+	static std::string g_plasmaNameIdStr                  = "weapon/player/plasma_rifle";
+	static std::string g_plasmaAoeNameIdStr               = "weapon/player/plasma_rifle_secondary_aoe";
+	static std::string g_plasmaMicroWaveNameIdStr         = "weapon/player/plasma_rifle_secondary_microwave";
+	static std::string g_rocketLauncherNameIdStr          = "weapon/player/rocket_launcher";
+	static std::string g_rocketLauncherDetonateNameIdStr  = "weapon/player/rocket_launcher_detonate";
+	static std::string g_rocketLauncherLockOnNameIdStr    = "weapon/player/rocket_launcher_lock_mod_mastery";
+	static std::string g_superShotGunOnNameIdStr          = "weapon/player/double_barrel";
+	static std::string g_superShotGunPrimaryOnNameIdStr   = "weapon/player/double_barrel_primary_lockon";
+	static std::string g_superShotGunMeathookNameIdStr    = "weapon/player/double_barrel_meat_hook";
+	static std::string g_balistaNameIdStr                 = "weapon/player/gauss_rifle";
+	static std::string g_balistaArbalesteNameIdStr        = "weapon/player/gauss_rifle_ballista";
+	static std::string g_balistaDestroyerBladeNameIdStr   = "weapon/player/gauss_rifle_destroyer";
+	static std::string g_chaingunNameIdStr                = "weapon/player/chaingun";
+	static std::string g_chaingunShielNameIdStr           = "weapon/player/chaingun_energy_shell";
+	static std::string g_chaingunShielPrimaryNameIdStr    = "weapon/player/chaingun_energy_shell_primary";
+	static std::string g_chaingunTurretPrimaryNameIdStr   = "weapon/player/chaingun_turret_primary";
 	static std::string g_chaingunTurretSecondaryNameIdStr = "weapon/player/chaingun_turret_secondary";
-	static std::string g_bfgNameIdStr = "weapon/player/bfg";
-	static std::string g_bfgSphereBurnNameIdStr = "weapon/player/bfg_charge_sphere_burn";
-	static std::string g_unmaykrNameIdStr = "weapon/player/unmaykr";
-	static std::string g_crucibleNameIdStr = "weapon/player/crucible";
-	static std::string g_hammerNameIdStr = "weapon/player/hammer";
+	static std::string g_bfgNameIdStr                     = "weapon/player/bfg";
+	static std::string g_bfgSphereBurnNameIdStr           = "weapon/player/bfg_charge_sphere_burn";
+	static std::string g_unmaykrNameIdStr                 = "weapon/player/unmaykr";
+	static std::string g_crucibleNameIdStr                = "weapon/player/crucible";
+	static std::string g_hammerNameIdStr                  = "weapon/player/hammer";
 }
 
-
-
-namespace ItemNames {
-	static const char* shotGunBaseName = "weapon/player/shotgun";
-	static const char* shotGunStickiesName = "weapon/player/shotgun_secondary_pop_rockets";
-	static const char* shotGunFullAutoName = "weapon/player/shotgun_secondary_full_auto";
-	static const char* heavyCannonName = "weapon/player/heavy_cannon";
-	static const char* heavyCannonBoltName = "weapon/player/heavy_cannon_bolt_action";
-	static const char* heavyCannonDetonateName = "weapon/player/heavy_cannon_burst_detonate_mastery";
-	static const char* plasmaName = "weapon/player/plasma_rifle";
-	static const char* plasmaAoeName = "weapon/player/plasma_rifle_secondary_aoe";
-	static const char* plasmaMicroWaveName = "weapon/player/plasma_rifle_secondary_microwave";
-	static const char* rocketLauncherName = "weapon/player/rocket_launcher";
-	static const char* rocketLauncherDetonateName = "weapon/player/rocket_launcher_detonate";
-	static const char* rocketLauncherLockOnName = "weapon/player/rocket_launcher_lock_mod_mastery";
-	static const char* superShotGunOnName = "weapon/player/double_barrel";
-	static const char* superShotGunPrimaryOnName = "weapon/player/double_barrel_primary_lockon";
-	static const char* superShotGunMeathookName = "weapon/player/double_barrel_meat_hook";
-	static const char* balistaName = "weapon/player/gauss_rifle";
-	static const char* balistaArbalesteName = "weapon/player/gauss_rifle_ballista";
-	static const char* balistaDestroyerBladeName = "weapon/player/gauss_rifle_destroyer";
-	static const char* chaingunName = "weapon/player/chaingun";
-	static const char* chaingunShielName = "weapon/player/chaingun_energy_shell";
-	static const char* chaingunShielPrimaryName = "weapon/player/chaingun_energy_shell_primary";
-	static const char* chaingunTurretPrimaryName = "weapon/player/chaingun_turret_primary";
+namespace ItemNames
+{
+	static const char* shotGunBaseName             = "weapon/player/shotgun";
+	static const char* shotGunStickiesName         = "weapon/player/shotgun_secondary_pop_rockets";
+	static const char* shotGunFullAutoName         = "weapon/player/shotgun_secondary_full_auto";
+	static const char* heavyCannonName             = "weapon/player/heavy_cannon";
+	static const char* heavyCannonBoltName         = "weapon/player/heavy_cannon_bolt_action";
+	static const char* heavyCannonDetonateName     = "weapon/player/heavy_cannon_burst_detonate_mastery";
+	static const char* plasmaName                  = "weapon/player/plasma_rifle";
+	static const char* plasmaAoeName               = "weapon/player/plasma_rifle_secondary_aoe";
+	static const char* plasmaMicroWaveName         = "weapon/player/plasma_rifle_secondary_microwave";
+	static const char* rocketLauncherName          = "weapon/player/rocket_launcher";
+	static const char* rocketLauncherDetonateName  = "weapon/player/rocket_launcher_detonate";
+	static const char* rocketLauncherLockOnName    = "weapon/player/rocket_launcher_lock_mod_mastery";
+	static const char* superShotGunOnName          = "weapon/player/double_barrel";
+	static const char* superShotGunPrimaryOnName   = "weapon/player/double_barrel_primary_lockon";
+	static const char* superShotGunMeathookName    = "weapon/player/double_barrel_meat_hook";
+	static const char* balistaName                 = "weapon/player/gauss_rifle";
+	static const char* balistaArbalesteName        = "weapon/player/gauss_rifle_ballista";
+	static const char* balistaDestroyerBladeName   = "weapon/player/gauss_rifle_destroyer";
+	static const char* chaingunName                = "weapon/player/chaingun";
+	static const char* chaingunShielName           = "weapon/player/chaingun_energy_shell";
+	static const char* chaingunShielPrimaryName    = "weapon/player/chaingun_energy_shell_primary";
+	static const char* chaingunTurretPrimaryName   = "weapon/player/chaingun_turret_primary";
 	static const char* chaingunTurretSecondaryName = "weapon/player/chaingun_turret_secondary";
-	static const char* bfgName = "weapon/player/bfg";
-	static const char* bfgSphereBurnName = "weapon/player/bfg_charge_sphere_burn";
-	static const char* unmaykrName = "weapon/player/unmaykr";
-	static const char* crucibleName = "weapon/player/crucible";
-	static const char* hammerName = "weapon/player/hammer";
-	static const char* fragNadeName = "throwable/player/frag_grenade";
-	static const char* iceNadeName = "throwable/player/ice_bomb";
+	static const char* bfgName                     = "weapon/player/bfg";
+	static const char* bfgSphereBurnName           = "weapon/player/bfg_charge_sphere_burn";
+	static const char* unmaykrName                 = "weapon/player/unmaykr";
+	static const char* crucibleName                = "weapon/player/crucible";
+	static const char* hammerName                  = "weapon/player/hammer";
+	static const char* fragNadeName                = "throwable/player/frag_grenade";
+	static const char* iceNadeName                 = "throwable/player/ice_bomb";
 }
-
-
-
-
-
 
 //! Mod name:
 //static std::string modName = "KaibzHudAndCrosshair";
@@ -284,9 +248,9 @@ namespace ItemNames {
 static std::string g_modFullNameWithSpaces = "Dedicated Grenade Keys And QOL";
 //! Ini file
 //? changing the name of the ini file or the log could create issue for users who would have 2 versions
-static std::string g_iniFileName =  "GrenadeKeysMod.ini";
+static std::string g_iniFileName = "GrenadeKeysMod.ini";
 //! log file
-static std::string logTxtFileName =  "GrenadeKeysModLog.txt";
+static std::string logTxtFileName = "GrenadeKeysModLog.txt";
 //static std::string logTxtFileName =  "DedicatedGrenadeKeysAndQOL_LOG.txt";
 //static std::string logTxtFileNameTEST =  "GrenadeKeysModLogTEST.txt";
 
@@ -310,38 +274,38 @@ static const int g_currentShortModVersion = 14;
 //
 //};
 
-enum class GameState {
-
-	undefined = -2,
-	unknown = -1,
-	inMainMenu = 0,
-	loading = 1,
-	levelLoaded = 2,	
+enum class GameState
+{
+	undefined   = -2,
+	unknown     = -1,
+	inMainMenu  = 0,
+	loading     = 1,
+	levelLoaded = 2,
 	MAX_GAME_STATES
 };
 
-
-enum class PlayerState {
-
-	undefined = -2,
-	unknown = -1,
-	inMainMenu = 0,
+enum class PlayerState
+{
+	undefined       = -2,
+	unknown         = -1,
+	inMainMenu      = 0,
 	inLoadingScreen = 1,
-	inPauseMenu = 2, //! in pause menue user can also acces settings, so pause menu means in game menus but not main menu. 
-	inGameNotAbleToFight = 3,	
-	inGameReticleActive = 4
+	inPauseMenu     = 2,
+	//! in pause menue user can also acces settings, so pause menu means in game menus but not main menu. 
+	inGameNotAbleToFight = 3,
+	inGameReticleActive  = 4
 };
 
-
-enum class PauseMenuState {
+enum class PauseMenuState
+{
 	undefined = -2,
-	unknown = -1,
-	closed = 0,
-	opened = 1
+	unknown   = -1,
+	closed    = 0,
+	opened    = 1
 };
 
-enum NadeStatus {
-
+enum NadeStatus
+{
 	undefinedNade,
 	iceNade,
 	fragNade,
@@ -376,55 +340,52 @@ enum NadeStatus {
 //	ice = 0x276A
 //};
 
-
-
-enum class usercmdButton : __int64 {
-
-	BUTTON_NONE = 0,
-	BUTTON_ATTACK1 = 1,
-	BUTTON_ATTACK2 = 2, // K this is actually melee button
-	BUTTON_ALTFIRE = 4, //K triggered when pressing mouse 2 but not continuously unfortunately
-	BUTTON_USE = 8,
-	BUTTON_ZOOM = 0x10,
-	BUTTON_SPRINT = 0x20,
-	BUTTON_CHANGEWEAPON = 0x40,
-	BUTTON_WEAP_RELOAD = 0x80,
-	BUTTON_MP_SCOREBOARD = 0x80,
-	BUTTON_WEAP_NEXT = 0x100,
-	BUTTON_WEAP_PREV = 0x200,
-	BUTTON_WEAP_0 = 0x400,
-	BUTTON_SHOTGUN = 0x800,					
-	BUTTON_ASSAULT_RIFFLE = 0x1000,			
-	BUTTON_PLASMA = 0x2000,					
-	BUTTON_RL = 0x4000,						
-	BUTTON_SUPER_SHOTGUN = 0x8000,
-	BUTTON_BALISTA = 0x10000,
-	BUTTON_MINIGUN = 0x20000,
-	BUTTON_BFG_UNMAKER = 0x40000,
-	BUTTON_WEAP_9 = 0x80000,
-	BUTTON_BFG = 0x100000,
-	BUTTON_WALK = 0x200000,
-	BUTTON_DASH = 0x400000,
-	BUTTON_USE_EQUIPMENT = 0x800000,		// BUTTON_QUICK_USE = 0x800000,
-	BUTTON_SWITCH_EQUIPMENT = 0x1000000,    // BUTTON_QUICK_0 = 0x1000000
-	BUTTON_QUICK_1 = 0x2000000,
-	BUTTON_QUICK_2 = 0x4000000,
-	BUTTON_QUICK_3 = 0x8000000,
-	BUTTON_WEAP_SIDEARM = 0x8000000,
-	BUTTON_NEXT_QUICK_ITEM = 0x10000000,
-	BUTTON_PREV_QUICK_ITEM = 0x20000000,
-	BUTTON_INVENTORY = 0x40000000,
+enum class usercmdButton : __int64
+{
+	BUTTON_NONE             = 0,
+	BUTTON_ATTACK1          = 1,
+	BUTTON_ATTACK2          = 2, // K this is actually melee button
+	BUTTON_ALTFIRE          = 4, //K triggered when pressing mouse 2 but not continuously unfortunately
+	BUTTON_USE              = 8,
+	BUTTON_ZOOM             = 0x10,
+	BUTTON_SPRINT           = 0x20,
+	BUTTON_CHANGEWEAPON     = 0x40,
+	BUTTON_WEAP_RELOAD      = 0x80,
+	BUTTON_MP_SCOREBOARD    = 0x80,
+	BUTTON_WEAP_NEXT        = 0x100,
+	BUTTON_WEAP_PREV        = 0x200,
+	BUTTON_WEAP_0           = 0x400,
+	BUTTON_SHOTGUN          = 0x800,
+	BUTTON_ASSAULT_RIFFLE   = 0x1000,
+	BUTTON_PLASMA           = 0x2000,
+	BUTTON_RL               = 0x4000,
+	BUTTON_SUPER_SHOTGUN    = 0x8000,
+	BUTTON_BALISTA          = 0x10000,
+	BUTTON_MINIGUN          = 0x20000,
+	BUTTON_BFG_UNMAKER      = 0x40000,
+	BUTTON_WEAP_9           = 0x80000,
+	BUTTON_BFG              = 0x100000,
+	BUTTON_WALK             = 0x200000,
+	BUTTON_DASH             = 0x400000,
+	BUTTON_USE_EQUIPMENT    = 0x800000, // BUTTON_QUICK_USE = 0x800000,
+	BUTTON_SWITCH_EQUIPMENT = 0x1000000, // BUTTON_QUICK_0 = 0x1000000
+	BUTTON_QUICK_1          = 0x2000000,
+	BUTTON_QUICK_2          = 0x4000000,
+	BUTTON_QUICK_3          = 0x8000000,
+	BUTTON_WEAP_SIDEARM     = 0x8000000,
+	BUTTON_NEXT_QUICK_ITEM  = 0x10000000,
+	BUTTON_PREV_QUICK_ITEM  = 0x20000000,
+	BUTTON_INVENTORY        = 0x40000000,
 	BUTTON_ACTIVATE_ABILITY = 0x80000000,
-	BUTTON_MOVEUP = 0x100000000,
-	BUTTON_CRUCIBLE_HAMMER = 0x400000000,
+	BUTTON_MOVEUP           = 0x100000000,
+	BUTTON_CRUCIBLE_HAMMER  = 0x400000000,
 	BUTTON_TEAM_SUPER_COMBO = 0x800000000,
-	BUTTON_TRAILERCAM_0 = 0x1000000000,
-	BUTTON_TRAILERCAM_MENU = 0x2000000000,
-	BUTTON_POWER = 0x4000000000,
-	BUTTON_OBJECTIVES = 0x8000000000 //! there are more enums but we don't use it and if we add it will set an error for the __int64 type (which is the same as func isKeyPress hook parameter so i would rather use the same the whole enum list is )
+	BUTTON_TRAILERCAM_0     = 0x1000000000,
+	BUTTON_TRAILERCAM_MENU  = 0x2000000000,
+	BUTTON_POWER            = 0x4000000000,
+	BUTTON_OBJECTIVES       = 0x8000000000
+	//! there are more enums but we don't use it and if we add it will set an error for the __int64 type (which is the same as func isKeyPress hook parameter so i would rather use the same the whole enum list is )
 };
-
-
 
 //? not used, just kept as reference.
 //enum class usercmdButtonCompleteList : uint64_t { 
@@ -482,7 +443,6 @@ enum class usercmdButton : __int64 {
 //	BUTTON_ANY = 0x0FFFFFFFFFFFFFFFF
 //};
 
-
 //? afaik this is unrealiable because these numbers are actually globalLastLoadIndex and not pure ids
 //enum declWeaponModId
 //{
@@ -527,8 +487,6 @@ enum class usercmdButton : __int64 {
 //	//! not adding crucible and hammer and i can see the use for it.
 //};
 
-
-
 //! used chatGpt to generate this:
 const std::map<std::string, int> keyStrToVK_KeyMap = {
 	{"0", 0x30},
@@ -566,7 +524,7 @@ const std::map<std::string, int> keyStrToVK_KeyMap = {
 	{"W", 0x57},
 	{"X", 0x58},
 	{"Y", 0x59},
-	{"Z", 0x5A},	
+	{"Z", 0x5A},
 	{"F1", 0x70},
 	{"F2", 0x71},
 	{"F3", 0x72},
@@ -580,7 +538,6 @@ const std::map<std::string, int> keyStrToVK_KeyMap = {
 	{"F11", 0x7A},
 	{"F12", 0x7B}
 };
-
 
 const std::map<int, std::string> vKToKeyStrMap = {
 	{0x41, "A"},
@@ -633,16 +590,13 @@ const std::map<int, std::string> vKToKeyStrMap = {
 	{0x7B, "F12"}
 };
 
-
-
 //! Bind Labels Strings
 
-
 //! when those string appear in the BindString function, it means the next string will be the Equipment launcher or the Mission information label which is the best way to identify the label in any language.
-const std::string EquipmentLauncherFlagStr = "#str_bind_slayer_quickuse";
+const std::string EquipmentLauncherFlagStr           = "#str_bind_slayer_quickuse";
 const std::string EquipmentLauncherControllerFlagStr = "#str_bind_slayer_quickuse_CONTROLLER";
 
-const std::string SwitchEquipmentFlagStr = "#str_bind_slayer_quick0";
+const std::string SwitchEquipmentFlagStr           = "#str_bind_slayer_quick0";
 const std::string SwitchEquipmentControllerFlagStr = "#str_bind_slayer_quick0_CONTROLLER";
 //const std::string MissionInfoFlagStr = "#str_bind_slayer_objectives";
 
@@ -668,38 +622,34 @@ const std::string SpanishSpainLangStr = "spanish";
 //const std::string SpanishMexicoLangStr = "Spanish(Mexico)";
 const std::string SpanishMexicoLangStr = "latin_spanish";
 
-
-
 static std::u8string FragGrenadeEnglishStr = u8"Frag Grenade";
-static std::u8string IceGrenadeEnglishStr = u8"Ice Grenade";
+static std::u8string IceGrenadeEnglishStr  = u8"Ice Grenade";
 
 static std::u8string FragGrenadeFrenchStr = u8"Grenade Frag";
-static std::u8string IceGrenadeFrenchStr = u8"Grenade Glace";
+static std::u8string IceGrenadeFrenchStr  = u8"Grenade Glace";
 
 static std::u8string FragGrenadeGermanStr = u8"Sprenggranate";
-static std::u8string IceGrenadeGermanStr = u8"Eisgranate";
+static std::u8string IceGrenadeGermanStr  = u8"Eisgranate";
 
 static std::u8string FragGrenadeItalianStr = u8"Granata Frag";
-static std::u8string IceGrenadeItalianStr = u8"Granata Ghiaccio";
-	 
+static std::u8string IceGrenadeItalianStr  = u8"Granata Ghiaccio";
+
 static std::u8string FragGrenadeJapanStr = u8"破片グレネード";
-static std::u8string IceGrenadeJapanStr = u8"氷グレネード";
-	 
+static std::u8string IceGrenadeJapanStr  = u8"氷グレネード";
+
 static std::u8string FragGrenadePolishStr = u8"Granat Frag";
-static std::u8string IceGrenadePolishStr = u8"Granat Lodowy";
-	 
+static std::u8string IceGrenadePolishStr  = u8"Granat Lodowy";
+
 static std::u8string FragGrenadePortugeseStr = u8"Granada Frag";
-static std::u8string IceGrenadePortugeseStr = u8"Granada Gelo";
-	
+static std::u8string IceGrenadePortugeseStr  = u8"Granada Gelo";
+
 //static std::u8string FragGrenadeRussianStr = u8"Фраг Гранада";
 static std::u8string FragGrenadeRussianStr = u8"Осколочная Граната"; //! translation from russian dude on discord
 //static std::u8string IceGrenadeRussianStr = u8"Лед Гранада";
 static std::u8string IceGrenadeRussianStr = u8"Ледяная Бомба"; //! translation from russian dude on discord
-	 
+
 static std::u8string FragGrenadeSpanishStr = u8"Granada Frag";
-static std::u8string IceGrenadeSpanishStr = u8"Granada Hielo";
-
-
+static std::u8string IceGrenadeSpanishStr  = u8"Granada Hielo";
 
 enum class GameLanguage
 {
@@ -715,9 +665,7 @@ enum class GameLanguage
 	Spanish
 };
 
-	
-
-enum class ExistingModError 
+enum class ExistingModError
 {
 	NoPreviousModVersionFound,
 	GrenadeKeysModAndQolFound,
@@ -726,7 +674,8 @@ enum class ExistingModError
 	ExceptionError
 };
 
-enum class ModFileToDelete {
+enum class ModFileToDelete
+{
 	XInput9_1_0,
 	DINPUT8
 };
@@ -737,12 +686,9 @@ enum class ModFileToDelete {
 //	Ice = 1
 //};
 
-
-
 //! used in idCmd:
 static std::string m_ZeroAsStr = "0";
-static std::string m_OneAsStr = "1";
-
+static std::string m_OneAsStr  = "1";
 
 //? 15/4/24 We should not use thos....using the actual name should be better, even if a bit slower but as we don't do that critial stuffs with the code i think it should be ok. i'm using them temporarily but soon to be replaced....
 //x these IDs are actual resourceIDs and unique fro ex the frag equipement and throwable are different compared to the display id of the decl which is what our old ItemID was based on
@@ -794,10 +740,6 @@ static std::string m_OneAsStr = "1";
 //	
 //};
 
-
-
-
-
 ////! these IDs are found in a decl object at offset 0x124 
 //enum class displayName_Id : unsigned int {
 //	Unknown = 0,
@@ -828,9 +770,6 @@ static std::string m_OneAsStr = "1";
 //	DashAbility = 0xB3C3E28C
 //};
 
-
-
-
 //static std::map<ItemID, weaponSlot_t> itemIdToWeaponSlotMap = {
 //{ItemID::Shotgun, weaponSlot_t::SHOTGUN},
 //{ItemID::HeavyCannon, weaponSlot_t::HAR},
@@ -843,13 +782,13 @@ static std::string m_OneAsStr = "1";
 //{ItemID::Unmaykr, weaponSlot_t::BFG_UNMAYKR},
 //};
 
-struct InventoryItem {
+struct InventoryItem
+{
 	unsigned int ID = 0; //! some items will have an ID of 0 and some will have same IDs keep that in mind
 	//__int64 Address;
-	std::string Name = "unknown";
-	int Count = -1;
+	std::string Name  = "unknown";
+	int         Count = -1;
 };
-
 
 //enum class GameState {
 //	Unknown = -1,
@@ -858,25 +797,23 @@ struct InventoryItem {
 //	Loaded = 2
 //};
 
-
-
-class matrDebughContainer {
-
+class matrDebughContainer
+{
 public:
-	__int64 MatPtr = 0;
-	std::string Name = "unknown";
+	__int64     MatPtr = 0;
+	std::string Name   = "unknown";
+
 	matrDebughContainer(__int64 matPtr, std::string name)
 	{
 		MatPtr = matPtr;
-		Name = name;
+		Name   = name;
 	}
 };
 
 //! name of the currently displayed grenade icon on the hud
 //! found at idPlayer + 47320 => idHUD_WeaponInfo + 1D0=> idSWFWidget_EquipmentItem + 188h
-static std::string g_icebombIconNameStr = "art/ui/weapon/equipment_ice_bomb";
+static std::string g_icebombIconNameStr  = "art/ui/weapon/equipment_ice_bomb";
 static std::string g_fragNadeIconNameStr = "art/ui/weapon/equipment_frag_grenade";
-
 
 const std::vector<std::string> materialsLibFileNames = {
 	"_white",
@@ -888,10 +825,11 @@ const std::vector<std::string> materialsLibFileNames = {
 	"art/ui/icons/ammo/bullets",
 	"art/ui/icons/ammo/fist",
 	"swf/hud/hud_abilityindicators_singlestack_textures/swf_images/icons/callouts/icon_callout_ice_bomb_",
-	"art/ui/weapon/equipment_frag_grenade",  // this one is lowRes by default
+	"art/ui/weapon/equipment_frag_grenade", // this one is lowRes by default
 	"swf/hud/hud_abilityindicators_singlestack_textures/swf_images/hud/ammo_equipment/hud_slayer_equipment_circlepip_full_",
 	"swf/hud/hud_abilityindicators_singlestack_textures/swf_images/icons/icon_ammo_hammer_racecar_",
-	"swf/hud/hud_abilityindicators_singlestack_textures/swf_images/icons/icon_grenade_frag_",  // this one is HiRes by default
+	"swf/hud/hud_abilityindicators_singlestack_textures/swf_images/icons/icon_grenade_frag_",
+	// this one is HiRes by default
 	"swf/hud/hud_abilityindicators_singlestack_textures/swf_images/icons/icon_ability_flame_belch_racecar_",
 	"swf/hud/hud_abilityindicators_singlestack_textures/swf_images/icons/icon_ammo_fuel_",
 	"swf/hud/hud_abilityindicators_singlestack_textures/swf_images/icons/icon_rune_bloodpunch_racecar_",
@@ -915,7 +853,8 @@ const std::vector<std::string> materialsLibFileNames = {
 	"swf/hud/hud_reticle_textures/swf_images/reticles/crucible/ret_center_circle_4pins_",
 	"swf/main_menu/screens/settings_textures/swf_images/icons/icon_tab_notification_",
 	"textures/guis/icons/weapons/simple/bfg",
-	"textures/swf_images/hud/weapon_icon/weaponicon_heavycannon"  //! found this in an idimage of a idmaterial of chaingun
+	"textures/swf_images/hud/weapon_icon/weaponicon_heavycannon"
+	//! found this in an idimage of a idmaterial of chaingun
 	"textures/guis/icons/weapons/simple/har",
 	"textures/guis/icons/weapons/simple/gauss",
 	"textures/guis/icons/weapons/simple/chaingun",
@@ -957,15 +896,15 @@ const std::vector<std::string> materialsLibFileNames = {
 
 };
 
-
-enum class idFontEnum : unsigned int {
-	unknown =  0,		//! works
-	eternal88 =  1,		//! works
-	eternal90 =  2,		//! thin font 
-	ttSuper98 =  3,		//! 7 segments style
-	ttSuperA0 =  4,		//! stylish 
-	idTacticA8 = 5,		//! flatter 
-	euroStilB0 = 6,		//! very thin and low alpha value
+enum class idFontEnum : unsigned int
+{
+	unknown    = 0, //! works
+	eternal88  = 1, //! works
+	eternal90  = 2, //! thin font 
+	ttSuper98  = 3, //! 7 segments style
+	ttSuperA0  = 4, //! stylish 
+	idTacticA8 = 5, //! flatter 
+	euroStilB0 = 6, //! very thin and low alpha value
 	//eternalB8,		//! no display (for fr at least)
 	/*eternalC0,
 	dfpop3w1C8,
@@ -975,20 +914,17 @@ enum class idFontEnum : unsigned int {
 	koreantkE8,
 	koreansnF0,*/
 	defaultCourrierF8 = 7,
-	MAX_ID_FONTS 
-
+	MAX_ID_FONTS
 };
-
 
 //! this is the value you have to add to the x position so the text start to get written exactly at this position
 const float ttSuper98_text_x_Offset_base = 3.7f; //! numeral 7segments.
 const float ttSuper98_text_y_Offset_base = -0.7f; //! numeral 7segments.
 //const float ttSuper98_text_y_Offset_base = .00000018f; //! numeral 7segments.
 
-
 //! elements part of a crosshair/hud
-enum class RectID {
-
+enum class RectID
+{
 	undefined,
 	centerDot,
 	leftBar,
@@ -997,8 +933,8 @@ enum class RectID {
 	bottomBar
 };
 
-enum class HudDataID {
-
+enum class HudDataID
+{
 	undefined,
 	noData,
 	health,
@@ -1011,7 +947,6 @@ enum class HudDataID {
 	//BloodPunch2, //! will set color on only if player has 2 bp	
 	CrucibleOrHammer
 };
-
 
 static std::map<RectID, HudDataID> NoData_CrosshairDataMap = {
 	{RectID::undefined, HudDataID::undefined},
@@ -1049,74 +984,65 @@ static std::map<RectID, HudDataID> Nades_Bp_Fuel_Health_CrosshairDataMap = {
 	{RectID::bottomBar, HudDataID::FlameBelch}
 };
 
-
-
 //! Game Settings:
 
-enum class UI_Scalling {
-
-	Small = 0,
+enum class UI_Scalling
+{
+	Small  = 0,
 	Medium = 1,
-	Large = 2
+	Large  = 2
 };
 
-enum class UI_ReticleMode {
+enum class UI_ReticleMode
+{
 	Unknown = -1,
-	Full = 0,
-	Dot = 1,
-	None = 2
+	Full    = 0,
+	Dot     = 1,
+	None    = 2
 };
-
 
 //! Hud Events (broadcasted events)
 
-
-
-
-
-
-
-
-
-
 //! used for ex in idSWFSpriteInstance.h
-enum swfNamedColors_t : int {	
-
-	SWF_NAMED_COLOR_INVALID = -1,
-	SWF_NAMED_COLOR_HUD_BASE = 0,
+enum swfNamedColors_t : int
+{
+	SWF_NAMED_COLOR_INVALID    = -1,
+	SWF_NAMED_COLOR_HUD_BASE   = 0,
 	SWF_NAMED_COLOR_HUD_SHADOW = 1, //! changes with ui profile
-	SWF_NAMED_COLOR_HUD_TEXT = 2,  // this might be the color of the hud arrow but it will change if user has set a different color profile...
-	SWF_NAMED_COLOR_HUD_HEADER = 3,
-	SWF_NAMED_COLOR_DASH_BASE = 4,
-	SWF_NAMED_COLOR_DASH_GLOW = 5,
-	SWF_NAMED_COLOR_NOTIFICATION_GHOST = 6,
-	SWF_NAMED_COLOR_UI_HEALTH = 7,
-	SWF_NAMED_COLOR_UI_HEALTH_GRADIENT = 8,
-	SWF_NAMED_COLOR_UI_HEALTH_LOW = 9,
-	SWF_NAMED_COLOR_UI_HEALTH_REALLY_LOW = 10,
-	SWF_NAMED_COLOR_UI_HEALTH_DEMON = 11,
-	SWF_NAMED_COLOR_UI_ARMOR = 12,
-	SWF_NAMED_COLOR_UI_ARMOR_GRADIENT = 13,
-	SWF_NAMED_COLOR_UI_RADIATION = 14,
-	SWF_NAMED_COLOR_UI_RADIATION_GRADIENT = 15,
-	SWF_NAMED_COLOR_UI_OXYGEN = 16,
-	SWF_NAMED_COLOR_UI_OXYGEN_GRADIENT = 17,
-	SWF_NAMED_COLOR_UI_WARNING = 18,
-	SWF_NAMED_COLOR_UI_CAUTION = 19,
-	SWF_NAMED_COLOR_UI_SUCCESS = 20,
-	SWF_NAMED_COLOR_UI_FAILURE = 21,
-	SWF_NAMED_COLOR_UI_PROGRESS_BAR_FILL = 22,
-	SWF_NAMED_COLOR_UI_PROGRESS_COMPLETE = 23,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND = 24,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_LOW = 25,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_REALLY_LOW = 26,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_DEAD = 27,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_GLOW = 28,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_GLOW_LOW = 29,
+	SWF_NAMED_COLOR_HUD_TEXT   = 2,
+	// this might be the color of the hud arrow but it will change if user has set a different color profile...
+	SWF_NAMED_COLOR_HUD_HEADER                                 = 3,
+	SWF_NAMED_COLOR_DASH_BASE                                  = 4,
+	SWF_NAMED_COLOR_DASH_GLOW                                  = 5,
+	SWF_NAMED_COLOR_NOTIFICATION_GHOST                         = 6,
+	SWF_NAMED_COLOR_UI_HEALTH                                  = 7,
+	SWF_NAMED_COLOR_UI_HEALTH_GRADIENT                         = 8,
+	SWF_NAMED_COLOR_UI_HEALTH_LOW                              = 9,
+	SWF_NAMED_COLOR_UI_HEALTH_REALLY_LOW                       = 10,
+	SWF_NAMED_COLOR_UI_HEALTH_DEMON                            = 11,
+	SWF_NAMED_COLOR_UI_ARMOR                                   = 12,
+	SWF_NAMED_COLOR_UI_ARMOR_GRADIENT                          = 13,
+	SWF_NAMED_COLOR_UI_RADIATION                               = 14,
+	SWF_NAMED_COLOR_UI_RADIATION_GRADIENT                      = 15,
+	SWF_NAMED_COLOR_UI_OXYGEN                                  = 16,
+	SWF_NAMED_COLOR_UI_OXYGEN_GRADIENT                         = 17,
+	SWF_NAMED_COLOR_UI_WARNING                                 = 18,
+	SWF_NAMED_COLOR_UI_CAUTION                                 = 19,
+	SWF_NAMED_COLOR_UI_SUCCESS                                 = 20,
+	SWF_NAMED_COLOR_UI_FAILURE                                 = 21,
+	SWF_NAMED_COLOR_UI_PROGRESS_BAR_FILL                       = 22,
+	SWF_NAMED_COLOR_UI_PROGRESS_COMPLETE                       = 23,
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND                 = 24,
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_LOW             = 25,
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_REALLY_LOW      = 26,
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_DEAD            = 27,
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_GLOW            = 28,
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_GLOW_LOW        = 29,
 	SWF_NAMED_COLOR_UI_DEMON_HEALTH_BACKGROUND_GLOW_REALLY_LOW = 30,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_GREEN = 31,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_GREEN_GRADIENT = 32,
-	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_ORANGE = 33, //!  will not be orange if in demon mode so this color will change depending on ui profile
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_GREEN                  = 31,
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_GREEN_GRADIENT         = 32,
+	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_ORANGE                 = 33,
+	//!  will not be orange if in demon mode so this color will change depending on ui profile
 	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_ORANGE_GRADIENT = 34,
 	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_BLUE = 35,
 	SWF_NAMED_COLOR_UI_DEMON_HEALTH_PIP_BLUE_GRADIENT = 36,
@@ -1224,7 +1150,7 @@ enum swfNamedColors_t : int {
 	SWF_NAMED_COLOR_DEMON_HUD_ABILITY_FRAME = 138,
 	SWF_NAMED_COLOR_DEMON_HUD_ABILITY_FRAME_GLOW_UNSELECTED = 139,
 	SWF_NAMED_COLOR_DEMON_HUD_ABILITY_FRAME_GLOW_SELECTED = 140,
-	SWF_NAMED_COLOR_DEMON_HUD_TEAL_BASE = 141,  //! DEMON_HUD_ will change alpha a bit in demon ui
+	SWF_NAMED_COLOR_DEMON_HUD_TEAL_BASE = 141, //! DEMON_HUD_ will change alpha a bit in demon ui
 	SWF_NAMED_COLOR_DEMON_HUD_TEAL_GRADIENT = 142,
 	SWF_NAMED_COLOR_DEMON_HUD_TEAL_OVERLAY = 143,
 	SWF_NAMED_COLOR_DEMON_HUD_TEAL_ICON = 144,
@@ -1377,11 +1303,9 @@ enum swfNamedColors_t : int {
 	SWF_CUSTOM_NAMED_COLOR_LIGHTYELLOW = 321,
 	SWF_CUSTOM_NAMED_COLOR_DARKPURPLE = 322,
 	SWF_CUSTOM_NAMED_COLOR_LIGHTPINK = 323,
-	SWF_CUSTOM_NAMED_COLOR_DARKBROWN = 324,		
+	SWF_CUSTOM_NAMED_COLOR_DARKBROWN = 324,
 	SWF_CUSTOM_NAMED_COLOR_INVISIBLE = 325
-
 };
-
 
 //enum IniFileColorId_t: int {
 //	Default = 0,
@@ -1412,125 +1336,123 @@ enum swfNamedColors_t : int {
 //	MAX_INI_FILE_COLOR_ID
 //};
 
-
-
-namespace Reticle {
-
-	static const float g_defaultReticleScale = 1.0f;
+namespace Reticle
+{
+	static const float g_defaultReticleScale   = 1.0f;
 	static const float g_invisibleReticleScale = 0.00001f; //! not setting to absolute zero to prevent potential issues.
 
 	//! ingame default values
-	static const float defaultReticleScaleForBalistaWeapons = .72f; //? changing to 72 for debug but val should be 71
-	static const float defaultReticleScaleAssaultRifleBase = .5f;
+	static const float defaultReticleScaleForBalistaWeapons  = .72f; //? changing to 72 for debug but val should be 71
+	static const float defaultReticleScaleAssaultRifleBase   = .5f;
 	static const float defaultReticleScaleAssaultRifleZoomed = 1.0f;
 
 	//! DeclReticles names:
-	const std::string g_weaponreticleDefault = "weaponreticle/default";
-	const std::string g_weaponreticleShotgun = "weaponreticle/shotgun";
-	const std::string g_weaponreticleShotgunPoprocket = "weaponreticle/shotgun_poprocket";
-	const std::string g_weaponreticleShotgunFullAuto = "weaponreticle/shotgun_full_auto";
-	const std::string g_weaponreticleShotgunPoprocketMastery = "weaponreticle/shotgun_poprocket_mastery";
-	const std::string g_weaponreticlePlasmaRifleBase = "weaponreticle/plasma_rifle_base";
-	const std::string g_weaponreticlePlasmaMicrowave = "weaponreticle/plasma_microwave";
-	const std::string g_weaponreticlePistolCharged = "weaponreticle/pistol_charged";
-	const std::string g_weaponreticlePlasmaRifleAoe = "weaponreticle/plasma_rifle_aoe";
-	const std::string g_weaponreticleRocketLauncher = "weaponreticle/rocket_launcher";
-	const std::string g_weaponreticleRocketLauncherBase = "weaponreticle/rocket_launcher_base";
-	const std::string g_weaponreticleRocketLauncherLockonMod = "weaponreticle/rocket_launcher_lockon_mod";
-	const std::string g_weaponreticleChaingunBase = "weaponreticle/chaingun_base";
-	const std::string g_weaponreticleChaingunTurret = "weaponreticle/chaingun_turret";
-	const std::string g_weaponreticleChaingunEnergyShell = "weaponreticle/chaingun_energy_shell";
-	const std::string g_weaponreticleChaingunTurretMastery = "weaponreticle/chaingun_turret_mastery";
-	const std::string g_weaponreticleGaussCannon = "weaponreticle/gauss_cannon";
-	const std::string g_weaponreticleGaussBallista = "weaponreticle/gauss_ballista";
-	const std::string g_weaponreticleGaussSiege = "weaponreticle/gauss_siege";
-	const std::string g_weaponreticleBallistaDestroyerMastery = "weaponreticle/ballista_destroyer_mastery";
-	const std::string g_weaponreticleAssaultRifleBase = "weaponreticle/assault_rifle_base";
-	const std::string g_weaponreticleHeavyCannon = "weaponreticle/heavy_cannon";
-	const std::string g_weaponreticleHeavyCannonBoltAction = "weaponreticle/heavy_cannon_bolt_action";
+	const std::string g_weaponreticleDefault                     = "weaponreticle/default";
+	const std::string g_weaponreticleShotgun                     = "weaponreticle/shotgun";
+	const std::string g_weaponreticleShotgunPoprocket            = "weaponreticle/shotgun_poprocket";
+	const std::string g_weaponreticleShotgunFullAuto             = "weaponreticle/shotgun_full_auto";
+	const std::string g_weaponreticleShotgunPoprocketMastery     = "weaponreticle/shotgun_poprocket_mastery";
+	const std::string g_weaponreticlePlasmaRifleBase             = "weaponreticle/plasma_rifle_base";
+	const std::string g_weaponreticlePlasmaMicrowave             = "weaponreticle/plasma_microwave";
+	const std::string g_weaponreticlePistolCharged               = "weaponreticle/pistol_charged";
+	const std::string g_weaponreticlePlasmaRifleAoe              = "weaponreticle/plasma_rifle_aoe";
+	const std::string g_weaponreticleRocketLauncher              = "weaponreticle/rocket_launcher";
+	const std::string g_weaponreticleRocketLauncherBase          = "weaponreticle/rocket_launcher_base";
+	const std::string g_weaponreticleRocketLauncherLockonMod     = "weaponreticle/rocket_launcher_lockon_mod";
+	const std::string g_weaponreticleChaingunBase                = "weaponreticle/chaingun_base";
+	const std::string g_weaponreticleChaingunTurret              = "weaponreticle/chaingun_turret";
+	const std::string g_weaponreticleChaingunEnergyShell         = "weaponreticle/chaingun_energy_shell";
+	const std::string g_weaponreticleChaingunTurretMastery       = "weaponreticle/chaingun_turret_mastery";
+	const std::string g_weaponreticleGaussCannon                 = "weaponreticle/gauss_cannon";
+	const std::string g_weaponreticleGaussBallista               = "weaponreticle/gauss_ballista";
+	const std::string g_weaponreticleGaussSiege                  = "weaponreticle/gauss_siege";
+	const std::string g_weaponreticleBallistaDestroyerMastery    = "weaponreticle/ballista_destroyer_mastery";
+	const std::string g_weaponreticleAssaultRifleBase            = "weaponreticle/assault_rifle_base";
+	const std::string g_weaponreticleHeavyCannon                 = "weaponreticle/heavy_cannon";
+	const std::string g_weaponreticleHeavyCannonBoltAction       = "weaponreticle/heavy_cannon_bolt_action";
 	const std::string g_weaponreticleHeavyCannonBoltActionZoomed = "weaponreticle/heavy_cannon_bolt_action_zoomed";
-	const std::string g_weaponreticleHeavyCannonBurstDetonate = "weaponreticle/heavy_cannon_burst_detonate";
-	const std::string g_weaponreticleFists = "weaponreticle/fists";
-	const std::string g_weaponreticleHammer = "weaponreticle/hammer";
-	const std::string g_weaponreticleUnmakyr = "weaponreticle/unmakyr";
-	const std::string g_weaponreticleChainsawBase = "weaponreticle/chainsaw_base";
-	const std::string g_weaponreticleBfg = "weaponreticle/bfg";
-	const std::string g_weaponreticleShotgunDb = "weaponreticle/shotgun_db";
-	const std::string g_weaponreticleShotgunDbMeathook = "weaponreticle/shotgun_db_meathook";
-	const std::string g_weaponreticleCrucible = "weaponreticle/crucible";
-	const std::string g_weaponreticleArchvile = "weaponreticle/archvile";
-	const std::string g_weaponreticleMancubus = "weaponreticle/mancubus";
-	const std::string g_weaponreticleMarauder = "weaponreticle/marauder";
-	const std::string g_weaponreticlePainElemental = "weaponreticle/pain_elemental";
-	const std::string g_weaponreticleRevenant = "weaponreticle/revenant";
-	const std::string g_weaponreticleDreadknight = "weaponreticle/dreadknight";
-
-
+	const std::string g_weaponreticleHeavyCannonBurstDetonate    = "weaponreticle/heavy_cannon_burst_detonate";
+	const std::string g_weaponreticleFists                       = "weaponreticle/fists";
+	const std::string g_weaponreticleHammer                      = "weaponreticle/hammer";
+	const std::string g_weaponreticleUnmakyr                     = "weaponreticle/unmakyr";
+	const std::string g_weaponreticleChainsawBase                = "weaponreticle/chainsaw_base";
+	const std::string g_weaponreticleBfg                         = "weaponreticle/bfg";
+	const std::string g_weaponreticleShotgunDb                   = "weaponreticle/shotgun_db";
+	const std::string g_weaponreticleShotgunDbMeathook           = "weaponreticle/shotgun_db_meathook";
+	const std::string g_weaponreticleCrucible                    = "weaponreticle/crucible";
+	const std::string g_weaponreticleArchvile                    = "weaponreticle/archvile";
+	const std::string g_weaponreticleMancubus                    = "weaponreticle/mancubus";
+	const std::string g_weaponreticleMarauder                    = "weaponreticle/marauder";
+	const std::string g_weaponreticlePainElemental               = "weaponreticle/pain_elemental";
+	const std::string g_weaponreticleRevenant                    = "weaponreticle/revenant";
+	const std::string g_weaponreticleDreadknight                 = "weaponreticle/dreadknight";
 }
 
 //! INI FILE DEFAULT SETTINGS:
 
 //! default idDeclWeapons vals:
-namespace modSettingsDefault {
+namespace modSettingsDefault
+{
+	static const bool defaultIsFirstTimeModLaunch = true;
 
-
-	static const bool defaultIsFirstTimeModLaunch = true;	
-
-	static const unsigned int defaultToggleModSettingsVkCode = VK_F8;
-	static const int  defaultmodSettingsShortcutTextColorImU32 = IM_COL32(255, 255, 255, 255); //white
+	static const unsigned int defaultToggleModSettingsVkCode           = VK_F8;
+	static const int          defaultmodSettingsShortcutTextColorImU32 = IM_COL32(255, 255, 255, 255); //white
 
 	static const bool defaultIsUseDedicatedNadeKeys = true;
 
 	static const bool defaultIsDisableNewCampaignPopUp = true;
 
-	static const bool defaultIsDisableBatterySocketPopUp = true;
+	static const bool defaultIsDisableBatterySocketPopUp     = true;
 	static const bool defaultIsSpeedUpBatterySocketAnimation = false;
 
 	static const bool defaultIsSkipCustomAnimations = false;
 
-	static const bool defaultIsOverideInteractionFOV = false;
-	static const float defaultInteractionFOV = 90.0f;
+	static const bool  defaultIsOverideInteractionFOV = false;
+	static const float defaultInteractionFOV          = 90.0f;
 
-	static const float g_defaultShotGunStickyzoomedFOV = 80.0f;				//! offset 1700
-	static const float g_defaultShotGunStickyzoomedHandsFOV = 55.0f;				//! offset 1704
+	static const float g_defaultShotGunStickyzoomedFOV      = 80.0f; //! offset 1700
+	static const float g_defaultShotGunStickyzoomedHandsFOV = 55.0f; //! offset 1704
 
-	static const float g_defaultShotGunStickyControllerSens = 0.450f;	//! offset 170C
-	static const float g_defaultShotGunStickyMouseSens = 0.650f;		//! offset 1710
+	static const float g_defaultShotGunStickyControllerSens = 0.450f; //! offset 170C
+	static const float g_defaultShotGunStickyMouseSens      = 0.650f; //! offset 1710
 
-	static const float g_defaultShotGunFullAutoZoomedFov = 82.0f;				//! offset 1700
-	static const float g_defaultShotGunFullAutozoomedHandsFov = 70.0f;				//! offset 1704
+	static const float g_defaultShotGunFullAutoZoomedFov      = 82.0f; //! offset 1700
+	static const float g_defaultShotGunFullAutozoomedHandsFov = 70.0f; //! offset 1704
 
-	static const float g_defaultShotGunFullAutoControllerSens = 0.450f;	//! offset 170C
-	static const float g_defaultShotGunFullAutoMouseSens = 0.650f;			//! offset 1710
+	static const float g_defaultShotGunFullAutoControllerSens = 0.450f; //! offset 170C
+	static const float g_defaultShotGunFullAutoMouseSens      = 0.650f; //! offset 1710
 
-	static const float g_defaultPrecisionBoltzoomedFOV = 45.0f;					//! offset 1700
-	static const float g_defaultPrecisionBoltzoomedHandsFOV = 0.0f;					//! offset 1704
+	static const float g_defaultPrecisionBoltzoomedFOV      = 45.0f; //! offset 1700
+	static const float g_defaultPrecisionBoltzoomedHandsFOV = 0.0f; //! offset 1704
 
-	static const float g_defaultPrecisionBoltControllerSens = 0.40f;				// offset 170C
-	static const float g_defaultPrecisionBoltMouseSens = 0.50f;                		//! offset 1710
+	static const float g_defaultPrecisionBoltControllerSens = 0.40f; // offset 170C
+	static const float g_defaultPrecisionBoltMouseSens      = 0.50f; //! offset 1710
 
-	static const float g_defaultBallistaArbalestezoomedFOV = 65.0f;					//! offset 1700
-	static const float g_defaultBallistaArbalestezoomedHandsFOV = 0.0f;					//! offset 1704
+	static const float g_defaultBallistaArbalestezoomedFOV      = 65.0f; //! offset 1700
+	static const float g_defaultBallistaArbalestezoomedHandsFOV = 0.0f; //! offset 1704
 
-	static const float g_defaultBallistaArbalesteControllerSens = 0.6f; 	//! offset 170C
-	static const float g_defaultBallistaArbalesteMouseSens = 0.6f;			//! offset 1710
+	static const float g_defaultBallistaArbalesteControllerSens = 0.6f; //! offset 170C
+	static const float g_defaultBallistaArbalesteMouseSens      = 0.6f; //! offset 1710
 
-	static const float g_weaponMaxSensitivity = 1.0f; //! this means the sens will be the same as when using for ex plasma or RL.
+	static const float g_weaponMaxSensitivity = 1.0f;
+	//! this means the sens will be the same as when using for ex plasma or RL.
 
-	static const float g_overideShotGunzoomedFOV = 89.999f;	//! this means it use the fov from settings menu as 90 is the game default fov for many calculations. we don't set it to 90 is because otherwise it would not trigger the gun+reticule animation.
-	static const float g_overideShotGunzoomedHandsFov = 0.0f;
+	static const float g_overideShotGunzoomedFOV = 89.999f;
+	//! this means it use the fov from settings menu as 90 is the game default fov for many calculations. we don't set it to 90 is because otherwise it would not trigger the gun+reticule animation.
+	static const float g_overideShotGunzoomedHandsFov    = 0.0f;
 	static const float g_overideBalistaArbalestMouseSens = 0.7f; //! personal preference
-	static const bool g_defaultIsOverideShotgunConfig = true; //! should the overide shotgun be used if issue with ini file.
+	static const bool  g_defaultIsOverideShotgunConfig   = true;
+	//! should the overide shotgun be used if issue with ini file.
 
-
-	static const float g_overideBalistaArbalestZoomedFOV = 89.999f;	//!  this means it use the fov from settings menu as 90 is the game default fov for many calculations. we don't set it to 90 is because otherwise it would not trigger the gun+reticule animation.
-	static const float g_overideBalistaArbalestZoomedHandsFov = 0.0f;	
-	static const bool g_defaultIsRemoveBalistaZoom = false;
+	static const float g_overideBalistaArbalestZoomedFOV = 89.999f;
+	//!  this means it use the fov from settings menu as 90 is the game default fov for many calculations. we don't set it to 90 is because otherwise it would not trigger the gun+reticule animation.
+	static const float g_overideBalistaArbalestZoomedHandsFov = 0.0f;
+	static const bool  g_defaultIsRemoveBalistaZoom           = false;
 
 	//! Improved Weapon Switching. Disabled by default cause it's still experimental imo.
-	static const bool g_defaultIsImprovedWeaponSwitchEnabled = false; //! should the improved switching be used if issue with ini file.
+	static const bool g_defaultIsImprovedWeaponSwitchEnabled = false;
+	//! should the improved switching be used if issue with ini file.
 	static const bool g_defaultIsImprovedWeaponSwitchBeep = false;
-
 
 	//! should we reload the ini file as soon as it is saved. Update: i'm setting this to true by default cause i think many miss the feature.
 	//static const bool g_defaultIsIniFileAutoReload = true;
@@ -1540,7 +1462,6 @@ namespace modSettingsDefault {
 
 	//! 0 means no change to HandsFOV
 	static const int g_defaultHandsFOV = 0;
-
 
 	static const bool g_defaultIsGameFovUnlocked = false;
 
@@ -1555,14 +1476,13 @@ namespace modSettingsDefault {
 
 	//! custom dot crosshair
 	static const bool g_defaultUseImguiCustomDotCrosshair = false;
-	
-	static const ImU32 g_defaultCustomDotCrosshairColorImU32 = IM_COL32(255, 255, 255, 255); //white
+
+	static const ImU32 g_defaultCustomDotCrosshairColorImU32         = IM_COL32(255, 255, 255, 255); //white
 	static const ImU32 g_defaultCustomDotCrosshairCooldownColorImU32 = IM_COL32(255, 0, 0, 255);
 
 	static const float g_defaultimguiCustomDotCrosshairRadiusPix = 2.0f;
 
 	static const bool g_defaultCustomDotCrosshairIsShowHealthAsColor = false;
-
 
 	//! custom hud settings
 	static const bool g_defaultIsUseKaibzHud = false;
@@ -1591,32 +1511,30 @@ namespace modSettingsDefault {
 
 	static const ImU32 g_defaultkaibzHudWhiteColorImU32 = IM_COL32(255, 255, 255, 255); // white
 
-	static const ImU32 g_defaultkaibzHudDisabledColorImU32 = IM_COL32(90, 90, 90, 255); // dark grey
-	static const ImU32 g_defaultkaibzHudCautionColorImU32 = IM_COL32(255, 255, 0, 255); // pale yellow
-	static const ImU32 g_defaultkaibzHudWarningColorImU32 = IM_COL32(238, 105, 9, 255); // orange
-	static const ImU32 g_defaultkaibzHudCriticalColorImU32 = IM_COL32(255, 0, 0, 255); // red
-	static const ImU32 g_defaultkaibzHudExtraLivesColorImU32 = IM_COL32(152, 251, 152, 255); // pale green
-	static const ImU32 g_defaultkaibzHudBloodPunch1ColorImU32 = IM_COL32(255, 165, 0, 255); // orange
-	static const ImU32 g_defaultkaibzHudBloodPunch2ColorImU32 = IM_COL32(255, 0, 0, 255); // red
+	static const ImU32 g_defaultkaibzHudDisabledColorImU32            = IM_COL32(90, 90, 90, 255); // dark grey
+	static const ImU32 g_defaultkaibzHudCautionColorImU32             = IM_COL32(255, 255, 0, 255); // pale yellow
+	static const ImU32 g_defaultkaibzHudWarningColorImU32             = IM_COL32(238, 105, 9, 255); // orange
+	static const ImU32 g_defaultkaibzHudCriticalColorImU32            = IM_COL32(255, 0, 0, 255); // red
+	static const ImU32 g_defaultkaibzHudExtraLivesColorImU32          = IM_COL32(152, 251, 152, 255); // pale green
+	static const ImU32 g_defaultkaibzHudBloodPunch1ColorImU32         = IM_COL32(255, 165, 0, 255); // orange
+	static const ImU32 g_defaultkaibzHudBloodPunch2ColorImU32         = IM_COL32(255, 0, 0, 255); // red
 	static const ImU32 g_defaultkaibzHudBloodPunchDesperateColorImU32 = IM_COL32(128, 0, 128, 255); // purple
-	static const ImU32 g_defaultkaibzHudHealthMaxColorImU32 = IM_COL32(255, 255, 255, 255); // white
-	static const ImU32 g_defaultkaibzHudHealthColorImU32 = IM_COL32(173, 216, 230, 255); // pale blue
-	static const ImU32 g_defaultkaibzHudArmorMaxColorImU32 = IM_COL32(255, 255, 255, 255); // white
-	static const ImU32 g_defaultkaibzHudArmorColorImU32 = IM_COL32(152, 251, 152, 255); // pale green
-	static const ImU32 g_defaultkaibzHudRadsuitColorImU32 = IM_COL32(255, 255, 0, 255); // pale yellow
-	static const ImU32 g_defaultkaibzHudOxygenColorImU32 = IM_COL32(0, 0, 255, 255); // blue
-	static const ImU32 g_defaultkaibzHudAmmoColorImU32 = IM_COL32(255, 255, 255, 255); // white
-	static const ImU32 g_defaultkaibzHudHammerCrucibleColorImU32 = IM_COL32(255, 69, 0, 255); // orange-red
-	static const ImU32 g_defaultkaibzHudFlameBelchColorImU32 = IM_COL32(255, 255, 0, 255); // yellow
-	static const ImU32 g_defaultkaibzHudFuel1ColorImU32 = IM_COL32(255, 165, 0, 255); // orange
-	static const ImU32 g_defaultkaibzHudFuel2ColorImU32 = IM_COL32(139, 0, 0, 255); // dark orange
-	static const ImU32 g_defaultkaibzHudFuel3ColorImU32 = IM_COL32(255, 0, 0, 255); // red
-	static const ImU32 g_defaultkaibzHudFrag1ColorImU32 = IM_COL32(152, 251, 152, 255); // pale green
-	static const ImU32 g_defaultkaibzHudFrag2ColorImU32 = IM_COL32(0, 128, 0, 255); // green
-	static const ImU32 g_defaultkaibzHudIceColorImU32 = IM_COL32(173, 216, 230, 255); // pale blue
-	static const ImU32 g_defaultkaibzHudIceCooldownColorImU32 = IM_COL32(255, 0, 0, 255); // red
-
-	
+	static const ImU32 g_defaultkaibzHudHealthMaxColorImU32           = IM_COL32(255, 255, 255, 255); // white
+	static const ImU32 g_defaultkaibzHudHealthColorImU32              = IM_COL32(173, 216, 230, 255); // pale blue
+	static const ImU32 g_defaultkaibzHudArmorMaxColorImU32            = IM_COL32(255, 255, 255, 255); // white
+	static const ImU32 g_defaultkaibzHudArmorColorImU32               = IM_COL32(152, 251, 152, 255); // pale green
+	static const ImU32 g_defaultkaibzHudRadsuitColorImU32             = IM_COL32(255, 255, 0, 255); // pale yellow
+	static const ImU32 g_defaultkaibzHudOxygenColorImU32              = IM_COL32(0, 0, 255, 255); // blue
+	static const ImU32 g_defaultkaibzHudAmmoColorImU32                = IM_COL32(255, 255, 255, 255); // white
+	static const ImU32 g_defaultkaibzHudHammerCrucibleColorImU32      = IM_COL32(255, 69, 0, 255); // orange-red
+	static const ImU32 g_defaultkaibzHudFlameBelchColorImU32          = IM_COL32(255, 255, 0, 255); // yellow
+	static const ImU32 g_defaultkaibzHudFuel1ColorImU32               = IM_COL32(255, 165, 0, 255); // orange
+	static const ImU32 g_defaultkaibzHudFuel2ColorImU32               = IM_COL32(139, 0, 0, 255); // dark orange
+	static const ImU32 g_defaultkaibzHudFuel3ColorImU32               = IM_COL32(255, 0, 0, 255); // red
+	static const ImU32 g_defaultkaibzHudFrag1ColorImU32               = IM_COL32(152, 251, 152, 255); // pale green
+	static const ImU32 g_defaultkaibzHudFrag2ColorImU32               = IM_COL32(0, 128, 0, 255); // green
+	static const ImU32 g_defaultkaibzHudIceColorImU32                 = IM_COL32(173, 216, 230, 255); // pale blue
+	static const ImU32 g_defaultkaibzHudIceCooldownColorImU32         = IM_COL32(255, 0, 0, 255); // red
 
 	//? i'm keeping this for doc, these colors from gpt are wrong: 
 	//static const int g_defaultkaibzHudDisabledColor = 0xFF808080; // dark grey
@@ -1642,33 +1560,28 @@ namespace modSettingsDefault {
 	//static const int g_defaultkaibzHudFrag2Color = 0xFF008000; // green
 	//static const int g_defaultkaibzHudIceColor = 0xFFADD8E6; // pale blue
 
-
-
-
-
 	//! game hud settings
 
 	static const int g_defaultOverrideHudColorPackedTest = 0xFFFFA500;;
 
-	static const int g_defaultOverrideBloodPunchColor1 = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_ORANGE;
-	static const int g_defaultOverrideBloodPunchColor2 = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_RED;
+	static const int g_defaultOverrideBloodPunchColor1    = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_ORANGE;
+	static const int g_defaultOverrideBloodPunchColor2    = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_RED;
 	static const int g_defaultOverrideDesperatePunchColor = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_PURPLE;
-	
+
 	static const int g_defaultOverrideFuel3Pips_Color = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_RED;
 
 	static const int g_defaultOverrideFragGrenadeAvailable_Color = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_GREEN;
-	static const int g_defaultOverrideFragGrenadeCooldown_Color = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DARKGREY;
+	static const int g_defaultOverrideFragGrenadeCooldown_Color  = (int)
+		swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DARKGREY;
 
 	static const int g_defaultOverrideIceGrenadeAvailable_Color = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT;
 	static const int g_defaultOverrideIceGrenadeCoolDown_Color = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DARKGREY;
 	//static const int g_defaultOverrideIceGrenadeCoolDown_Color = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_RED;
-	
-	static const bool g_defaultIsWeaponBarColored = true;
 
+	static const bool g_defaultIsWeaponBarColored = true;
 
 	static const int g_defaultOverrideRadMeterColor = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_WHITE;
 
-	
 	/*static const int g_defaultOverrideDotReticleColor = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_WHITE;
 	static const int g_defaultOverrideDotReticleCooldownColor = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_RED;
 	static const int g_defaultOverrideDotReticleFragNadeReadyColor = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_GREEN;
@@ -1676,8 +1589,6 @@ namespace modSettingsDefault {
 	static const int g_defaultOverrideDotReticleBothNadesReadyColor = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_YELLOW;*/
 
 	static const int g_DotColorFeatureDisabledColor = (int)swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_DEFAULT;
-
-
 
 	//! the binds above some of the hud elements
 	static const bool g_defaultIsRemoveBindsReminderOnHud = true;
@@ -1687,51 +1598,43 @@ namespace modSettingsDefault {
 
 	static const bool g_defaultIsHitMarkerDisabled = false;
 
-
 	//! other settings
 	//? this is now a bool cause the DLLS anti aliasing is just a pain to handle cause of user potential graphic card 
-	static const bool g_defaultIsDisableAntiAliasing = false;
-	static const bool g_defaultIsDisableBloom = false;
+	static const bool g_defaultIsDisableAntiAliasing   = false;
+	static const bool g_defaultIsDisableBloom          = false;
 	static const bool g_defaultIsDisableMouseSmoothing = false;
 	//static const int g_defaultTextureLodBias = 0;
-	static const int g_defaultDecalLifetimeMultiplier = 1;
-	static const float g_defaultDesaturate = 0.0f;
-
-
-
+	static const int   g_defaultDecalLifetimeMultiplier = 1;
+	static const float g_defaultDesaturate              = 0.0f;
 
 	//! Gameplay settings
 	//static const bool g_defaultForceRainAnywhere = false;
 	//static const bool g_defaultForceSnowAnywhere = false;
 	static const bool g_defaultisForceAiHaste = false;
 
-
-
 	//! debug setting
 	static const bool g_defaultisDebugMode = false;
 
-	static const int g_userLogLevelErrorInt = 0;
-	static const int g_userLogLevelWarningInt  = 1;
-	static const int g_userLogLevelInfoInt = 2;
+	static const int g_userLogLevelErrorInt   = 0;
+	static const int g_userLogLevelWarningInt = 1;
+	static const int g_userLogLevelInfoInt    = 2;
 	//? only communicate this to user who have big crash issues so i can know at which point they crash. We do not let user set this mode by default because the size of log file grows VERY fast and will grow as big as the game for long sessions so it should only be used to figure out why the game crash at start or at the start of a level:
-	static const int g_userHiddenLogLevelMaxVerboseInt = 666; 
+	static const int g_userHiddenLogLevelMaxVerboseInt = 666;
 	//static const int g_userMaxDebugLevelInt = 5;
 
-
 	//! other settings
-	static const bool g_defaulIsUseImgui = true;
+	static const bool g_defaulIsUseImgui            = true;
 	static const bool g_defaulIsLogConsoleToLogFile = false;
 
-
 	//! debug settings:
-	static const unsigned int g_defaultReloadImguiHooksVkCode = VK_F7;
-	static const std::string g_defaultReloadImguiHooksKeyName = "F7";
+	static const unsigned int g_defaultReloadImguiHooksVkCode  = VK_F7;
+	static const std::string  g_defaultReloadImguiHooksKeyName = "F7";
 
 	//! weapons
 
 	const float g_scaledDownGameDotCrosshairScale = 0.0001f;
-	const float g_defaultGameCrosshairScale = 1.0f;
-	
+	const float g_defaultGameCrosshairScale       = 1.0f;
+
 	//const float g_defaultGameCrosshairScaleBallista = .75f;
 
 	const float g_minSensValue = 0.0f;
@@ -1747,42 +1650,35 @@ namespace modSettingsDefault {
 
 	const int g_userMaxSensIntValue = 100;
 
-
 	//! Ini file:
 	//! if parser fails to parse an int value it will return -1
 	static const int iniFileIntNotFoundVal = -1;
 	//! if parser fails to parse an bool value it will return -1
 	static const int iniFileBoolNotFoundVal = -1;
 	//const bool iniFileBoolNotFoundValFalse = 0;
-
 }
-
-
-
-
 
 //! sprites hash ids (these are the member fullPathHash in the idSWFSpriteInstance.h, they are handled in setSpriteInstanceColorHook:
 //! doesn't make sens they could be negative but the field says int not unsigned int.
 
-
 const int32_t unknownHudElementId = -2107815822; //! may be weaponInfo container
-const int32_t weaponInfoSriteId = -938331194; //! si name: weaponInfo
-const int32_t equipmentSpriteId = 929754470; //! si name: equipment
+const int32_t weaponInfoSriteId   = -938331194; //! si name: weaponInfo
+const int32_t equipmentSpriteId   = 929754470; //! si name: equipment
 
-const int32_t flameBelchIconSpriteId = 183897624;
-const int32_t flameBelchCoolDownFillSpriteId = 1747535555;
+const int32_t flameBelchIconSpriteId             = 183897624;
+const int32_t flameBelchCoolDownFillSpriteId     = 1747535555;
 const int32_t flameBelchCoolDownGlowFillSpriteId = 285385424;
-const int32_t flameBelchInnerFillSpriteId = 838311833;
+const int32_t flameBelchInnerFillSpriteId        = 838311833;
 
 const int32_t fuelRechargeInnerFillSpriteId = -1860842928;
-const int32_t fuelIconSpriteId = 853642232;
-const int32_t fuelPipFillSpriteId = 2000815950;
-const int32_t fuelPipInnerFillSpriteId = 1636335086;
+const int32_t fuelIconSpriteId              = 853642232;
+const int32_t fuelPipFillSpriteId           = 2000815950;
+const int32_t fuelPipInnerFillSpriteId      = 1636335086;
 
-const int32_t fragCoolDownFillGlowSpriteId = 1569359954; //! this is the oriented rectangle structure 
+const int32_t fragCoolDownFillGlowSpriteId  = 1569359954; //! this is the oriented rectangle structure 
 const int32_t fragCoolDownInnerFillSpriteId = 1986816599; //! bg of the nade icon i believe
-const int32_t fragCoolDownFillFillSpriteId = 401882437; //! not sure about this one
-const int32_t fragIconSpriteId = -1683998079; //! the nade icon
+const int32_t fragCoolDownFillFillSpriteId  = 401882437; //! not sure about this one
+const int32_t fragIconSpriteId              = -1683998079; //! the nade icon
 
 /*
 14:00:14.607              idPlayer.h:602   INFO| debugPrintFragNadeCoordsFromWeaponInfoV2: found display entry sprite instance: background with hash: 0xDAE74AB6 (-622376266) rect: 632.38 395.70 674.17 426.20
@@ -1792,81 +1688,75 @@ const int32_t fragIconSpriteId = -1683998079; //! the nade icon
 14:00:14.607              idPlayer.h:602   INFO| debugPrintFragNadeCoordsFromWeaponInfoV2: found display entry sprite instance: switchedFlash with hash: 0xF4E3275 (256782965) rect: 633.29 386.82 633.29 386.82
 */
 
-const int32_t Equipment_background_Id = 0xDAE74AB6;
-const int32_t Equipment_ready_flash_Id = 0x3902E1CC;
-const int32_t Equipment_cooldown_Id = 0x5691BEF3;
-const int32_t Equipment_icon_Id = 0xF828F801;
+const int32_t Equipment_background_Id    = 0xDAE74AB6;
+const int32_t Equipment_ready_flash_Id   = 0x3902E1CC;
+const int32_t Equipment_cooldown_Id      = 0x5691BEF3;
+const int32_t Equipment_icon_Id          = 0xF828F801;
 const int32_t Equipment_switchedFlash_Id = 0xF4E3275;
 
-
-const int32_t equipmentArrowSpriteId = -1637630621;
+const int32_t equipmentArrowSpriteId  = -1637630621;
 const int32_t equipmentBackerSpriteId = -2014894865; //! the little bar right side of the nade
 
-
-
-const int32_t healthIconOuterSpriteId = -1170972450; 
-const int32_t healthIconBgSpriteId = -108148670;
-const int32_t healthTextSpriteId = -1213354124;
-const int32_t healthPipsOutlineSpriteId = 331208024;
-const int32_t healthPipsGradientBottomSpriteId = 602032450;
-const int32_t healthPipsGradientTopSpriteId = -682387167;
-const int32_t healthBottomAdornmentSpriteId = 124287208;
-const int32_t healthPulseLoopSpriteId = -903599971;
-const int32_t healthGlowSpriteId = -955715598;
-const int32_t healthRightSideRightRightSpriteId = 1116648134;
+const int32_t healthIconOuterSpriteId             = -1170972450;
+const int32_t healthIconBgSpriteId                = -108148670;
+const int32_t healthTextSpriteId                  = -1213354124;
+const int32_t healthPipsOutlineSpriteId           = 331208024;
+const int32_t healthPipsGradientBottomSpriteId    = 602032450;
+const int32_t healthPipsGradientTopSpriteId       = -682387167;
+const int32_t healthBottomAdornmentSpriteId       = 124287208;
+const int32_t healthPulseLoopSpriteId             = -903599971;
+const int32_t healthGlowSpriteId                  = -955715598;
+const int32_t healthRightSideRightRightSpriteId   = 1116648134;
 const int32_t healthRightSideMiddleMiddleSpriteId = 113114667;
-const int32_t healthRightSideAddAmountSpriteId = -1744332829;
-const int32_t healthrightSideRightborderSpriteId = -1710607419;
+const int32_t healthRightSideAddAmountSpriteId    = -1744332829;
+const int32_t healthrightSideRightborderSpriteId  = -1710607419;
 
 const int32_t armorBarGradientSpriteId = -440946002;
-const int32_t armorBarBaseSpriteId = -1673318065;
-const int32_t armorRightSideSpriteId = 718516331;
-const int32_t armorTextSpriteId = -600175609;
-const int32_t armorIconSpriteId = -465741973;
-const int32_t armorIconGlowSpriteId = -250485121;
-const int32_t armorInfoSpriteId = -837958482;
-const int32_t armorBgSpriteId = -40273562;
+const int32_t armorBarBaseSpriteId     = -1673318065;
+const int32_t armorRightSideSpriteId   = 718516331;
+const int32_t armorTextSpriteId        = -600175609;
+const int32_t armorIconSpriteId        = -465741973;
+const int32_t armorIconGlowSpriteId    = -250485121;
+const int32_t armorInfoSpriteId        = -837958482;
+const int32_t armorBgSpriteId          = -40273562;
 
 const int32_t weaponInfoBgModlessSpriteId = -285705630;
-const int32_t weaponInfoTextSpriteId = 1997308846;
-const int32_t weaponInfoAmmoIconSpriteId = -831019681;
-const int32_t weaponInfoBgSpriteId = -527652115; //! this is the big bar at the bottow that we'll use as a reference for ammos text
+const int32_t weaponInfoTextSpriteId      = 1997308846;
+const int32_t weaponInfoAmmoIconSpriteId  = -831019681;
+const int32_t weaponInfoBgSpriteId        = -527652115;
+//! this is the big bar at the bottow that we'll use as a reference for ammos text
 const int32_t weaponInfoModIconId = 0x1C99E529; //! current mod icon color
 //const int32_t weaponInfoModMayBe = 0xEEF87A62; 
 //const int32_t weaponInfoModMayBe = 0x770C83AE;
 
 const int32_t radSuitBarGradientSpriteId = 247756417;
-const int32_t radSuitBarBaseSpriteId = -1642539358;
-const int32_t radSuitRightSideSpriteId = -1695464456;
-const int32_t radSuitTextSpriteId = 841051668;
-const int32_t radSuitIconImgSpriteId = -1651990978;
-const int32_t radSuitGlowImgSpriteId = -1436734126;
-const int32_t radSuitBgSpriteId = 1400953715;
-const int32_t radSuitBgPulseSpriteId = 337295309;
+const int32_t radSuitBarBaseSpriteId     = -1642539358;
+const int32_t radSuitRightSideSpriteId   = -1695464456;
+const int32_t radSuitTextSpriteId        = 841051668;
+const int32_t radSuitIconImgSpriteId     = -1651990978;
+const int32_t radSuitGlowImgSpriteId     = -1436734126;
+const int32_t radSuitBgSpriteId          = 1400953715;
+const int32_t radSuitBgPulseSpriteId     = 337295309;
 
-const int32_t bloodPunchBgPulseSpriteId = 1334139029;
-const int32_t bloodPunchChargeGlowBgSpriteId = -1700059271;
-const int32_t bloodPunchBgImgSpriteId = 2038383566;
-const int32_t bloodPunchBorderImgSpriteId = -2114214347;
-const int32_t bloodPunchIconOnSpriteId = 1200615612;
-const int32_t bloodPunchIconOffSpriteId = -1614698948;
-const int32_t bloodPunchReadyFlashSpriteId = 654315928;
+const int32_t bloodPunchBgPulseSpriteId       = 1334139029;
+const int32_t bloodPunchChargeGlowBgSpriteId  = -1700059271;
+const int32_t bloodPunchBgImgSpriteId         = 2038383566;
+const int32_t bloodPunchBorderImgSpriteId     = -2114214347;
+const int32_t bloodPunchIconOnSpriteId        = 1200615612;
+const int32_t bloodPunchIconOffSpriteId       = -1614698948;
+const int32_t bloodPunchReadyFlashSpriteId    = 654315928;
 const int32_t bloodPunchFillRightGlowSpriteId = -216838433;
-const int32_t bloodPunchFillRightImgSpriteId = -6992847;
-const int32_t bloodPunchFillLeftGlowSpriteId = -1035373996;
-const int32_t bloodPunchFillLeftImgSpriteId = -33397220;
-const int32_t bloodPunchTextSpriteId = 1430400401;
-const int32_t bloodPunchBindKbmSpriteId = -370399847;
-const int32_t bloodPunchBindJoySpriteId = 348013304;
-const int32_t bloodPunchChargeBgSpriteId = 1938093377;
-const int32_t bloodPunchImgImgSpriteId = 1656191230;
-const int32_t bloodPunchBgBaseSpriteId = 2093662737;
+const int32_t bloodPunchFillRightImgSpriteId  = -6992847;
+const int32_t bloodPunchFillLeftGlowSpriteId  = -1035373996;
+const int32_t bloodPunchFillLeftImgSpriteId   = -33397220;
+const int32_t bloodPunchTextSpriteId          = 1430400401;
+const int32_t bloodPunchBindKbmSpriteId       = -370399847;
+const int32_t bloodPunchBindJoySpriteId       = 348013304;
+const int32_t bloodPunchChargeBgSpriteId      = 1938093377;
+const int32_t bloodPunchImgImgSpriteId        = 1656191230;
+const int32_t bloodPunchBgBaseSpriteId        = 2093662737;
 
 const int32_t unidentifiedReticleId = 0xECB04FE2;
-
-
-
-
 
 inline std::unordered_map<std::string, unsigned int> ValidKeyBindsMap = {
 	{"0", 0x30},
@@ -1919,218 +1809,203 @@ inline std::unordered_map<std::string, unsigned int> ValidKeyBindsMap = {
 	{"F12", 0x7B}
 };
 
-
-
-
-
-
-
 //! 0:Full  1:Dot  2:None (No Crosshair)
-enum gameSettingsCrosshairMode {
+enum gameSettingsCrosshairMode
+{
 	FULL = 0,
-	DOT = 1,
+	DOT  = 1,
 	NONE = 2
 };
 
-
-
-
-
-
-enum idWeapon_chargeState_t : __int32 {
-	CHARGE_STATE_NONE = 0,
-	CHARGE_STATE_READY = 1,
-	CHARGE_STATE_CHARGING = 2,
+enum idWeapon_chargeState_t : __int32
+{
+	CHARGE_STATE_NONE          = 0,
+	CHARGE_STATE_READY         = 1,
+	CHARGE_STATE_CHARGING      = 2,
 	CHARGE_STATE_FULLY_CHARGED = 3,
-	CHARGE_STATE_DISCHARGING = 4,
-	CHARGE_STATE_COOLING = 5,
-	CHARGE_STATE_SUSPENDED = 6,
+	CHARGE_STATE_DISCHARGING   = 4,
+	CHARGE_STATE_COOLING       = 5,
+	CHARGE_STATE_SUSPENDED     = 6,
 };
 
-
-
 //? there are more you can get them by modifying getIdHud_Element
-namespace HudElementName {
+namespace HudElementName
+{
 	//! using strings for id is not great but at least i'll be sure:
-	static std::string Backdrop = "backdrop";
-	static std::string LowWarning = "hud_lowwarning";
+	static std::string Backdrop            = "backdrop";
+	static std::string LowWarning          = "hud_lowwarning";
 	static std::string DirectionalFeedback = "hud_directionalfeedback";
-	static std::string HealthInfo = "hud_healthinfo";
-	static std::string WeaponInfo = "hud_weaponinfo";
-	static std::string HordeVictory = "hud_horde_victory";
-	static std::string Reticle = "hud_reticle";
-	static std::string AbilityIndicators = "hud_abilityindicators";
-	static std::string SkipCinematic = "hud_skipcinematic";
-	static std::string ExtraLives = "hud_extralives";
-	static std::string BloodPunch = "hud_bloodpunch";
-	static std::string DemonAbilityBar = "demon/hud_abilitybar";
-/*
-	
-backdrop at addr: 0000021177AC31B0  
- hud_lowwarning at addr: 000002117388D130  
- hud_lowwarning_background at addr: 000002117388D2A0  
- hud_directionalfeedback at addr: 00000210F22A08D0  
- hud_healthinfo at addr: 00000211AED892D0  
- hud_weaponinfo at addr: 000002111E66C1C0  
- horde/hud_horde_victory at addr: 0000021177AC38B0  
- hud_reticle at addr: 00000210F56C8790  
- debug at addr: 00000210F589A510  
- hud_bossvitals at addr: 00000211785F67D0  
- hud_dash at addr: 0000021175A405E0  
- hud_bloodpunch at addr: 000002111BADDBA0  
- hud_diagnostics at addr: 00000211B371E1D0  
- hud_diagnostics_online at addr: 00000210F22A0290  
- demon/hud_healthinfo at addr: 00000211B371DB10  
- demon/hud_reticle at addr: 00000211423EC0A0  
- demon/hud_cardwheel_4wedge at addr: 00000210F5899FD0  
- hud_focusinfo at addr: 000002100193BBD0  
- hud_compass at addr: 00000211B3B826C0  
- hud_poi at addr: 00000211B371E410  
- demon/hud_abilitybar at addr: 00000211B371E650  
- pvp/hud_matchheader at addr: 00000211B40846E0  
- demon/hud_abilitybar_bottom_right at addr: 00000211785F61E0  
- hud_damagenumber at addr: 000002100193C230  
- hud_extralives at addr: 000002100193B020  
- hud_keycard at addr: 00000211785F6900  
- hud_subtitles at addr: 0000021175B7DBE0  
- hud_targetstike at addr: 00000210019398C0  
- demon/hud_timer at addr: 000002100193A9C0  
- hud_mission_challenge at addr: 00000210FC8CF930  
- hud_runeinfo at addr: 000002116D1C0F00  
- hud_timer at addr: 000002100193B130  
- pvp/hud_end_of_match at addr: 000002117388CE50  
- hud_score at addr: 00000211785F6310  
- hud_powerup at addr: 00000210F5972E60  
- hud_nameplate at addr: 000002116D1BDE10  
- demon/hud_dash at addr: 00000211785F6C90  
- hud_characterstatustext at addr: 000002100193A360  
- hud_speaker at addr: 000002100193A8B0  
- hud_skipcinematic at addr: 000002111BADD780  
- hud_tutorial_objectives at addr: 00000210F5BC3AF0  
- demon/hud_tutorial_objectives at addr: 00000210F5BC3C20  
- hud_video at addr: 00000210F22A03D0  
- pvp/hud_spectator at addr: 00000210F5BC3170  
- hud_photomodedisplay at addr: 000002100193C890  
- hud_damage_report at addr: 00000210FC859BB0  
- demon/hud_damage_report at addr: 00000210FC858440  
- hud_networkstatus at addr: 00000211B371DC30  
- hud_timeattack_timer at addr: 00000210019389E0  
- hud_textcrawl at addr: 0000021175B7DD60  
- hud_abilityindicators at addr: 00000210F5899E10  
- horde/hud_horde_score at addr: 00000210FFBA9310  
- horde/hud_horde_staged_timer at addr: 000002117388D410  
- hud_textchat at addr: 000002113A294900  
- demon/hud_textchat_demon at addr: 
-	
-	*/
+	static std::string HealthInfo          = "hud_healthinfo";
+	static std::string WeaponInfo          = "hud_weaponinfo";
+	static std::string HordeVictory        = "hud_horde_victory";
+	static std::string Reticle             = "hud_reticle";
+	static std::string AbilityIndicators   = "hud_abilityindicators";
+	static std::string SkipCinematic       = "hud_skipcinematic";
+	static std::string ExtraLives          = "hud_extralives";
+	static std::string BloodPunch          = "hud_bloodpunch";
+	static std::string DemonAbilityBar     = "demon/hud_abilitybar";
+	/*
 		
+	backdrop at addr: 0000021177AC31B0  
+	 hud_lowwarning at addr: 000002117388D130  
+	 hud_lowwarning_background at addr: 000002117388D2A0  
+	 hud_directionalfeedback at addr: 00000210F22A08D0  
+	 hud_healthinfo at addr: 00000211AED892D0  
+	 hud_weaponinfo at addr: 000002111E66C1C0  
+	 horde/hud_horde_victory at addr: 0000021177AC38B0  
+	 hud_reticle at addr: 00000210F56C8790  
+	 debug at addr: 00000210F589A510  
+	 hud_bossvitals at addr: 00000211785F67D0  
+	 hud_dash at addr: 0000021175A405E0  
+	 hud_bloodpunch at addr: 000002111BADDBA0  
+	 hud_diagnostics at addr: 00000211B371E1D0  
+	 hud_diagnostics_online at addr: 00000210F22A0290  
+	 demon/hud_healthinfo at addr: 00000211B371DB10  
+	 demon/hud_reticle at addr: 00000211423EC0A0  
+	 demon/hud_cardwheel_4wedge at addr: 00000210F5899FD0  
+	 hud_focusinfo at addr: 000002100193BBD0  
+	 hud_compass at addr: 00000211B3B826C0  
+	 hud_poi at addr: 00000211B371E410  
+	 demon/hud_abilitybar at addr: 00000211B371E650  
+	 pvp/hud_matchheader at addr: 00000211B40846E0  
+	 demon/hud_abilitybar_bottom_right at addr: 00000211785F61E0  
+	 hud_damagenumber at addr: 000002100193C230  
+	 hud_extralives at addr: 000002100193B020  
+	 hud_keycard at addr: 00000211785F6900  
+	 hud_subtitles at addr: 0000021175B7DBE0  
+	 hud_targetstike at addr: 00000210019398C0  
+	 demon/hud_timer at addr: 000002100193A9C0  
+	 hud_mission_challenge at addr: 00000210FC8CF930  
+	 hud_runeinfo at addr: 000002116D1C0F00  
+	 hud_timer at addr: 000002100193B130  
+	 pvp/hud_end_of_match at addr: 000002117388CE50  
+	 hud_score at addr: 00000211785F6310  
+	 hud_powerup at addr: 00000210F5972E60  
+	 hud_nameplate at addr: 000002116D1BDE10  
+	 demon/hud_dash at addr: 00000211785F6C90  
+	 hud_characterstatustext at addr: 000002100193A360  
+	 hud_speaker at addr: 000002100193A8B0  
+	 hud_skipcinematic at addr: 000002111BADD780  
+	 hud_tutorial_objectives at addr: 00000210F5BC3AF0  
+	 demon/hud_tutorial_objectives at addr: 00000210F5BC3C20  
+	 hud_video at addr: 00000210F22A03D0  
+	 pvp/hud_spectator at addr: 00000210F5BC3170  
+	 hud_photomodedisplay at addr: 000002100193C890  
+	 hud_damage_report at addr: 00000210FC859BB0  
+	 demon/hud_damage_report at addr: 00000210FC858440  
+	 hud_networkstatus at addr: 00000211B371DC30  
+	 hud_timeattack_timer at addr: 00000210019389E0  
+	 hud_textcrawl at addr: 0000021175B7DD60  
+	 hud_abilityindicators at addr: 00000210F5899E10  
+	 horde/hud_horde_score at addr: 00000210FFBA9310  
+	 horde/hud_horde_staged_timer at addr: 000002117388D410  
+	 hud_textchat at addr: 000002113A294900  
+	 demon/hud_textchat_demon at addr: 
+		
+		*/
 }
 
-
-enum class ImmersiveCrosshairLevel {
+enum class ImmersiveCrosshairLevel
+{
 	IMMERSIVE_CROSSHAIR_LEVEL_UNKNOWN = -1,
-	NO_IMMERSIVE_CROSSHAIR = 0,
+	NO_IMMERSIVE_CROSSHAIR            = 0,
 	HAR_ADS, //! only displayed when ads view of Har
 	HAR_ADS_BALISTA_ADS, //! only displayed in har ads and ads view of balista
-	HAR_ADS_BALISTA_BOTH,	 //! only displayed in har ads and in both views of balista
+	HAR_ADS_BALISTA_BOTH, //! only displayed in har ads and in both views of balista
 	MAX_IMMERSIVE_CROSSHAIR
 };
 
-
-enum  class reticleStyle_t {
-	RETICLE_K_STYLE_UNKNOWN = -2, 
-	RETICLE_K_DEFAULT_STYLE = -1, // will use whatever style is defined for the weapon reticle
-	RETICLE_STYLE_NONE = 0, // no crosshair on hud
-	RETICLE_STYLE_DOT = 1,
-	RETICLE_STYLE_ROCKET_LAUNCHER = 2,
-	RETICLE_STYLE_SHOTGUN = 3,
-	RETICLE_STYLE_SHOTGUN_STICKY_BOMBS = 4,
+enum class reticleStyle_t
+{
+	RETICLE_K_STYLE_UNKNOWN                    = -2,
+	RETICLE_K_DEFAULT_STYLE                    = -1, // will use whatever style is defined for the weapon reticle
+	RETICLE_STYLE_NONE                         = 0, // no crosshair on hud
+	RETICLE_STYLE_DOT                          = 1,
+	RETICLE_STYLE_ROCKET_LAUNCHER              = 2,
+	RETICLE_STYLE_SHOTGUN                      = 3,
+	RETICLE_STYLE_SHOTGUN_STICKY_BOMBS         = 4,
 	RETICLE_STYLE_SHOTGUN_STICKY_BOMBS_MASTERY = 5,
-	RETICLE_STYLE_SHOTGUN_FULL_AUTO = 6,
-	RETICLE_STYLE_HEAVY_CANNON = 7,
-	RETICLE_STYLE_HEAVY_CANNON_BOLT = 8,
-	RETICLE_STYLE_DB_SHOTGUN = 9,
-	RETICLE_STYLE_DB_SHOTGUN_MEATHOOK = 10,
-	RETICLE_STYLE_PLASMA = 11,
-	RETICLE_STYLE_PLASMA_MICROWAVE = 12,
-	RETICLE_STYLE_PLASMA_AOE = 13,
-	RETICLE_STYLE_PLASMA_STUN_FASTER_RECHARGE = 14,
-	RETICLE_STYLE_CHAINGUN = 15,
-	RETICLE_STYLE_CHAINGUN_TURRET = 16,
-	RETICLE_STYLE_CHAINGUN_TURRET_NOHEAT = 17,
-	RETICLE_STYLE_BALLISTA_ARBALEST = 18, //? this is arbalest hips AND ads view unfortunately 
-	RETICLE_STYLE_BALLISTA_DESTROYER = 19,
-	RETICLE_STYLE_BALLISTA_DESTROYER_MASTERY = 20,
-	RETICLE_STYLE_CHAINSAW = 21,
-	RETICLE_STYLE_ROCKET_LAUNCHER_LOCKON = 22,
-	RETICLE_STYLE_BFG = 23,
-	RETICLE_STYLE_CRUCIBLE = 24,
-	RETICLE_STYLE_UNMAKYR = 25,
-	RETICLE_STYLE_PISTOL = 26,
-	RETICLE_STYLE_MP_BARON = 27,
-	RETICLE_STYLE_MP_REVENANT = 28,
-	RETICLE_STYLE_MP_PROWLER = 29,
-	RETICLE_STYLE_MP_MANCUBUS = 30,
-	RETICLE_STYLE_MP_HARVESTER = 31,
-	RETICLE_STYLE_MP_CACODEMON = 32,
-	RETICLE_STYLE_MP_PINKY = 33,
-	RETICLE_STYLE_MP_ARCHVILE = 34,
-	RETICLE_STYLE_MP_MARAUDER = 35,
-	RETICLE_STYLE_MP_DREADKNIGHT = 36,
-	RETICLE_STYLE_MAX = 37,
+	RETICLE_STYLE_SHOTGUN_FULL_AUTO            = 6,
+	RETICLE_STYLE_HEAVY_CANNON                 = 7,
+	RETICLE_STYLE_HEAVY_CANNON_BOLT            = 8,
+	RETICLE_STYLE_DB_SHOTGUN                   = 9,
+	RETICLE_STYLE_DB_SHOTGUN_MEATHOOK          = 10,
+	RETICLE_STYLE_PLASMA                       = 11,
+	RETICLE_STYLE_PLASMA_MICROWAVE             = 12,
+	RETICLE_STYLE_PLASMA_AOE                   = 13,
+	RETICLE_STYLE_PLASMA_STUN_FASTER_RECHARGE  = 14,
+	RETICLE_STYLE_CHAINGUN                     = 15,
+	RETICLE_STYLE_CHAINGUN_TURRET              = 16,
+	RETICLE_STYLE_CHAINGUN_TURRET_NOHEAT       = 17,
+	RETICLE_STYLE_BALLISTA_ARBALEST            = 18, //? this is arbalest hips AND ads view unfortunately 
+	RETICLE_STYLE_BALLISTA_DESTROYER           = 19,
+	RETICLE_STYLE_BALLISTA_DESTROYER_MASTERY   = 20,
+	RETICLE_STYLE_CHAINSAW                     = 21,
+	RETICLE_STYLE_ROCKET_LAUNCHER_LOCKON       = 22,
+	RETICLE_STYLE_BFG                          = 23,
+	RETICLE_STYLE_CRUCIBLE                     = 24,
+	RETICLE_STYLE_UNMAKYR                      = 25,
+	RETICLE_STYLE_PISTOL                       = 26,
+	RETICLE_STYLE_MP_BARON                     = 27,
+	RETICLE_STYLE_MP_REVENANT                  = 28,
+	RETICLE_STYLE_MP_PROWLER                   = 29,
+	RETICLE_STYLE_MP_MANCUBUS                  = 30,
+	RETICLE_STYLE_MP_HARVESTER                 = 31,
+	RETICLE_STYLE_MP_CACODEMON                 = 32,
+	RETICLE_STYLE_MP_PINKY                     = 33,
+	RETICLE_STYLE_MP_ARCHVILE                  = 34,
+	RETICLE_STYLE_MP_MARAUDER                  = 35,
+	RETICLE_STYLE_MP_DREADKNIGHT               = 36,
+	RETICLE_STYLE_MAX                          = 37,
 };
 
-
-enum class HitMarkerState {
-	ON = 0,
+enum class HitMarkerState
+{
+	ON  = 0,
 	OFF = 1
 };
 
+static const std::vector<unsigned char> eternalFontOffsetPatch_88 = {0x88, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_88 = { 0x88, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_90 = {0x90, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_90 = { 0x90, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_98 = {0x98, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_98 = { 0x98, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_A0 = {0xA0, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_A0 = { 0xA0, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_A8 = {0xA8, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_A8 = { 0xA8, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_B0 = {0xB0, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_B0 = { 0xB0, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_B8 = {0xB8, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_B8 = { 0xB8, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_C0 = {0xC0, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_C0 = { 0xC0, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_C8 = {0xC8, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_C8 = { 0xC8, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_D0 = {0xD0, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_D0 = { 0xD0, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_D8 = {0xD8, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_D8 = { 0xD8, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_E0 = {0xE0, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_E0 = { 0xE0, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_E8 = {0xE8, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_E8 = { 0xE8, 0x00, 0x00, 0x00 };
+static const std::vector<unsigned char> eternalFontOffsetPatch_F0 = {0xF0, 0x00, 0x00, 0x00};
 
-static const std::vector<unsigned char> eternalFontOffsetPatch_F0 = { 0xF0, 0x00, 0x00, 0x00 };
-
-static const std::vector<unsigned char> eternalFontDefaultOffsetPatch_F8 = { 0xF8, 0x00, 0x00, 0x00 }; //! default font 
-
-
-
+static const std::vector<unsigned char> eternalFontDefaultOffsetPatch_F8 = {0xF8, 0x00, 0x00, 0x00}; //! default font 
 
 //! ice icon draw related:
 
-namespace hudString {
-static const std::string textForidCmd = "66666666666666";
+namespace hudString
+{
+	static const std::string textForidCmd = "66666666666666";
 }
 
 //namespace VarName{
 //	extern  const char* idPlayer = "idPlayer";
 //	extern  const char* playerHud = "playerHud";
 //}
-
 
 //enum idGameSystemLocalState_t : __int32 {
 //	GAME_STATE_UNDEFINED_K = -0x1,
@@ -2144,10 +2019,4 @@ static const std::string textForidCmd = "66666666666666";
 /*
 idSWFSpriteInstance:print: Addr: 000001F741A5CC70 full path name: fill_right:glow:glow, visIndex: 56, fullPathHash: -216838433 namedColorId: 3 bounds.tl.x: 194.53 bounds.tl.y: 644.20  bounds.br.x: 194.53 bounds.br.y: 644.20
 
-
-
-
-
 */
-
-

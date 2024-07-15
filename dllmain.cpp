@@ -79,7 +79,7 @@ void DllInit()
 
 void DisableWndProcHook(HWND hwnd)
 {
-	SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)pOriginalWndProc);
+	SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)g_pOriginalWndProc);
 }
 
 auto IsExpectedExecutable(const std::wstring& expectedFilename) -> bool
@@ -180,7 +180,7 @@ void initImguiV2()
 {
 	static bool isFirsTimeUseImguiCheck = true;
 
-	if (!modSettings::getIsUseImgui()) {
+	if (!ModSettings::getIsUseImgui()) {
 		if (isFirsTimeUseImguiCheck) {
 			logWarn("");
 			logWarn("!!! user has disabled imgui in the json file, the mod menu, custom hud/crosshair will be disabled !!!!");
@@ -243,13 +243,13 @@ void modInit()
 	//! create default weapons for vec
 	WeaponSettings::initWeapons();
 
-	modSettings::apply();
+	ModSettings::apply();
 
 	//! get all the idDeclUIColor from all color profiles so we can restore original colors of the hud
 	//idDeclUIColorManager::acquireDefaultColors();
 
 	//! attempting to overwrite controller static bind strings only once and only when not in game and once menu is levelLoaded.
-	if (modSettings::getIsUseDedicatedNadeKeys()) {
+	if (ModSettings::getIsUseDedicatedNadeKeys()) {
 		if (!BindLabelChanger::isControllerStaticStringsOverwriteAttempt()) {
 			//if (EpochMillis() - lastStringOverwriteAttempMs > 1000 && GameStateChecker::isMainMenuLoaded()) {
 			//mem.overwriteBindStrings(); //! will only try to overwrite if not already overwritten
@@ -367,8 +367,8 @@ auto InitializeHooks() -> bool
 		return false;
 	}*/
 
-	p_customAnimSmth_t_Target = reinterpret_cast<customAnimSmth_t>(MinHookManager::GetCustomAnimSmthFuncAdd());
-	if (MH_CreateHook(p_customAnimSmth_t_Target, &customAnimSmth_t_Hook,
+	p_customAnimSmth_t_Target = reinterpret_cast<CustomAnimSmth_t>(MinHookManager::GetCustomAnimSmthFuncAdd());
+	if (MH_CreateHook(p_customAnimSmth_t_Target, &CustomAnimSmth_t_Hook,
 					  reinterpret_cast<void**>(&p_customAnimSmth_t)) != MH_OK) {
 		logErr("Failed to create p_customAnimSmth_t_Target hook.");
 		return false;
@@ -397,8 +397,8 @@ auto InitializeHooks() -> bool
 		return false;
 	}
 
-	p_syncEnd_Target = reinterpret_cast<syncEnd_t>(MinHookManager::GetSyncEndFuncAdd());
-	if (MH_CreateHook(p_syncEnd_Target, &syncEnd_Hook,
+	p_syncEnd_Target = reinterpret_cast<SyncEnd_t>(MinHookManager::GetSyncEndFuncAdd());
+	if (MH_CreateHook(p_syncEnd_Target, &SyncEnd_Hook,
 					  reinterpret_cast<void**>(&p_syncEnd)) != MH_OK) {
 		logErr("Failed to create p_syncEnd_Target hook.");
 		return false;
@@ -426,7 +426,7 @@ auto InitializeHooks() -> bool
 	}
 
 	//? this can only be changed by restarting the game mod, as this hook is only enabled in debug mode and if user enables it in menu
-	if (Config::get() != ModConfig::nexusRelease && modSettings::isLogConsoleToLogFile()) {
+	if (Config::get() != ModConfig::nexusRelease && ModSettings::isLogConsoleToLogFile()) {
 		pIdLib_PrintfTarget = reinterpret_cast<IdLib_Printf>(MinHookManager::GetConsoleLogFuncAdd());
 		if (MH_CreateHook(pIdLib_PrintfTarget, &IdLib_PrintfHook,
 						  reinterpret_cast<void**>(&pIdLib_Printf)) != MH_OK) {
@@ -448,7 +448,7 @@ auto InitializeHooks() -> bool
 		return false;
 	}*/
 
-	pOriginalWndProc = (WNDPROC)SetWindowLongPtr(g_game_hWindow, GWLP_WNDPROC, (LONG_PTR)&HookedWndProc);
+	g_pOriginalWndProc = (WNDPROC)SetWindowLongPtr(g_game_hWindow, GWLP_WNDPROC, (LONG_PTR)&HookedWndProc);
 
 	Sleep(100); // just in case.
 
@@ -465,7 +465,7 @@ auto InitializeHooks() -> bool
 DWORD __stdcall EjectThread(LPVOID /*lpParameter*/)
 {
 	Sleep(100);
-	FreeLibraryAndExitThread(DllHandle, 0);
+	FreeLibraryAndExitThread(g_dllHandle, 0);
 }
 
 //? Reminder: the way to load this dll with xenos is simply to change the output name to smth like somedll.dll.
@@ -517,8 +517,8 @@ DWORD WINAPI ModMain()
 		}
 
 		if (!Config::isModError()) {
-			modSettings::loadSettings();
-			modSettings::saveSettings();
+			ModSettings::loadSettings();
+			ModSettings::saveSettings();
 		}
 	}
 
@@ -713,7 +713,7 @@ DWORD WINAPI ModMain()
 		}
 
 		if (EpochMillis() - lastAACheckMs > 1000) {
-			idCmd::setAntiAliasingState(modSettings::getIsDisableAA());
+			idCmd::setAntiAliasingState(ModSettings::getIsDisableAA());
 
 			lastAACheckMs = EpochMillis();
 		}
@@ -740,10 +740,10 @@ DWORD WINAPI ModMain()
 				lastPlayerFlagUpdateMs = EpochMillis();
 			}
 
-			if (modSettings::isImprovedWeaponSwitching() && isSlayerActiveFlag && EpochMillis() -
+			if (ModSettings::isImprovedWeaponSwitching() && isSlayerActiveFlag && EpochMillis() -
 				lastWeaponSwitchCheckMs > 100) {
 				lastWeaponSwitchCheckMs = EpochMillis();
-				switcher.checkWeaponSwitchV2();
+				g_switcher.checkWeaponSwitchV2();
 			}
 
 			//! Not using this anymore as we modify DeclWeapons in the Resource we found:
@@ -763,10 +763,10 @@ DWORD WINAPI ModMain()
 			if (EpochMillis() - lastCustomHudcheckMs > 200) {
 				//logInfo("hello?????: isSlayerActiveFlag: %d", isSlayerActiveFlag);
 
-				Menu::bShowKaibzCrosshairWindow = modSettings::getIsUseImguiDotCrosshair() && (isSlayerActiveFlag ||
+				Menu::bShowKaibzCrosshairWindow = ModSettings::getIsUseImguiDotCrosshair() && (isSlayerActiveFlag ||
 					isDemonActiveFlag);
 
-				Menu::bShowKaibzHudWindow = modSettings::getIsUseKaibzHud() && (isSlayerActiveFlag ||
+				Menu::bShowKaibzHudWindow = ModSettings::getIsUseKaibzHud() && (isSlayerActiveFlag ||
 					isDemonActiveFlag);
 
 				lastCustomHudcheckMs = EpochMillis();
@@ -775,7 +775,7 @@ DWORD WINAPI ModMain()
 			//? it doesn't work.....
 			// enforcing frag just to be absolutely sure there is no way ice can be selected when dedicated nade key is enabled
 			if (EpochMillis() - lastFragSelectedCheckMs > 1000) {
-				if (modSettings::getIsUseDedicatedNadeKeys() && idPlayer_K::getSelectedGrenadeType() ==
+				if (ModSettings::getIsUseDedicatedNadeKeys() && idPlayer_K::getSelectedGrenadeType() ==
 					EQUIPMENT_ICE_BOMB) {
 					logInfo("idPlayer_K::setGrenadeType(GrenadeType::Frag); trig....");
 					EquipmentManager::switchEquipment(EQUIPMENT_FRAG_GRENADE);
@@ -789,7 +789,7 @@ DWORD WINAPI ModMain()
 				//logInfo("isFragNadeOwned in lskdjf is: %d and isIceNadeOwned: %d", isFragNadeOwned, isIceNadeOwned);
 				//! we don't render if frag is not owned cause if player uses console to give himself ice and not frag at game start it will show double ice icon and as a side note when using the ice in that config the icon shows up while reloading and then disappears, certainly cause it's not meant to be this way.
 				if (!isSlayerActiveFlag || !isIceNadeOwned || !isFragNadeOwned || !isEquipmentInfoEnabled || !
-					isGameSettingsHudEnabled || !modSettings::getIsUseDedicatedNadeKeys()) {
+					isGameSettingsHudEnabled || !ModSettings::getIsUseDedicatedNadeKeys()) {
 					CustomIceNadeIconManager::updateIsRenderingAllowed(false);
 				} else {
 					CustomIceNadeIconManager::updateIsRenderingAllowed(true);
@@ -865,7 +865,7 @@ DWORD WINAPI ModMain()
 			if (EpochMillis() - lastinGameReticleModeCheckMs > 300) {
 				lastinGameReticleModeCheckMs = EpochMillis();
 
-				if (!idPlayer_K::isPlayerDemon() && modSettings::isImmersiveCrosshairModeEnabled()) {
+				if (!idPlayer_K::isPlayerDemon() && ModSettings::isImmersiveCrosshairModeEnabled()) {
 					//if (idCmd::getReticleMode() == UI_ReticleMode::None) {
 					if (FastCvarManager::getReticleMode() == UI_ReticleMode::None) {
 						idCmd::setReticleMode(UI_ReticleMode::Full);
@@ -930,12 +930,12 @@ extern "C" BOOL APIENTRY DllMain(const HMODULE hModule, const DWORD ul_reason_fo
 	UNREFERENCED_PARAMETER(lpReserved);
 
 	if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
-		DllHandle = hModule;
+		g_dllHandle = hModule;
 		DllInit();
 		DisableThreadLibraryCalls(hModule);
 
 		HANDLE hHandle = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)ModMain,
-									  DllHandle, 0, nullptr);
+									  g_dllHandle, 0, nullptr);
 
 		if (hHandle != nullptr) {
 			CloseHandle(hHandle);

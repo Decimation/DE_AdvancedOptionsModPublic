@@ -1,6 +1,5 @@
 #include "UserColorSet.h"
 
-
 swfNamedColors_t UserColorSet::m_bloodpunch1Available_Color = (swfNamedColors_t)(modSettingsDefault::g_defaultOverrideBloodPunchColor1);
 swfNamedColors_t UserColorSet::m_bloodpunch2Available_Color = (swfNamedColors_t)(modSettingsDefault::g_defaultOverrideBloodPunchColor2);
 swfNamedColors_t UserColorSet::m_desperatePunchAvailable_Color = (swfNamedColors_t)(modSettingsDefault::g_defaultOverrideDesperatePunchColor);
@@ -23,7 +22,6 @@ swfNamedColors_t UserColorSet::m_radsuitMeterOveride_Color = (swfNamedColors_t)(
 //
 //swfNamedColors_t UserColorSet::m_dotCrosshairColorFeaturesDisabled_Color = (swfNamedColors_t)(modSettingsDefault::g_DotColorFeatureDisabledColor);
 
-
 const bool UserColorSet::m_AllowInvisibleColor = true;
 
 uint64_t UserColorSet::m_lastIceIconPulseColorChangeMs = 0;
@@ -32,10 +30,7 @@ bool UserColorSet::m_isIcePulseColorChange = false;
 //const swfNamedColors_t UserColorSet::m_invisibleFlagColor = swfNamedColors_t::SWF_CUSTOM_NAMED_COLOR_INVISIBLE;
 //const swfNamedColors_t UserColorSet::m_orangeForAllUiProfilesFlagColor = swfNamedColors_t::SWF_NAMED_COLOR_INVASION_YELLOW;
 
-
-
  swfNamedColors_t UserColorSet::getSwfNamedColorFromModSettings(int iniFileColorValInt) {
-
 
     //! sanity check. Also not letting user use invisible color.
 
@@ -123,29 +118,29 @@ unsigned int UserColorSet::getCustomInvisibleColorUint() {
  void UserColorSet::Update() {
     logDebug("Update");
 
-    m_bloodpunch1Available_Color = getSwfNamedColorFromModSettings(modSettings::getOverrideBloodPunchColor1());
+    m_bloodpunch1Available_Color = getSwfNamedColorFromModSettings(ModSettings::getOverrideBloodPunchColor1());
     logInfo("m_bloodpunch1Available_Color: %s (%d)", getSwfNamedColorString(m_bloodpunch1Available_Color).c_str(), m_bloodpunch1Available_Color);
 
-    m_bloodpunch2Available_Color = getSwfNamedColorFromModSettings(modSettings::getOverrideBloodPunchColor2());
+    m_bloodpunch2Available_Color = getSwfNamedColorFromModSettings(ModSettings::getOverrideBloodPunchColor2());
     logInfo("m_bloodpunch2Available_Color: %s (%d)", getSwfNamedColorString(m_bloodpunch2Available_Color).c_str(), m_bloodpunch2Available_Color);
 
-    m_desperatePunchAvailable_Color = getSwfNamedColorFromModSettings(modSettings::getOverrideDesperatePunchColor());
+    m_desperatePunchAvailable_Color = getSwfNamedColorFromModSettings(ModSettings::getOverrideDesperatePunchColor());
     logInfo("m_desperatePunchAvailable_Color: %s (%d)", getSwfNamedColorString(m_desperatePunchAvailable_Color).c_str(), m_desperatePunchAvailable_Color);
 
-    m_fragNadeAvailable_Color = getSwfNamedColorFromModSettings(modSettings::getOverrideFragGrenadeColor());
+    m_fragNadeAvailable_Color = getSwfNamedColorFromModSettings(ModSettings::getOverrideFragGrenadeColor());
     logInfo("m_fragNadeAvailable_Color: %s (%d)", getSwfNamedColorString(m_fragNadeAvailable_Color).c_str(), m_fragNadeAvailable_Color);
 
-    m_fragNadeCooldown_Color = getSwfNamedColorFromModSettings(modSettings::getOverrideFragGrenadeCooldownColor());
+    m_fragNadeCooldown_Color = getSwfNamedColorFromModSettings(ModSettings::getOverrideFragGrenadeCooldownColor());
     logInfo("m_fragNadeCooldown_Color: %s (%d)", getSwfNamedColorString(m_fragNadeCooldown_Color).c_str(), m_fragNadeCooldown_Color);
 
-    m_iceNadeAvailable_Color = getSwfNamedColorFromModSettings(modSettings::getOverrideIceGrenadeColor());
+    m_iceNadeAvailable_Color = getSwfNamedColorFromModSettings(ModSettings::getOverrideIceGrenadeColor());
     logInfo("m_iceNadeAvailable_Color: %s (%d)", getSwfNamedColorString(m_iceNadeAvailable_Color).c_str(), m_iceNadeAvailable_Color);
 
     //x iceNadeCooldown icon is the only icon which is allowed by us to be invisible.
-    m_iceNadeCooldown_Color = getSwfNamedColorFromModSettings(modSettings::getOverrideIceGrenadeCooldownColor());
+    m_iceNadeCooldown_Color = getSwfNamedColorFromModSettings(ModSettings::getOverrideIceGrenadeCooldownColor());
     logInfo("m_iceNadeCooldown_Color: %s (%d)", getSwfNamedColorString(m_iceNadeCooldown_Color).c_str(), m_iceNadeCooldown_Color);
 
-    m_radsuitMeterOveride_Color = getSwfNamedColorFromModSettings(modSettings::getOverrideRadMeterColor());
+    m_radsuitMeterOveride_Color = getSwfNamedColorFromModSettings(ModSettings::getOverrideRadMeterColor());
     logInfo("m_radsuitMeterOveride_Color: %s (%d)", getSwfNamedColorString(m_radsuitMeterOveride_Color).c_str(), m_radsuitMeterOveride_Color);
 
     /*m_dotCrosshair_Color = getSwfNamedColorFromIniFileColorId(modSettings::getOverrideReticleColor());
@@ -162,7 +157,6 @@ unsigned int UserColorSet::getCustomInvisibleColorUint() {
 
     m_dotCrosshairBothNadesReady_Color = getSwfNamedColorFromIniFileColorId(modSettings::getOverrideDotReticleBothNadeReadyColor());
     logInfo("m_dotCrosshairBothNadesReady_Color: %s (%d)", getSwfNamedColorString(m_dotCrosshairBothNadesReady_Color).c_str(), m_dotCrosshairBothNadesReady_Color);*/
-
 
 }
 

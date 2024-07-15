@@ -27,7 +27,7 @@ public:
         if (!declWeaponReticle) return false;
         logDebug("updateScale");
 
-        float computedReticleScale = computeReticleScale(declWeaponReticle, modSettings::getReticleScale(), FastCvarManager::getReticleMode());
+        float computedReticleScale = computeReticleScale(declWeaponReticle, ModSettings::getReticleScale(), FastCvarManager::getReticleMode());
         //float computedReticleScale = computeReticleScale(declWeaponReticle, modSettings::getReticleScale(), idCmd::getReticleMode());
 
         //logInfo("updateScale debug: computedReticleScale: %.3f and declWeaponReticle->reticleModelScale: %.3f", computedReticleScale, declWeaponReticle->reticleModelScale);
@@ -46,12 +46,12 @@ public:
 	}
 
     static bool isModSettingsChanged() {
-        if (modSettings::getReticleScale() != m_lastIniReticleScaleVal) {
-            m_lastIniReticleScaleVal = modSettings::getReticleScale();
+        if (ModSettings::getReticleScale() != m_lastIniReticleScaleVal) {
+            m_lastIniReticleScaleVal = ModSettings::getReticleScale();
             return true;
         }
-        if (modSettings::getImmersiveCrosshairLevel() != m_lastIniImmersiveCrosshairLevel) {
-            m_lastIniImmersiveCrosshairLevel = modSettings::getImmersiveCrosshairLevel();
+        if (ModSettings::getImmersiveCrosshairLevel() != m_lastIniImmersiveCrosshairLevel) {
+            m_lastIniImmersiveCrosshairLevel = ModSettings::getImmersiveCrosshairLevel();
             return true;
         }
         return false;
@@ -70,7 +70,7 @@ public:
     }*/
 
     static float getReticleScaleForImmersiveCrosshairMode(std::string& reticleName) {
-        ImmersiveCrosshairLevel immersiveCrosshairLevel = modSettings::getImmersiveCrosshairLevel();
+        ImmersiveCrosshairLevel immersiveCrosshairLevel = ModSettings::getImmersiveCrosshairLevel();
 
         if (immersiveCrosshairLevel == ImmersiveCrosshairLevel::HAR_ADS) {
             if (reticleName == Reticle::g_weaponreticleHeavyCannonBoltActionZoomed) {
@@ -168,7 +168,7 @@ public:
     }
 
     static bool isIniCrosshairScaleDefault() {
-        return (modSettings::getReticleScale() == Reticle::g_defaultReticleScale);
+        return (ModSettings::getReticleScale() == Reticle::g_defaultReticleScale);
     }
 
     static float computeReticleScale(idDeclWeaponReticle* weaponReticlePtr, float userRequestedReticleScaleFloat, UI_ReticleMode reticleMode) {
@@ -177,7 +177,7 @@ public:
         bool isOvewrite = false;
         std::string reticleName = idResourceManager::getDeclWeaponReticleName(weaponReticlePtr);
 
-        if (modSettings::isImmersiveCrosshairModeEnabled()) {
+        if (ModSettings::isImmersiveCrosshairModeEnabled()) {
             if (reticleMode == UI_ReticleMode::None) { 
                 logWarn("computeReticleScale current reticle Mode is: %d and setting it to Full", (int)reticleMode);
                 //todo carefull about having state here, atm each else prevents issues but i don't like it.

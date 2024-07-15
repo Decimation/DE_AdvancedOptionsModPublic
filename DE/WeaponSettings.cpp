@@ -21,15 +21,12 @@
 
 }
 
-
-
 void WeaponSettings::overwriteDeclWeaponsWithUserSettings() {
 	if (!m_isInitialized) {
 		logErr("overwriteDeclWeaponsWithUserSettings: func called before weapons were initialized, this will not work...initWeapons() must be called once before overwriteDeclWeaponsWithUserSettings can ever be called");
 	}
 
 	 updateFromModSettings();
-
 
 	 unsigned int declCount = 0;
 	 unsigned int weaponOverrideCount = 0;
@@ -61,7 +58,6 @@ void WeaponSettings::overwriteDeclWeaponsWithUserSettings() {
 			 logWarn("overwriteDeclWeaponsWithUserSetting declWeapon->getNameStr().empty() Triggered Could this cause a crash?");
 			 break;
 		 }
-		
 
 		 for (size_t i = 0; i < m_customWeaponsVec.size(); i++)
 		 {
@@ -98,7 +94,6 @@ void WeaponSettings::overwriteDeclWeaponsWithUserSettings() {
   int WeaponSettings::checkDeclWeaponForOverwrite(CustomWeapon& customWeapon, idDeclWeapon* declWeaponPtr) {
 
 	 unsigned int changesCount = 0;
-
 
 	 /*logWarn("checkDeclWeaponForOverwrite: NOT DOING ANYTHING JUST DEBUG: declWeaponPtr: %p", (void*)declWeaponPtr);
 	 return;*/
@@ -159,12 +154,12 @@ void WeaponSettings::overwriteDeclWeaponsWithUserSettings() {
 	 for (size_t i = 0; i < m_customWeaponsVec.size(); i++)
 	 {
 		 if (m_customWeaponsVec[i].getNameStr() == WeaponIdStr::g_heavyCannonBoltNameIdStr) {
-			 m_customWeaponsVec[i].setMouseSens(modSettings::getAssaultRiflePrecisionBoltMouseSens());
-			 logInfo("updateFromModSettings: debug: heavyCannonBolt mouse sens set to: %.3f ", modSettings::getAssaultRiflePrecisionBoltMouseSens());
-			 m_customWeaponsVec[i].setControllerSens( modSettings::getAssaultRiflePrecisionBoltControllerSens());
+			 m_customWeaponsVec[i].setMouseSens(ModSettings::getAssaultRiflePrecisionBoltMouseSens());
+			 logInfo("updateFromModSettings: debug: heavyCannonBolt mouse sens set to: %.3f ", ModSettings::getAssaultRiflePrecisionBoltMouseSens());
+			 m_customWeaponsVec[i].setControllerSens( ModSettings::getAssaultRiflePrecisionBoltControllerSens());
 		 }
 		 else if (m_customWeaponsVec[i].getNameStr() == WeaponIdStr::g_balistaArbalesteNameIdStr) {
-			 if (modSettings::isRemoveBalistaZoom()) {
+			 if (ModSettings::isRemoveBalistaZoom()) {
 				 m_customWeaponsVec[i].setZoomedFov(modSettingsDefault::g_overideBalistaArbalestZoomedFOV);
 				 m_customWeaponsVec[i].setzoomedHandsFOV(modSettingsDefault::g_overideBalistaArbalestZoomedHandsFov);
 			 }
@@ -172,11 +167,11 @@ void WeaponSettings::overwriteDeclWeaponsWithUserSettings() {
 				 m_customWeaponsVec[i].setZoomedFov(modSettingsDefault::g_defaultBallistaArbalestezoomedFOV);
 				 m_customWeaponsVec[i].setzoomedHandsFOV(modSettingsDefault::g_defaultBallistaArbalestezoomedHandsFOV);
 			 }
-			 m_customWeaponsVec[i].setMouseSens(modSettings::getBallistaArbalestMouseSens());
-			 m_customWeaponsVec[i].setControllerSens(modSettings::getBallistaArbalestControllerSens());
+			 m_customWeaponsVec[i].setMouseSens(ModSettings::getBallistaArbalestMouseSens());
+			 m_customWeaponsVec[i].setControllerSens(ModSettings::getBallistaArbalestControllerSens());
 		 }
 		 else if (m_customWeaponsVec[i].getNameStr() == WeaponIdStr::g_shotGunFullAutoNameIdStr) {
-			 if (modSettings::isOverideShotgunConfig()) {
+			 if (ModSettings::isOverideShotgunConfig()) {
 				 m_customWeaponsVec[i] = m_shotGunFullAutoOveride;
 			 }
 			 else {
@@ -184,7 +179,7 @@ void WeaponSettings::overwriteDeclWeaponsWithUserSettings() {
 			 }
 		 }
 		 else if (m_customWeaponsVec[i].getNameStr() == WeaponIdStr::g_shotGunStickiesNameIdStr) {
-			 if (modSettings::isOverideShotgunConfig()) {
+			 if (ModSettings::isOverideShotgunConfig()) {
 				 m_customWeaponsVec[i] = m_shotGunStickyOveride;
 			 }
 			 else {

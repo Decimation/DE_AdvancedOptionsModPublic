@@ -23,7 +23,6 @@
     //static int lastWeaponIndex = -2;
     //static weaponSlot_t lastUserRequestedWeaponIndex = weaponSlot_t::UNDEFINED;
 
-
     m_lastWeaponInputPressMs = EpochMillis();
 
     m_UserRequestedWeaponIndex = (weaponSlot_t)weaponIndex;
@@ -73,12 +72,9 @@
 
     //logInfo("checkWeaponSwitch called");
 
-
-
     static weaponSlot_t lastCurrentWeaponSlot = weaponSlot_t::UNDEFINED;
 
     uint64_t epochNowMs = EpochMillis();
-
 
     //! strangly enough idPlayer_K::getcurrentWeaponSlotIndex is 'faster to get the current slot by 100ms but that's ofc because of polling rate and when the idWeaponManager hook is triggered by the game, but idWeaponManager is good enough
     // idWeaponManager::getCurWeaponSlot();
@@ -113,7 +109,7 @@
 
         setWeaponEnumToResend();
 
-        if (modSettings::isImprovedWeaponSwitchingBeep()) {
+        if (ModSettings::isImprovedWeaponSwitchingBeep()) {
             playWeaponSwitchOverideSound();
             //? not sure about using thread for beep...it's a debug tool anyway so keep it sync.
             //playWeaponSwitchOverideSoundAsync();
@@ -168,7 +164,6 @@
     m_lastWeaponBtnToResend = m_weaponBtnToResend;
     logInfo("setWeaponEnumToResend m_weaponBtnToResend has changed to %llX (hex)", (__int64)m_weaponBtnToResend);
     }*/
-
 
     if (m_weaponBtnToResend != m_lastWeaponBtnToResend) {
         m_lastWeaponBtnToResend = m_weaponBtnToResend;

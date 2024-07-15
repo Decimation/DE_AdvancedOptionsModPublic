@@ -1,9 +1,5 @@
 #include "KaibzCrosshair.h"
 
-
-
-
-
 void KaibzCrosshair::showCircleCrosshair(KaibzHudData& data)
 {
     ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -26,24 +22,22 @@ void KaibzCrosshair::showCircleCrosshair(KaibzHudData& data)
 
         // Draw crosshair outline
         ImDrawList* drawList = ImGui::GetWindowDrawList();
-        drawList->AddCircleFilled(crosshairPos, modSettings::getImguiCustomDotCrosshairRadiusPix() + outlineThickness, outlineColorImU32); // Outer background. always black  
-
+        drawList->AddCircleFilled(crosshairPos, ModSettings::getImguiCustomDotCrosshairRadiusPix() + outlineThickness, outlineColorImU32); // Outer background. always black  
 
         if (CustomCrosshairManager::getIsWeaponCooldownFlag()) {           
-            drawList->AddCircleFilled(crosshairPos, modSettings::getImguiCustomDotCrosshairRadiusPix(), modSettings::getCustomDotCrosshairCooldownColorImU32()); // Inner crosshair
+            drawList->AddCircleFilled(crosshairPos, ModSettings::getImguiCustomDotCrosshairRadiusPix(), ModSettings::getCustomDotCrosshairCooldownColorImU32()); // Inner crosshair
         }
 
-        else if (modSettings::getCustomCrosshairIsShowHealthAsColor()) {
-            drawList->AddCircleFilled(crosshairPos, modSettings::getImguiCustomDotCrosshairRadiusPix(), data.crosshairHealthColorImU32);
+        else if (ModSettings::getCustomCrosshairIsShowHealthAsColor()) {
+            drawList->AddCircleFilled(crosshairPos, ModSettings::getImguiCustomDotCrosshairRadiusPix(), data.crosshairHealthColorImU32);
         }
 
         else {
-            drawList->AddCircleFilled(crosshairPos, modSettings::getImguiCustomDotCrosshairRadiusPix(), modSettings::getCustomDotCrosshairColorImU32()); // Inner crosshair
+            drawList->AddCircleFilled(crosshairPos, ModSettings::getImguiCustomDotCrosshairRadiusPix(), ModSettings::getCustomDotCrosshairColorImU32()); // Inner crosshair
         }
     }
     ImGui::End();
 }
-
 
 //! BAK
 //void KaibzCrosshair::showCircleCrosshair(bool* p_open)

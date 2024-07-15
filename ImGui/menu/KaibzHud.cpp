@@ -1,7 +1,5 @@
 #include "KaibzHud.h"
 
-
-
 void KaibzHud::showCustomHud(KaibzHudData& data)
 {
     static bool isDemonActive = false;
@@ -28,7 +26,6 @@ void KaibzHud::showCustomHud(KaibzHudData& data)
     //ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)); 
 
     ImGui::Begin("KaibzHudGui", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar);
-
 
     if (K_Utils::EpochMillis() - lastDemonCheckMs > 500) {
         lastDemonCheckMs = K_Utils::EpochMillis();
@@ -60,20 +57,11 @@ void KaibzHud::showCustomHud(KaibzHudData& data)
 
 }
 
-
-
-
-
-
-
 std::string KaibzHud::getPaddedString(int value, size_t width) {
     std::ostringstream oss;
     oss << std::setw(width) << std::setfill('0') << value; // Pad with leading zeros
     return oss.str();
 }
-
-
-
 
 ImVec2 KaibzHud::computeHudPos(float hudSizeX, ImVec2 zeroCharSize, float heightSafepaddingMul) {
 
@@ -83,8 +71,8 @@ ImVec2 KaibzHud::computeHudPos(float hudSizeX, ImVec2 zeroCharSize, float height
     float maxPosX = displayeSize.x - zeroCharSize.x;
     float maxPosY = displayeSize.y - zeroCharSize.y;
 
-    float userOffsetX = ((float)modSettings::getKaibzHudOffsetX() * displayeSize.x) / 100.0f;
-    float userOffsetY = ((float)modSettings::getKaibzHudOffsetY() * displayeSize.y) / 100.0f;
+    float userOffsetX = ((float)ModSettings::getKaibzHudOffsetX() * displayeSize.x) / 100.0f;
+    float userOffsetY = ((float)ModSettings::getKaibzHudOffsetY() * displayeSize.y) / 100.0f;
 
     //? update no it's the setting of window size in showCustomHud that prevent the bug
     //x this is what prevent the bug of the hud being only displayable in the area set by user offsets limits
@@ -100,8 +88,6 @@ ImVec2 KaibzHud::computeHudPos(float hudSizeX, ImVec2 zeroCharSize, float height
     hudPosX = (displayeSize.x - hudSizeX) / 2.0f + userOffsetX;
     hudPosY = displayeSize.y - zeroCharSize.y * heightSafepaddingMul + userOffsetY;
 
-
-    
     ImVec2 hudPosVec2 = ImVec2(hudPosX, hudPosY);
 
     //! prevent the hud from going completely offscreen
@@ -126,7 +112,6 @@ ImVec2 KaibzHud::computeHudPos(float hudSizeX, ImVec2 zeroCharSize, float height
     return hudPosVec2;        
 }
 
-
 ImVec4 KaibzHud::getElementColor(KaibzHudColor_t hudColor, int outlineRef) {
 
     if (outlineRef) {
@@ -134,8 +119,6 @@ ImVec4 KaibzHud::getElementColor(KaibzHudColor_t hudColor, int outlineRef) {
     }
     return Menu::getHudColor(hudColor);
 }
-
-
 
 void KaibzHud::writePaddedNumberALT(std::string paddedStr, float zeroCharWidth, KaibzHudColor_t hudColor, int outlineRef) {
     float charOffsetX = zeroCharWidth * 0.55f;
@@ -186,9 +169,7 @@ void KaibzHud::writePaddedNumberALT(std::string paddedStr, float zeroCharWidth, 
         ImGui::SameLine();
     }
 
-
 }
-
 
 //void KaibzHud::writePaddedNumber(std::string paddedStr, float zeroCharWidth, ImVec4 color, int outlineRef) {
 //    float charOffsetX = zeroCharWidth * 0.55f;
@@ -239,7 +220,6 @@ void KaibzHud::writePaddedNumberALT(std::string paddedStr, float zeroCharWidth, 
 //    }
 //}
 
-
 void KaibzHud::adjustSize(ImVec2& coordsVec2, float mul) {
     coordsVec2.x = coordsVec2.x * mul;
     coordsVec2.y = coordsVec2.y * mul;
@@ -257,7 +237,6 @@ void KaibzHud::drawHudBg(KaibzHudData& dataRef, ImVec2 hudStartVec2, float hudSi
     static bool isFlashFlag = false;   
     int flashDurationMs = 200;  
     static uint64_t lastFlashStartMs = 0;
-
 
     // Calculate the end position of the HUD
     ImVec2 hudEndVec2 = ImVec2(hudStartVec2.x + hudSizeX, hudStartVec2.y + zeroCharSizeY);
@@ -301,10 +280,6 @@ void KaibzHud::drawHudBg(KaibzHudData& dataRef, ImVec2 hudStartVec2, float hudSi
     
 }
 
-
-
-
-
 void KaibzHud::drawCoolDownCircleV2(ImVec2 centerCoords, float radius, float progress, ImU32 colorImU32) {
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     int segments = 60;
@@ -326,10 +301,6 @@ void KaibzHud::drawCoolDownCircleV2(ImVec2 centerCoords, float radius, float pro
     }
 }
 
-
-
-
-
 //! USES ONE FONT. 
 
 void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
@@ -348,14 +319,13 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
     float zeroCharHeight = zeroCharSize.y;
     float heightSafepaddingMul = 1.2f;
 
-    float hudIconsSafeFontSize = guiHelper::getSafeFontSize(modSettings::getKaibzHudIconFontSize());
+    float hudIconsSafeFontSize = guiHelper::getSafeFontSize(ModSettings::getKaibzHudIconFontSize());
     //logInfo("hudIconsSafeFontSize: %.3f zeroCharWidth: %.3f", hudIconsSafeFontSize, zeroCharWidth);
 
     float hudTextsSpacing = zeroCharWidth * 3;  
-    float elementsExtraSpacingPix = hudIconsSafeFontSize * modSettings::getKaibzHudIconExtraSpacingMul();
+    float elementsExtraSpacingPix = hudIconsSafeFontSize * ModSettings::getKaibzHudIconExtraSpacingMul();
 
     int iconCount = 0;
-
 
     //! setting these pos so that changing:
     float ArmorIconPosX = -1.0f;
@@ -366,10 +336,8 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
     //KaibzHudData data = KaibzHudManager::getTestData();
     //KaibzHudData data = KaibzHudManager::getData();
 
-
     static float hudSizeX = 0; //! init   
     //float huxStartX = 0.0f;
-
 
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     if (viewport->Size.x <= 0 || viewport->Size.y <= 0) {
@@ -378,13 +346,11 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         return;
     }
 
-
     ImVec2 displayeSize = ImGui::GetIO().DisplaySize;
     //! attempting to use this instead of ImGui::GetIO().DisplaySize; to see if it fix the hud diseapearing bug
     //? update it doesn't help
     //ImVec2 displayeSize = viewport->Size;
     //logInfo("drawHud: hudSizeX: %.3f displayeSize.x: %.3f displayeSize.y: %.3f", hudSizeX, displayeSize.x, displayeSize.y);
-   
 
     ImVec2 hudOffsetComputed = computeHudPos(hudSizeX, zeroCharSize, heightSafepaddingMul);
     if (outlineRef == 1) {
@@ -400,17 +366,14 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
     ImGui::SetCursorPos(hudOffsetComputed);
 
     //! drawing the hud doesnt change cursor positions cause it uses drawList
-    drawHudBg(data, hudOffsetComputed, hudSizeX, zeroCharSize.y, modSettings::getKaibzHudBgOpacity());
-
+    drawHudBg(data, hudOffsetComputed, hudSizeX, zeroCharSize.y, ModSettings::getKaibzHudBgOpacity());
 
     //logInfo("drawHud: hudSizeX: %.3f screenWidth: %.3f hudOffsetX: %.3f hudOffsetY: %.3f CursorPosX: %.3f", hudSizeX, displayeSize.x, hudOffsetX, hudOffsetY, ImGui::GetCursorPosX());
 
-
     hudSizeX = 0; //! reset
 
-
     //! EXTRA LIFE
-    if (modSettings::getFlag(KaibzHudFlag::ShowExtraLives)) {
+    if (ModSettings::getFlag(KaibzHudFlag::ShowExtraLives)) {
 
         ImGui::TextColored(getElementColor(data.extraLivesColor, outlineRef), ICON_HUD_EXTRALIFE_HELMET);
         //ImGui::TextColored(getElementColor(data.extraLivesColor, outlineRef), ICON_HUD_EXTRALIFE_BOTTLE);
@@ -419,10 +382,8 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         iconCount++;        
     }  
 
-
-
     //! RADSUIT/OXYGEN
-    if (modSettings::getFlag(KaibzHudFlag::ShowRadsuitOrOxygen)) {
+    if (ModSettings::getFlag(KaibzHudFlag::ShowRadsuitOrOxygen)) {
         if (data.isOxygenEquipped) {
             ImGui::TextColored(getElementColor(data.oxygenColor, outlineRef), ICON_HUD_OXYGEN);
             ImGui::SameLine();
@@ -437,10 +398,8 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         }       
     } 
 
-
-
     //! BP  
-    if (modSettings::getFlag(KaibzHudFlag::ShowBloodPunch)) {
+    if (ModSettings::getFlag(KaibzHudFlag::ShowBloodPunch)) {
         ImGui::TextColored(getElementColor(data.bloodPunchColor, outlineRef), ICON_HUD_BLOODPUNCH_ALT);
         //ImGui::TextColored(getElementColor(data.bloodPunchColor, isOutline), ICON_HUD_BLOODPUNCH);
         ImGui::SameLine();
@@ -448,12 +407,10 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         iconCount++;
     }
 
-
-
     //! Health
-    if (modSettings::getFlag(KaibzHudFlag::ShowBasics)) {     
+    if (ModSettings::getFlag(KaibzHudFlag::ShowBasics)) {     
 
-        if (modSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
+        if (ModSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
             /*if (iconCount != 0) {
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + defaultSpacing);
             }*/
@@ -462,7 +419,7 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         ImGui::TextColored(getElementColor(data.healthColor, outlineRef), ICON_HUD_HEALTH);
         ImGui::SameLine();
 
-        if (modSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
+        if (ModSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
             
             //HealthStr += data.healthStr;     
             ArmorIconPosX = ImGui::GetCursorPosX() + hudTextsSpacing; //! this is very important to be able to draw any 'health' value without having the whole hud shifting to the right or left every time the health value goes from 9 to 10 and 99 to 100
@@ -476,9 +433,8 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         iconCount++;    
     }  
 
-
     //! ARMOR
-    if (modSettings::getFlag(KaibzHudFlag::ShowBasics)) {
+    if (ModSettings::getFlag(KaibzHudFlag::ShowBasics)) {
 
         if (ArmorIconPosX >= 0.0f) { //! if ShowNumbers and health is displayed
             ImGui::SetCursorPosX(ArmorIconPosX);
@@ -487,7 +443,7 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         ImGui::TextColored(getElementColor(data.armorColor, outlineRef), ICON_HUD_ARMOR);
         ImGui::SameLine();
       
-        if (modSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
+        if (ModSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
          
             AmmoIconPosX = ImGui::GetCursorPosX() + hudTextsSpacing;
            //! writePaddedNumber always ends by a ImGui::SameLine();
@@ -502,9 +458,8 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         iconCount++;
     }
 
-
     //! AMMO
-    if (modSettings::getFlag(KaibzHudFlag::ShowBasics)) {
+    if (ModSettings::getFlag(KaibzHudFlag::ShowBasics)) {
 
         if (AmmoIconPosX >= 0.0f) { //! if ShowNumbers and health is displayed
             ImGui::SetCursorPosX(AmmoIconPosX);
@@ -513,7 +468,7 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         ImGui::TextColored(getElementColor(data.ammoColor, outlineRef), ICON_HUD_AMMO);
         ImGui::SameLine();
        
-        if (modSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
+        if (ModSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
            
             FirstEquipmentIconPosX = ImGui::GetCursorPosX() +  hudTextsSpacing + 0.5f * elementsExtraSpacingPix;
             //FirstEquipmentIconPosX = ImGui::GetCursorPosX() + elementsExtraSpacingPix;
@@ -525,7 +480,6 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + elementsExtraSpacingPix);
         }
 
-
         //ImGui::SetCursorPosX(ImGui::GetCursorPosX() + elementsExtraSpacingPix);
         //else {
         //    FirstEquipmentIconPosX = ImGui::GetCursorPosX() + defaultSpacing * 2;
@@ -534,7 +488,6 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         //ImGui::TextColored(getElementColor(data.ammoColor, outlineRef), AmmoStr.c_str());       
         iconCount++;
 
-        
     }    
     /*ImGui::SameLine();
     std::string ammoString = std::to_string(data.ammo);*/   
@@ -543,12 +496,8 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
    /* ImGui::TextColored(colorWhite, ammoString.c_str());*/
     //ImGui::SameLine();
 
-    
-
-
-
     //! HAMMER/CRUCIBLE   
-    if (modSettings::getFlag(KaibzHudFlag::ShowHammerOrCrucible)) {
+    if (ModSettings::getFlag(KaibzHudFlag::ShowHammerOrCrucible)) {
         if (data.isHammerShownOnHud) {
             if (FirstEquipmentIconPosX > 0.0f) {
                 ImGui::SetCursorPosX(FirstEquipmentIconPosX);
@@ -572,9 +521,8 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
    /* ImGui::TextColored(colorWhite, ICON_HUD_HAMMER);
     hudSizeX += ImGui::CalcTextSize(ICON_HUD_HAMMER).x;*/
 
-
     //! FLAME BELCH
-    if (modSettings::getFlag(KaibzHudFlag::ShowFlameBelch)) {  
+    if (ModSettings::getFlag(KaibzHudFlag::ShowFlameBelch)) {  
         if (FirstEquipmentIconPosX > 0.0f) {
             ImGui::SetCursorPosX(FirstEquipmentIconPosX);
             FirstEquipmentIconPosX = -1.0f;
@@ -584,11 +532,9 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         ImGui::SameLine();
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + elementsExtraSpacingPix);
     }
-   
-
 
     //! FUEL
-    if (modSettings::getFlag(KaibzHudFlag::ShowFuel)) {
+    if (ModSettings::getFlag(KaibzHudFlag::ShowFuel)) {
         if (FirstEquipmentIconPosX > 0.0f) {
             ImGui::SetCursorPosX(FirstEquipmentIconPosX);
             FirstEquipmentIconPosX = -1.0f;
@@ -598,10 +544,9 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + elementsExtraSpacingPix);
     } 
 
+    if (!ModSettings::getIsUseDedicatedNadeKeys()) {
 
-    if (!modSettings::getIsUseDedicatedNadeKeys()) {
-
-        if (modSettings::getFlag(KaibzHudFlag::ShowFragOrEquipment)) {
+        if (ModSettings::getFlag(KaibzHudFlag::ShowFragOrEquipment)) {
             if (FirstEquipmentIconPosX > 0.0f) {
                 ImGui::SetCursorPosX(FirstEquipmentIconPosX);
                 FirstEquipmentIconPosX = -1.0f;
@@ -624,13 +569,12 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
             ImGui::SameLine();
             ImGui::SetCursorPosX(savedPosX + zeroCharWidth * 1.2f); //! this works very well to prevent the shift of the whole hud when switching grenade types.
         }
-       
 
     }
     else {
 
         //! FRAG NADE
-        if (modSettings::getFlag(KaibzHudFlag::ShowFragOrEquipment)) {
+        if (ModSettings::getFlag(KaibzHudFlag::ShowFragOrEquipment)) {
             if (FirstEquipmentIconPosX > 0.0f) {
                 ImGui::SetCursorPosX(FirstEquipmentIconPosX);
                 FirstEquipmentIconPosX = -1.0f;
@@ -640,9 +584,8 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + elementsExtraSpacingPix);
         }
 
-
         //! ICE NADE
-        if (modSettings::getFlag(KaibzHudFlag::ShowIce)) {
+        if (ModSettings::getFlag(KaibzHudFlag::ShowIce)) {
             if (FirstEquipmentIconPosX > 0.0f) {
                 ImGui::SetCursorPosX(FirstEquipmentIconPosX);
                 FirstEquipmentIconPosX = -1.0f;
@@ -663,36 +606,28 @@ void KaibzHud::drawSlayerHud(KaibzHudData& data, int outlineRef){
                 float radiusSafeMul = 1.0f; //! so we are sure to cover the whole icon
                 float coolDownCircleRadius = iceIconSize.y * .5f * radiusSafeMul;
 
-                KaibzHud::drawCoolDownCircleV2(coolDownCicleCenterVec2, coolDownCircleRadius, data.iceNadeCooldownProgress, modSettings::getkaibzHudIceCooldownColorImU32());
+                KaibzHud::drawCoolDownCircleV2(coolDownCicleCenterVec2, coolDownCircleRadius, data.iceNadeCooldownProgress, ModSettings::getkaibzHudIceCooldownColorImU32());
             }
             else {
                 ImGui::TextColored(getElementColor(data.iceColor, outlineRef), ICON_HUD_ICE_NADE_ALT_3);
             }
             ImGui::SameLine();
 
-           
         }
 
     }
-
-    
 
     //! this is to prevent the added space by ImGui::SameLine() so we can get an accurate hud size
     float itemSpacingX = ImGui::GetStyle().ItemSpacing.x;
     
     hudSizeX = ImGui::GetCursorPosX() - itemSpacingX - hudOffsetComputed.x ;
-    
-    
+
    /* ImGui::SameLine();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + defaultSpacing);
     ImGui::SameLine();*/    
-    
-    
+
     ImGui::PopFont(); //? <= IMPORTANT !!!
 }
-
-
-
 
 void KaibzHud::drawDemonHud(KaibzHudData& data, int outlineRef) {
 
@@ -710,14 +645,13 @@ void KaibzHud::drawDemonHud(KaibzHudData& data, int outlineRef) {
     float zeroCharHeight = zeroCharSize.y;
     float heightSafepaddingMul = 1.2f;
 
-    float hudIconsSafeFontSize = guiHelper::getSafeFontSize(modSettings::getKaibzHudIconFontSize());
+    float hudIconsSafeFontSize = guiHelper::getSafeFontSize(ModSettings::getKaibzHudIconFontSize());
     //logInfo("hudIconsSafeFontSize: %.3f zeroCharWidth: %.3f", hudIconsSafeFontSize, zeroCharWidth);
 
     float hudTextsSpacing = zeroCharWidth * 3;
-    float elementsExtraSpacingPix = hudIconsSafeFontSize * modSettings::getKaibzHudIconExtraSpacingMul();
+    float elementsExtraSpacingPix = hudIconsSafeFontSize * ModSettings::getKaibzHudIconExtraSpacingMul();
 
     int iconCount = 0;
-
 
     //! setting these pos so that changing:
     float ArmorIconPosX = -1.0f;
@@ -728,10 +662,8 @@ void KaibzHud::drawDemonHud(KaibzHudData& data, int outlineRef) {
     //KaibzHudData data = KaibzHudManager::getTestData();
     //KaibzHudData data = KaibzHudManager::getData();
 
-
     static float hudSizeX = 0; //! init   
     //float huxStartX = 0.0f;
-
 
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     if (viewport->Size.x <= 0 || viewport->Size.y <= 0) {
@@ -740,13 +672,11 @@ void KaibzHud::drawDemonHud(KaibzHudData& data, int outlineRef) {
         return;
     }
 
-
     ImVec2 displayeSize = ImGui::GetIO().DisplaySize;
     //! attempting to use this instead of ImGui::GetIO().DisplaySize; to see if it fix the hud diseapearing bug
     //? update it doesn't help
     //ImVec2 displayeSize = viewport->Size;
     //logInfo("drawHud: hudSizeX: %.3f displayeSize.x: %.3f displayeSize.y: %.3f", hudSizeX, displayeSize.x, displayeSize.y);
-
 
     ImVec2 hudOffsetComputed = computeHudPos(hudSizeX, zeroCharSize, heightSafepaddingMul);
     if (outlineRef == 1) {
@@ -762,22 +692,19 @@ void KaibzHud::drawDemonHud(KaibzHudData& data, int outlineRef) {
     ImGui::SetCursorPos(hudOffsetComputed);
 
     //! drawing the hud doesnt change cursor positions cause it uses drawList
-    drawHudBg(data, hudOffsetComputed, hudSizeX, zeroCharSize.y, modSettings::getKaibzHudBgOpacity());
-
+    drawHudBg(data, hudOffsetComputed, hudSizeX, zeroCharSize.y, ModSettings::getKaibzHudBgOpacity());
 
     //logInfo("drawHud: hudSizeX: %.3f screenWidth: %.3f hudOffsetX: %.3f hudOffsetY: %.3f CursorPosX: %.3f", hudSizeX, displayeSize.x, hudOffsetX, hudOffsetY, ImGui::GetCursorPosX());
 
-
     hudSizeX = 0; //! reset   
 
-
     //! Health
-    if (modSettings::getFlag(KaibzHudFlag::ShowBasics)) {       
+    if (ModSettings::getFlag(KaibzHudFlag::ShowBasics)) {       
 
         ImGui::TextColored(getElementColor(data.healthColor, outlineRef), ICON_HUD_HEALTH);
         ImGui::SameLine();
 
-        if (modSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
+        if (ModSettings::getFlag(KaibzHudFlag::ShowNumbers)) {
 
             //HealthStr += data.healthStr;     
             ArmorIconPosX = ImGui::GetCursorPosX() + hudTextsSpacing; //! this is very important to be able to draw any 'health' value without having the whole hud shifting to the right or left every time the health value goes from 9 to 10 and 99 to 100
@@ -790,34 +717,22 @@ void KaibzHud::drawDemonHud(KaibzHudData& data, int outlineRef) {
         }
     }  
 
-
-
     //! this is to prevent the added space by ImGui::SameLine() so we can get an accurate hud size
     float itemSpacingX = ImGui::GetStyle().ItemSpacing.x;
 
     hudSizeX = ImGui::GetCursorPosX() - itemSpacingX - hudOffsetComputed.x;
 
-
     /* ImGui::SameLine();
      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + defaultSpacing);
      ImGui::SameLine();*/
 
-
     ImGui::PopFont(); //? <= IMPORTANT !!!
 }
-
-
-
-
-
 
 void KaibzHud::DebugShowAllIcons() {
     //? be careful with fonts stacks it may lead to crashes (dont pop same font twice)
 
     ImVec4 colorWhite = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-
-
-
 
     for (char letter = 'a'; letter <= 'z'; ++letter) {
 
@@ -836,12 +751,6 @@ void KaibzHud::DebugShowAllIcons() {
         // Restore default font
     }
 }
-
-
-
-
-
-
 
 //? it just looked horrible
 //void KaibzHud::drawHourglass(ImDrawList* drawList, ImVec2 center, float size) {
@@ -862,8 +771,6 @@ void KaibzHud::DebugShowAllIcons() {
 //    drawList->AddPolyline(middle, 2, IM_COL32_WHITE, false, 1.0f);
 //    drawList->AddPolyline(bottom, 2, IM_COL32_WHITE, false, 1.0f);
 //}
-
-
 
 //? this doesn't work it as the numbers are spaced too much and changing kaibzHudIconsFont_cfg.GlyphExtraSpacing.x makes it harder to calculate hud line size. 
    //std::string paddedHealthStr = KaibzHud::getPaddedString(data.health, 3);
@@ -893,13 +800,6 @@ void KaibzHud::DebugShowAllIcons() {
    //ImGui::Text(fourSpaces.c_str()); // Spacing   
 
    //ImGui::SameLine();    
-
-
-
-
-
-
-
 
 //! USES 2 FONTS:
 //void KaibzHud::drawHud()
@@ -1088,17 +988,6 @@ void KaibzHud::DebugShowAllIcons() {
 //    ImGui::PopFont();
 //
 //}
-
-
-
-
-
-
-
-
-
-
-
 
 //!  BAK
 //void KaibzHud::drawHud()
@@ -1345,9 +1234,6 @@ void KaibzHud::DebugShowAllIcons() {
 //
 //
 //}
-
-
-
 
 //! icon offset test. This works keep it.
 //void KaibzHud::drawHud()
