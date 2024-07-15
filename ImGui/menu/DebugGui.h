@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 #include "../dependencies/imgui/imgui.h"
-#include <ImGuiDebugWin.h>
+#include <../Debug/ImGuiDebugWin.h>
 #include "../../K_Utils/K_Utils.h"
 #include "../../DE/idInventoryManager.h"
 
